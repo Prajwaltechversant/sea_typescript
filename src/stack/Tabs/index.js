@@ -1,9 +1,13 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-export default function App() {
+
+
+
+// const Tab = createNa
+export default function TabStack() {
   return (
     <View>
-      <Text>App</Text>
+      <Text>TabStack</Text>
     </View>
   )
 }
