@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function index() {
+export default function Screen2() {
   return (
     <View>
-      <Text>index</Text>
+      <Text>Screen2</Text>
     </View>
   )
 }
