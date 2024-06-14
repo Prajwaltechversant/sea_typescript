@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
 
     },
     headingText: {
-        color: 'black',
+        color: 'white',
         fontSize: 20,
         textAlign:'center'
     }

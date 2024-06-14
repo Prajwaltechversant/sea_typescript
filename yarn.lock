@@ -1584,6 +1584,14 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@shopify/react-native-skia@*", "@shopify/react-native-skia@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.npmjs.org/@shopify/react-native-skia/-/react-native-skia-1.3.4.tgz"
+  integrity sha512-SskehEpndqsQyurCbGOni57pGt7ssxAc+Tu8NXiWJR3VZ7qE6JH2xOICKml6mwCAeGErab4dc7hP4VEVX+OInA==
+  dependencies:
+    canvaskit-wasm "0.39.1"
+    react-reconciler "0.27.0"
+
 "@sideway/address@^4.1.5":
   version "4.1.5"
   dependencies:
@@ -1827,6 +1835,11 @@
 
 "@ungap/structured-clone@^1.2.0":
   version "1.2.0"
+
+"@webgpu/types@0.1.21":
+  version "0.1.21"
+  resolved "https://registry.npmjs.org/@webgpu/types/-/types-0.1.21.tgz"
+  integrity sha512-pUrWq3V5PiSGFLeLxoGqReTZmiiXwY3jRkIG5sLLKjyqNxrwm/04b4nw7LSmGWJcKk59XOM/YRTUwOzo4MMlow==
 
 abort-controller@^3.0.0:
   version "3.0.0"
@@ -2165,6 +2178,13 @@ camelcase@^6.2.0:
 
 caniuse-lite@^1.0.30001629:
   version "1.0.30001632"
+
+canvaskit-wasm@0.39.1:
+  version "0.39.1"
+  resolved "https://registry.npmjs.org/canvaskit-wasm/-/canvaskit-wasm-0.39.1.tgz"
+  integrity sha512-Gy3lCmhUdKq+8bvDrs9t8+qf7RvcjuQn+we7vTVVyqgOVO1UVfHpsnBxkTZw+R4ApEJ3D5fKySl9TU11hmjl/A==
+  dependencies:
+    "@webgpu/types" "0.1.21"
 
 chalk@^2.4.2:
   version "2.4.2"
@@ -4479,7 +4499,7 @@ react-native-ratings@^8.1.0:
   dependencies:
     lodash "^4.17.15"
 
-react-native-reanimated@*, react-native-reanimated@^3.12.0, "react-native-reanimated@>= 1.0.0":
+react-native-reanimated@*, react-native-reanimated@^3.12.0, "react-native-reanimated@>= 1.0.0", react-native-reanimated@>=2.0.0:
   version "3.12.0"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.12.0.tgz"
   integrity sha512-Bwa4jKL/QttnV8pQYiX+1N5a6XgL8yZtMyH+7UbEaW7ZeNCv1Pxp2PmYu/bP3LafCkmS9Yj/hY2adYNKe58g9A==
@@ -4524,7 +4544,7 @@ react-native-vision-camera@^4.3.2:
   resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-4.3.2.tgz"
   integrity sha512-zrMWS+I5kIV9UShryRBOjV0PfOvKIH1LlvnQKw8n4D2NOuT6d3dTZ1KtwmktorwrPxRPf3FRktSn2Gv6F1kmWQ==
 
-react-native@*, react-native@0.74.2:
+react-native@*, react-native@>=0.64, react-native@0.74.2:
   version "0.74.2"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
@@ -4565,6 +4585,14 @@ react-native@*, react-native@0.74.2:
     ws "^6.2.2"
     yargs "^17.6.2"
 
+react-reconciler@0.27.0:
+  version "0.27.0"
+  resolved "https://registry.npmjs.org/react-reconciler/-/react-reconciler-0.27.0.tgz"
+  integrity sha512-HmMDKciQjYmBRGuuhIaKA1ba/7a+UsM5FzOZsMO2JYHt9Jh8reCb7j1eDC95NOyUlKM9KRyvdx0flBuDvYSBoA==
+  dependencies:
+    loose-envify "^1.1.0"
+    scheduler "^0.21.0"
+
 react-refresh@^0.14.0:
   version "0.14.2"
 
@@ -4581,7 +4609,7 @@ react-test-renderer@18.2.0:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@>=16.8, react@>=17.0.0, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.0.0, react@^18.2.0, react@>=16.8, react@>=17.0.0, react@>=18.0, react@18.2.0:
   version "18.2.0"
   dependencies:
     loose-envify "^1.1.0"
@@ -4749,6 +4777,13 @@ safe-regex-test@^1.0.3:
     call-bind "^1.0.6"
     es-errors "^1.3.0"
     is-regex "^1.1.4"
+
+scheduler@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.21.0.tgz"
+  integrity sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==
+  dependencies:
+    loose-envify "^1.1.0"
 
 scheduler@^0.23.0:
   version "0.23.2"
