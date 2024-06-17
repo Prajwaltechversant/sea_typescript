@@ -8,7 +8,7 @@ import { Image } from 'react-native'
 
 
 
-export default function Home() {
+const  Home :React.FC = ()=> {
   const { hasPermission, requestPermission } = useCameraPermission()
  
   console.log(hasPermission)
@@ -82,3 +82,5 @@ console.log(openScanner)
     </View>
   )
 }
+
+export default Home
