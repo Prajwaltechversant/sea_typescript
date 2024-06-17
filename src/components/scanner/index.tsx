@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, Linking, ActivityIndicator, Image, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Alert, Linking, ActivityIndicator, Image, Dimensions, ToastAndroid } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Camera, CameraDevice, CodeScanner, useCameraDevice, useCameraPermission, useSkiaFrameProcessor } from 'react-native-vision-camera'
 import Icon from 'react-native-vector-icons/Fontisto'
@@ -7,7 +7,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { TouchableOpacity } from 'react-native'
 
 import RNQRGenerator from 'rn-qr-generator';
+import Animated, { useSharedValue } from 'react-native-reanimated'
 
+
+import RNFS from 'react-native-fs'
 
 type Props = {
     checkPermission: () => void;
@@ -96,17 +99,50 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
     }
     // console.log(image)
 
+    const opacity = useSharedValue(1)
     const scanImage = async () => {
+        try {
+            if (!image) {
+                throw new Error('No image selected.');
+            }
+            const res = await RNQRGenerator.detect({
+                uri: image,
+            });
+            setResult(res.values[0])
+            if (res.values[0]) {
+                Alert.alert('Success', 'Click to open the result', [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Ok', onPress: () => Linking.openURL(`${res.values[0]}`),
+                        style: 'destructive'
+                    },
+                ]);
+            } else {
+                // opacity.value = 0.6
+                ToastAndroid.showWithGravityAndOffset(
+                    'Scanning Failed !, please try with another image',
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
+            }
+            setLoading(true)
+            // console.log(rest)
 
-        try{
-            const res = await RNQRGenerator.detect({ uri: image })
-            console.log(res)
-        }catch(err){
-            console.log(err)
+        } catch (error) {
+            console.log('QR Code detection error:', error);
         }
+    };
 
-    }
+    // console.log(opacity.value)
 
+
+    
     return (
         <View style={{ backgroundColor: 'black', flex: 1, width }}>
             {!image ?
@@ -136,21 +172,20 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                         onPress={handleImageSelection}
                     />
                     <Image source={require('./scanImg.png')} style={{ zIndex: 1, position: 'absolute', alignSelf: 'center', top: height / 6, width: '100%' }} />
-
                 </View>
-
                 :
-                <View style={{ backgroundColor: 'black', flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+                <View style={{ backgroundColor: 'black', flex: 1, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
                     <Image source={{
                         uri: image
-                    }} width={width - 50} height={200} />
+                    }} style={{ width: '100%', height: height / 2 }} />
                     <TouchableOpacity style={{ backgroundColor: 'green', height: 40, width: 200, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }} onPress={scanImage}>
                         <Text style={{ color: 'black' }}>Scan Qr</Text>
                     </TouchableOpacity>
-
+                    <Flash name='images' color={'white'} style={{ position: 'absolute', left: 20, bottom: 30, }} size={40}
+                        onPress={handleImageSelection}
+                    />
+                    <Icon name='close' color={'white'} style={{ position: 'absolute', right: 20, bottom: 30, }} size={40} onPress={() => setOpenScanner(false)} />
                 </View>
-
-
             }
         </View>
     )
