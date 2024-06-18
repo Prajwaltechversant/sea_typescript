@@ -6,12 +6,9 @@ import DrawerStack from '../Drawer'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createNativeStackNavigator, } from '@react-navigation/native-stack'
 import Screen2 from '../../screens/screen2'
+import { RootStackParams } from '../MainStack'
 
 
-export type RootStackParams ={
-  Home:{status:boolean};
-  HomeStack:undefined
-}
 const Stack = createNativeStackNavigator()
 const HomeStack = () => {
   return (
@@ -24,7 +21,7 @@ const Tab = createBottomTabNavigator<RootStackParams>()
 export default function TabStack() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name='Home' component={Home} initialParams={{status:false}} />
+      <Tab.Screen name='Home' component={Home}  />
       <Tab.Screen name='HomeStack' component={HomeStack} />
 
     </Tab.Navigator>

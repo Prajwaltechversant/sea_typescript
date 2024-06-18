@@ -5,17 +5,19 @@ import styles from './style'
 import { Button } from '@rneui/base'
 import Scanner from '../../components/scanner'
 import { Image } from 'react-native'
+import { RootStackParams } from '../../stack/MainStack'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 
+type NavigaionProps = NativeStackScreenProps<RootStackParams,'TabStack' >
 
-const  Home :React.FC = ()=> {
+
+const Home= ({navigation}:NavigaionProps) => {
   const { hasPermission, requestPermission } = useCameraPermission()
- 
+
   console.log(hasPermission)
-
-
+  
   const [openScanner, setOpenScanner] = useState(false)
-
   const checkPermission = useCallback(async () => {
     const cameraPermission = await Camera.getCameraPermissionStatus()
     if (cameraPermission !== 'granted') {
@@ -35,7 +37,7 @@ const  Home :React.FC = ()=> {
     }
   }, [hasPermission])
   checkPermission()
-console.log(openScanner)
+  console.log(openScanner)
   return (
     <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -71,10 +73,10 @@ console.log(openScanner)
                 marginVertical: 10,
               }}
             />
-            </>
+          </>
         }
         {openScanner &&
-          <Scanner checkPermission={checkPermission} setOpenScanner={setOpenScanner} />
+          <Scanner checkPermission={checkPermission} setOpenScanner={setOpenScanner} navigation={navigation} />
         }
       </View>
 

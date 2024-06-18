@@ -8,27 +8,28 @@ import { TouchableOpacity } from 'react-native'
 import notifee, { AndroidColor, AndroidImportance, AndroidVisibility, TimestampTrigger, TriggerType } from '@notifee/react-native';
 import RNQRGenerator from 'rn-qr-generator';
 import Animated, { useSharedValue } from 'react-native-reanimated'
-
-
 import RNFS, { DownloadDirectoryPath } from 'react-native-fs'
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from '@react-navigation/native'
+import { RootStackParams } from '../../stack/MainStack'
 
 type Props = {
     checkPermission: () => void;
-    setOpenScanner: (value: boolean) => void
+    setOpenScanner: (value: boolean) => void,
+    navigation :any
+
 }
 
 
-const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
+const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
 
     const [loading, setLoading] = useState(false)
-
     const [result, setResult] = useState<string>('')
     const device: any | null = useCameraDevice('back')
-    // console.log(device.hasTorch, 'yuf')
-
     const [error, setError] = useState('')
-
     const [image, setImage] = useState<string>('')
+
+    // const navigation = useNavigation()
 
     const codeScanner: CodeScanner = {
         codeTypes: ['qr', 'ean-13'],
@@ -53,7 +54,11 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                         style: 'destructive'
                     },
                     {
-                        text: 'Ok', onPress: () => Linking.openURL(`${code.value}`),
+                        // text: 'Ok', onPress: () => Linking.openURL(`${code.value}`),
+                        text: 'Ok', onPress: () => navigation.navigate('ResultView',{
+                            url:code.value
+                        }),
+
                         style: 'destructive'
                     },
                 ]);
@@ -130,7 +135,12 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                         style: 'destructive'
                     },
                     {
-                        text: 'Ok', onPress: () => Linking.openURL(`${res.values[0]}`),
+                        // text: 'Ok', onPress: () => Linking.openURL(`${res.values[0]}`),
+
+                        // text: 'Ok', onPress: () => Linking.openURL(`${res.values[0]}`),
+                        text: 'Ok', onPress: () => navigation.navigate('ResultView', {
+                            url:res.values[0]
+                        }),
                         style: 'destructive'
                     },
                 ]);
@@ -156,9 +166,8 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
 
 
     const downLoadResult = async (url: string) => {
-        console.log(result)  // '' empty
+        console.log(result)
         const date = new Date()
-        // console.log(date.getTime())
         const fileName = `${date.getTime()}_sample.pdf`
         await RNFS.mkdir(RNFS.DownloadDirectoryPath)
         const path = `${RNFS.DownloadDirectoryPath}/${fileName}`
@@ -167,8 +176,6 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
             const downLoadedFile = await RNFS.downloadFile({
                 fromUrl: result ? result : url,
                 toFile: path,
-                
-            
                 progress(res) {
                     let progressPercent = (res.bytesWritten / res.contentLength) * 100;
                     console.log(progressPercent.toFixed(2))
@@ -176,7 +183,6 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                 },
             })
             console.log(path)
-            // await downLoadedFile.promise
             const res = await downLoadedFile.promise
             await notifee.requestPermission()
             if (res.statusCode === 200) {
@@ -186,16 +192,18 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                     importance: AndroidImportance.HIGH,
                     vibration: true,
                     visibility: AndroidVisibility.PUBLIC
-
                 });
                 await notifee.displayNotification(
                     {
                         title: 'Download Completed',
                         body: `${fileName}`,
+                        data: {
+                            path
+                        },
                         android: {
                             channelId: channelId,
-
                         },
+
                     },
                 );
             }
@@ -203,11 +211,15 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
             console.log(error, 'failed')
         }
     }
-
-
-    useEffect(()=>{
-        console.log(downLoadingProgress,'...')
+    useEffect(() => {
+        console.log(downLoadingProgress, '...')
     }, [downLoadingProgress])
+
+
+
+
+
+
     return (
         <View style={{ backgroundColor: 'black', flex: 1, width }}>
             {!image ?
@@ -229,8 +241,9 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                         <ActivityIndicator color={'red'} style={{ position: 'absolute', alignSelf: 'center', top: '55%' }} />
                     }
                     <View style={{ position: 'absolute', right: 30, top: 20, zIndex: 1, flexDirection: 'column', backgroundColor: 'white', borderRadius: 50 }} >
-                        <Flash name={flash ?'flash-off' : 'flash'} color={'black'} size={30} onPress={() => setFlash(!flash)} onLongPress={() => setFlash(false)} />
+                        <Flash name={flash ? 'flash-off' : 'flash'} color={'black'} size={30} onPress={() => setFlash(!flash)} onLongPress={() => setFlash(false)} />
                     </View>
+
                     <Text style={{ color: 'red', position: 'absolute', top: '60%', left: '50%', zIndex: 1, backgroundColor: 'yellow', textAlign: 'center' }}>{error}</Text>
                     <Icon name='close' color={'white'} style={{ position: 'absolute', right: 20, bottom: 30, }} size={40} onPress={() => setOpenScanner(false)} />
                     <Flash name='folder-multiple-image' color={'white'} style={{ position: 'absolute', left: 20, bottom: 30, }} size={40}
@@ -246,15 +259,16 @@ const Scanner: React.FC<Props> = ({ checkPermission, setOpenScanner }) => {
                     <TouchableOpacity style={{ backgroundColor: 'green', height: 40, width: 200, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }} onPress={scanImage}>
                         <Text style={{ color: 'black' }}>Scan Qr</Text>
                     </TouchableOpacity>
-                    <Flash name='images' color={'white'} style={{ position: 'absolute', left: 20, bottom: 30, }} size={40}
+                    <Flash name='folder-multiple-image' color={'white'} style={{ position: 'absolute', left: 20, bottom: 30, }} size={40}
                         onPress={handleImageSelection}
                     />
+                    <View style={{ position: 'absolute', left: 30, top: 20, zIndex: 1, flexDirection: 'column', borderRadius: 50 }} >
+                        <Flash name={'camera'} color={'white'} size={30} onPress={() => setImage('')} />
+                    </View>
                     <Icon name='close' color={'white'} style={{ position: 'absolute', right: 20, bottom: 30, }} size={40} onPress={() => setOpenScanner(false)} />
                 </View>
             }
         </View>
     )
 }
-
-
 export default Scanner
