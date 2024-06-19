@@ -7,6 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createNativeStackNavigator, } from '@react-navigation/native-stack'
 import Screen2 from '../../screens/screen2'
 import { RootStackParams } from '../MainStack'
+import Editor from '../../screens/Imageditor'
 
 
 const Stack = createNativeStackNavigator()
@@ -23,7 +24,6 @@ export default function TabStack() {
     <Tab.Navigator>
       <Tab.Screen name='Home' component={Home}  />
       <Tab.Screen name='HomeStack' component={HomeStack} />
-
     </Tab.Navigator>
   )
 }
