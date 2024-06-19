@@ -116,7 +116,7 @@ export default function GeoLoaction() {
     const [date, setDate] = useState('')
 
     const convertToDate = () => {
-        let time: Date | string = currenntLocation?.timestamp
+        let time:any = currenntLocation?.timestamp
         const date = new Date(time)
         let readableDate = date.toTimeString()
         console.log(readableDate)
@@ -135,7 +135,13 @@ export default function GeoLoaction() {
                 console.log(error)
             }
         )
+        return ()=>Geolocation.clearWatch(watchId)
     }, [])
+
+
+    // setInterval(() => {
+    //     Geolocation.getCurrentPosition();
+    //   }, 1000);
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text>GeoLoaction</Text>

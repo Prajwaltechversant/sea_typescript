@@ -108,6 +108,11 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-fs')
 
+    // compile (project(':react-native-open-street-map')) {
+    //     // if you use the lib gms in the project or libs on project
+    //     exclude group: 'com.google.android.gms'
+    // }
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
