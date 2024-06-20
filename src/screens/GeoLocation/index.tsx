@@ -5,10 +5,7 @@ import { isLocationEnabled } from 'react-native-android-location-enabler';
 import { promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-// import MapView from 'react-native-maps';
-// import UrlTile from 'react-native-maps'
-
-interface Position {
+export interface Position {
     coords: {
         latitude: number;
         longitude: number;

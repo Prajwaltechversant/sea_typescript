@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         flex: 0.5,
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         padding: 20,
     },
     contentContainer: {
