@@ -82,7 +82,7 @@ export default function GeoLoaction() {
                     const enableResult = await promptForEnableLocationIfNeeded();
                     console.log('enableResult', enableResult);
                 } catch (err) {
-                    console.log(err)
+                    console.log(err) 
                 }
             }
 
