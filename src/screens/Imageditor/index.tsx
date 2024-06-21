@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, Pressable, Dimensions, FlatList, Alert, PermissionsAndroid } from 'react-native';
+import { View, Text, Pressable, Dimensions, FlatList, TouchableOpacity, Alert, PermissionsAndroid, KeyboardAvoidingView, } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Gesture, GestureDetector, GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, GestureHandlerRootView, } from 'react-native-gesture-handler';
 import { Blur, Canvas, FitBox, Group, Image, Path, SkImage, SkPath, Skia, useCanvasRef, useTouchHandler, Text as SkText, useFont, useFonts, TextAlign, Paragraph, SkData } from '@shopify/react-native-skia';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { tools } from './tools';
 import Tools from '../../components/edting tools';
 import styles from './style';
-import { Modal, Portal, Provider as PaperProvider } from 'react-native-paper';
+import { Modal, Portal, Provider as PaperProvider, TextInput, } from 'react-native-paper';
 import { Slider } from '@react-native-assets/slider'
 import colorPalette from '../../assets/colorPalette/colorPalette';
 import SliderComponent from '../../components/slider';
@@ -16,7 +16,7 @@ import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native
 import Geolocation from '@react-native-community/geolocation';
 import { Position } from '../GeoLocation';
 import RNFS, { DownloadDirectoryPath } from 'react-native-fs'
-
+import { Badge, Button } from '@rneui/themed'
 
 
 export default function Editor() {
@@ -24,15 +24,24 @@ export default function Editor() {
   const [rotate, setRotate] = useState(0);
   const { width } = Dimensions.get('screen');
   const [visible, setVisible] = useState(false);
+  const [visibleTextModal, setVisibleTextModal] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+  const showTextModal = () => setVisibleTextModal(true);
+  const hideTextModal = () => setVisibleTextModal(false);
+  const [text, setText] = useState('')
   const [blurValue, setBlurValue] = useState<number>(0);
   const imageRef = useCanvasRef();
   const [value, setValue] = useState(0);
   const [draw, setDraw] = useState<Boolean>(false)
-
   const [currenntLocation, setCurrentLocation] = useState<Position>()
   const [resultStatus, setResultStatus] = useState(false)
+  const [textPosition, setTextPosition] = useState({
+    x: 5,
+    y: width - 48
+  })
+
+
 
 
   const checkPermission = async () => {
@@ -49,7 +58,7 @@ export default function Editor() {
       }
     }
     catch (err) {
-      console.log(err)
+      console.log(err, 'regh')
     }
   }
   useEffect(() => {
@@ -57,49 +66,109 @@ export default function Editor() {
   }, [])
 
 
-  const getLocation = async () => {
+  // const getLocation = async () => {
+  //   const hasPermission = await checkPermission()
+  //   console.log(hasPermission, 'aka')
+  //   if (hasPermission) {
+  //     const hasGPS = await isLocationEnabled()
+  //     console.log("insidee fn")
 
-    const hasPermission = await checkPermission()
-    console.log(hasPermission, 'aka')
+  //     if (hasGPS) {
+  //       Geolocation.getCurrentPosition(
+  //         (position) => {
+  //           console.log("insidee fn", position)
+  //           setCurrentLocation(position)
+  //           setResultStatus(true)
+  //         },
+  //         (error) => {
+  //           console.log(error,'uih')
+  //           if (error.code === 2) {
+  //             Alert.alert("Please turn on the Location")
+  //             // Linking.openSettings()
+  //           }
+  //           Alert.alert(error.message)
+  //         },
+  //         { enableHighAccuracy: true }
+
+  //       )
+  //     } else {
+  //       try {
+  //         const enableResult = await promptForEnableLocationIfNeeded();
+  //         console.log('enableResult', enableResult);
+
+  //       } catch (err) {
+  //         console.log(err)
+  //       }
+  //     }
+  //     console.log(currenntLocation)
+
+  //   } else {
+  //     checkPermission()
+  //   }
+  // } 
+  const getLocation = async () => {
+    const hasPermission = await checkPermission();
+    console.log('Permission granted:', hasPermission);
+
     if (hasPermission) {
-      const hasGPS = await isLocationEnabled()
+      const hasGPS = await isLocationEnabled();
+      console.log('GPS enabled:', hasGPS);
 
       if (hasGPS) {
         Geolocation.getCurrentPosition(
           (position) => {
-            console.log("insidee fn", position)
-
-            setCurrentLocation(position)
-            setResultStatus(true)
+            console.log('Position obtained:', position);
+            setCurrentLocation(position);
+            setResultStatus(true);
           },
           (error) => {
-
-            console.log(error)
+            console.log('Geolocation error:', error);
             if (error.code === 2) {
-              Alert.alert("Please turn on the Location")
+              Alert.alert('Please turn on the Location');
               // Linking.openSettings()
             }
-            Alert.alert(error.message)
+            Alert.alert(error.message);
           },
           { enableHighAccuracy: true }
-
-        )
+        );
       } else {
         try {
           const enableResult = await promptForEnableLocationIfNeeded();
-          console.log('enableResult', enableResult);
-
+          console.log('Location enable result:', enableResult);
         } catch (err) {
-          console.log(err)
+          console.log('Error enabling location:', err);
         }
       }
-      console.log(currenntLocation)
-
+      console.log('Current location state:', currenntLocation);
     } else {
-      checkPermission()
+      console.log('Permission not granted, rechecking.');
+      checkPermission();
     }
-  }
+  };
 
+  // useEffect(() => {
+  //   if (image) {
+  //     const interval = setInterval(() => {
+  //       getLocation();
+  //     }, 3000);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [image]);
+
+
+
+  // useEffect(() => {
+  //   const watchId = Geolocation.watchPosition(
+  //     (position) => {
+  //       setCurrentLocation(position)
+  //       // console.log( currenntLocation?.coords.latitude)
+  //     },
+  //     (error) => {
+  //       console.log(error)
+  //     }
+  //   )
+  //   return () => Geolocation.clearWatch(watchId)
+  // }, [])
 
   const font = useFont(require('../../assets/fonts/PlayfairDisplay-Black.ttf'), 12)
   const currentPath = useRef<SkPath | null>()
@@ -188,7 +257,7 @@ export default function Editor() {
     };
     return Skia.ParagraphBuilder.Make(paragraphStyle)
       .pushStyle(textStyle)
-      .addText(`${currenntLocation?.coords.latitude}`)
+      .addText(`${currenntLocation?.coords.latitude} | ${currenntLocation?.coords.longitude}`)
       .pushStyle({ ...textStyle, fontStyle: { weight: 500 } })
       .addText(`\n${new Date().toDateString()}`)
       .pop()
@@ -208,7 +277,7 @@ export default function Editor() {
     } catch (error) {
       console.log(error, 'failed')
     }
-  }   
+  }
 
 
   return (
@@ -253,14 +322,14 @@ export default function Editor() {
                   <Path path={path} style={'stroke'} color={'red'} strokeWidth={2} />
 
                 }
-                {/* <SkText 
-                font={font}
-                x={5}
-                y={width-48}
-                color={'white'}          
-                text={locationText}
-                   /> */}
-                <Paragraph paragraph={paragraph} x={150} y={320} width={300} />
+                <SkText
+                  font={font}
+                  x={textPosition.x}
+                  y={textPosition.y}
+                  color={'white'}
+                  text={text}
+                />
+                <Paragraph paragraph={paragraph} x={140} y={0} width={300} />
               </Group>
             </Canvas>
             {/* </GestureDetector> */}
@@ -279,26 +348,52 @@ export default function Editor() {
           </View>
         </Portal >
       </PaperProvider >
-      {image && (
-        <View style={styles.footerContainer}>
-          <FlatList
-            data={tools}
-            renderItem={({ item }) => (
-              <Tools
-                item={item}
-                rotateImage={rotateImage}
-                setRotate={setRotate}
-                showModal={showModal}
-                hideModal={hideModal}
-                setBlurValue={setBlurValue}
-                setDraw={setDraw}
-                draw={draw}
-              />
-            )}
-            horizontal
-          />
-        </View>
-      )
+      <PaperProvider>
+        <Portal>
+          <KeyboardAvoidingView>
+            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, width: width - 40, height: 'auto', alignSelf: 'center' }}>
+              <Modal visible={visibleTextModal} onDismiss={hideTextModal} style={{ height: 'auto' }} >
+                <View style={{ alignItems: 'center', flexDirection: 'column' }} >
+                  <View style={{ flexDirection: 'row', padding: 10, justifyContent:'center', alignItems:'center' }}>
+                    <TextInput cursorColor='red' value={text} onChangeText={(e) => setText(e)} style={{ color: 'black', width: '90%' }} mode='outlined' />
+                    <TouchableOpacity  onPress={hideTextModal} style={{ width: '10%', height: 40, marginLeft: 10, borderRadius: 30 }}>
+                      <Text>
+                        <MaterialIcons name='done' size={30} color={'green'} />
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {/* <SliderComponent textPosition={textPosition} setTextPosition={setTextPosition} /> */}
+                </View>
+              </Modal>
+            </View>
+          </KeyboardAvoidingView>
+
+        </Portal >
+
+      </PaperProvider >
+      {
+        image && (
+          <View style={styles.footerContainer}>
+            <FlatList
+              data={tools}
+              renderItem={({ item }) => (
+                <Tools
+                  item={item}
+                  rotateImage={rotateImage}
+                  setRotate={setRotate}
+                  showModal={showModal}
+                  showTextModal={showTextModal}
+
+                  hideModal={hideModal}
+                  setBlurValue={setBlurValue}
+                  setDraw={setDraw}
+                  draw={draw}
+                />
+              )}
+              horizontal
+            />
+          </View>
+        )
       }
     </View >
   );

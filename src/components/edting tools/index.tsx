@@ -17,9 +17,11 @@ interface Props {
   hideModal:()=>void
   setDraw:(t:Boolean)=>void
   draw:Boolean
+  showTextModal:()=>void
+
 }
 
-export default function Tools({ item, rotateImage, setRotate, setBlurValue, showModal, hideModal,setDraw ,draw}: Props) {
+export default function Tools({ item, rotateImage,showTextModal, setRotate, setBlurValue, showModal, hideModal,setDraw ,draw}: Props) {
 
   const [value, setValue] = useState(0)
   const [slider, setSlider] = useState(false)
@@ -38,6 +40,12 @@ export default function Tools({ item, rotateImage, setRotate, setBlurValue, show
                 <FontAwesome6 name={item.icon} color={'black'} size={30}  onPress={showModal} />
      
               </>
+              : item.name === 'Text' ?
+              <>
+                <FontAwesome6 name={item.icon} color={'black'} size={30}  onPress={showTextModal} />
+     
+              </>
+              
               :
               <FontAwesome6 name={item.icon} color={'black'} size={30} onPress={()=>setDraw(!draw)}  />
 

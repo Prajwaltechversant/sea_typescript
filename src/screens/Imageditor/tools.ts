@@ -27,6 +27,11 @@ export const tools = [
         name:'blur',
         icon:'droplet',
         iconLibrary: 'FontAwesome6'
+    },
+    {
+        name:'Text',
+        icon:'font',
+        iconLibrary: 'FontAwesome6'
 
     }
 
