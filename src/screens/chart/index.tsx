@@ -2,7 +2,7 @@ import { View, Text, Dimensions } from 'react-native'
 import React from 'react'
 import styles from './style'
 import { BarChart, LineChart, PieChart, PopulationPyramid } from "react-native-gifted-charts";
-import { LinearGradient, Stop } from 'react-native-svg';
+// import { LinearGradient, Stop } from 'react-native-svg';
 import { ScrollView } from 'react-native';
 // import preconnect from 'react-dom'
 
