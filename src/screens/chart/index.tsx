@@ -6,6 +6,8 @@ import { LinearGradient, Stop } from 'react-native-svg';
 import { ScrollView } from 'react-native';
 // import preconnect from 'react-dom'
 
+
+
 export default function SampleChart() {
 
     const data = [{ value: 19 }, { value: 40 }, { value: 26 }, { value: 40 }
@@ -57,9 +59,7 @@ export default function SampleChart() {
             </View>
 
             <View style={style.subChart}>
-                {/* <Text style={styles.subscriberHeading}>SubScriber Count</Text> */}
                 <PieChart
-
                     showText
                     textColor="black"
                     radius={150}
@@ -78,6 +78,7 @@ export default function SampleChart() {
 
 
         </View>
-       </ScrollView>
+
+    </ScrollView>
     )
 }

@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import Data from '../../screens/data'
 import GeoLoaction from '../../screens/GeoLocation'
 import Editor from '../../screens/Imageditor'
+import SampleChart from '../../screens/chart'
 
 
 const Drawer = createDrawerNavigator()
@@ -13,6 +14,7 @@ export default function DrawerStack() {
             <Drawer.Screen name='data' component={Data} />
             <Drawer.Screen name='GeoLoaction' component={GeoLoaction} />
             <Drawer.Screen name='Editor' component={Editor} />
+            <Drawer.Screen  name='Chart' component={SampleChart} />
         </Drawer.Navigator>
     )
 }

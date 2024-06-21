@@ -6,7 +6,7 @@ const styles =(width, height)=>
         flex:1,
         padding:10
     }
-    ,
+    ,  
     subChart:{
             backgroundColor:'white',
             // flex:1,
