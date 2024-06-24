@@ -47,7 +47,7 @@ export default function GeoLoaction() {
         // console.log(currenntLocation)
     }, [])
 
-
+    const [city, setCity] = useState(null)
 
 
     const getLocation = async () => {
@@ -74,12 +74,15 @@ export default function GeoLoaction() {
                     { enableHighAccuracy: true }
 
                 )
+                const city = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${currenntLocation?.coords.latitude}%2C${currenntLocation?.coords.longitude}&key=5e64e9c2c30b458785aa7a473e892aeb`)
+                const jsonData = await city.json()
+                setCity(jsonData.results[0].formatted)
             } else {
                 try {
                     const enableResult = await promptForEnableLocationIfNeeded();
                     console.log('enableResult', enableResult);
                 } catch (err) {
-                    console.log(err)
+                    console.log(err) 
                 }
             }
 
@@ -87,7 +90,7 @@ export default function GeoLoaction() {
             checkPermission()
         }
     }
-    console.log(currenntLocation)
+    console.log(city)
     console.log(resultStatus)
     const width = Dimensions.get('screen').width
 
@@ -105,6 +108,8 @@ export default function GeoLoaction() {
     // console.log(currenntLocation)
 
 
+
+
     const openMap = async () => {
         let url = `geo:0,0?q=${currenntLocation?.coords.latitude},${currenntLocation?.coords.longitude}`
         await Linking.openURL(url)
@@ -113,7 +118,7 @@ export default function GeoLoaction() {
     const [date, setDate] = useState('')
 
     const convertToDate = () => {
-        let time:any = currenntLocation?.timestamp
+        let time: any = currenntLocation?.timestamp
         const date = new Date(time)
         let readableDate = date.toTimeString()
         console.log(readableDate)
@@ -132,7 +137,7 @@ export default function GeoLoaction() {
                 console.log(error)
             }
         )
-        return ()=>Geolocation.clearWatch(watchId)
+        return () => Geolocation.clearWatch(watchId)
     }, [])
 
 
@@ -148,6 +153,7 @@ export default function GeoLoaction() {
             {currenntLocation &&
                 <>
                     <View style={{ backgroundColor: '#bce887', justifyContent: 'center', alignItems: 'center', height: 'auto', width: '100%', marginTop: 50 }}>
+                        <Text style={[styles.text]}>{city}</Text>
                         <Text style={[styles.text, { marginVertical: 30 }]}>Date & Time:{date}</Text>
                         <Text style={[styles.text]}>latitude:{currenntLocation.coords.latitude}</Text>
                         <Text style={styles.text}>altitude:{currenntLocation.coords.altitude}</Text>

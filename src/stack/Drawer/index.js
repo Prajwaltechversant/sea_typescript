@@ -14,7 +14,11 @@ export default function DrawerStack() {
             <Drawer.Screen name='data' component={Data} />
             <Drawer.Screen name='GeoLoaction' component={GeoLoaction} />
             <Drawer.Screen name='Editor' component={Editor} />
+<<<<<<< HEAD
             <Drawer.Screen name='chart' component={SampleChart} />
+=======
+            <Drawer.Screen  name='Chart' component={SampleChart} />
+>>>>>>> chart
         </Drawer.Navigator>
     )
 }
