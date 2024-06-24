@@ -6,7 +6,17 @@ import MainStack from './src/stack/MainStack'
 
 import notifee, { AndroidImportance, AndroidStyle, AndroidVisibility, EventType } from '@notifee/react-native';
 import RNFS from 'react-native-fs'
+import { Appearance } from 'react-native';
+
 export default function App() {
+
+  // const getdeviceDefaultTheme = ()=>{
+  //  const colorTheme =  Appearance.getColorScheme()
+  //  console.log(colorTheme)
+  //  Appearance.setColorScheme('')
+  // }
+
+
 
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
@@ -22,6 +32,10 @@ export default function App() {
       }
     });
   }, []);
+
+  // useEffect(()=>{
+  //   getdeviceDefaultTheme()
+  // },[])
   return (
     <NavigationContainer>
       <MainStack />
