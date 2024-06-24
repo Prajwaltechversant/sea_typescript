@@ -71,7 +71,7 @@ export default function GeoLoaction() {
                         }
                         Alert.alert(error.message)
                     },
-                    { enableHighAccuracy: true }
+                    { enableHighAccuracy: true, timeout: 60000 }
 
                 )
             } else {
@@ -113,7 +113,7 @@ export default function GeoLoaction() {
     const [date, setDate] = useState('')
 
     const convertToDate = () => {
-        let time:any = currenntLocation?.timestamp
+        let time: any = currenntLocation?.timestamp
         const date = new Date(time)
         let readableDate = date.toTimeString()
         console.log(readableDate)
@@ -132,7 +132,7 @@ export default function GeoLoaction() {
                 console.log(error)
             }
         )
-        return ()=>Geolocation.clearWatch(watchId)
+        return () => Geolocation.clearWatch(watchId)
     }, [])
 
 

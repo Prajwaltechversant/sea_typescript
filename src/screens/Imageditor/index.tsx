@@ -109,11 +109,9 @@ export default function Editor() {
   const getLocation = async () => {
     const hasPermission = await checkPermission();
     console.log('Permission granted:', hasPermission);
-
     if (hasPermission) {
       const hasGPS = await isLocationEnabled();
       console.log('GPS enabled:', hasGPS);
-
       if (hasGPS) {
         Geolocation.getCurrentPosition(
           (position) => {
@@ -146,14 +144,14 @@ export default function Editor() {
     }
   };
 
-  // useEffect(() => {
-  //   if (image) {
-  //     const interval = setInterval(() => {
-  //       getLocation();
-  //     }, 3000);
-  //     return () => clearInterval(interval);
-  //   }
-  // }, [image]);
+  useEffect(() => {
+    if (image) {
+      const interval = setInterval(() => {
+        getLocation();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [image]);
 
 
 
@@ -320,7 +318,6 @@ export default function Editor() {
                 {
                   draw &&
                   <Path path={path} style={'stroke'} color={'red'} strokeWidth={2} />
-
                 }
                 <SkText
                   font={font}
