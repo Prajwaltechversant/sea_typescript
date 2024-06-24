@@ -5,6 +5,7 @@ import Data from '../../screens/data'
 import GeoLoaction from '../../screens/GeoLocation'
 import Editor from '../../screens/Imageditor'
 import SampleChart from '../../screens/chart'
+import UiSamples from '../../screens/ui'
 
 
 const Drawer = createDrawerNavigator()
@@ -15,6 +16,11 @@ export default function DrawerStack() {
             <Drawer.Screen name='GeoLoaction' component={GeoLoaction} />
             <Drawer.Screen name='Editor' component={Editor} />
             <Drawer.Screen  name='Chart' component={SampleChart} />
+            <Drawer.Screen  name='UiSamples'  component={UiSamples} 
+            // options={{
+            //     headerShown:false
+            // }}
+              />
         </Drawer.Navigator>
     )
 }

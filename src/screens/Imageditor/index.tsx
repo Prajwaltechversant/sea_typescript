@@ -17,9 +17,8 @@ import Geolocation from '@react-native-community/geolocation';
 import { Position } from '../GeoLocation';
 import RNFS, { DownloadDirectoryPath } from 'react-native-fs'
 
-
-
 export default function Editor() {
+
   const [image, setImage] = useState<SkImage | null>(null);
   const [rotate, setRotate] = useState(0);
   const { width } = Dimensions.get('screen');
@@ -30,10 +29,8 @@ export default function Editor() {
   const imageRef = useCanvasRef();
   const [value, setValue] = useState(0);
   const [draw, setDraw] = useState<Boolean>(false)
-
   const [currenntLocation, setCurrentLocation] = useState<Position>()
   const [resultStatus, setResultStatus] = useState(false)
-
 
   const checkPermission = async () => {
     try {

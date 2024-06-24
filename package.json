@@ -12,6 +12,7 @@
   "dependencies": {
     "@notifee/react-native": "^7.8.2",
     "@react-native-assets/slider": "^7.2.1",
+    "@react-native-community/blur": "^4.4.0",
     "@react-native-community/geolocation": "^3.2.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/drawer": "^6.6.15",
