@@ -31,7 +31,7 @@ export default function Editor() {
   const hideTextModal = () => setVisibleTextModal(false);
   const [text, setText] = useState('')
   const [blurValue, setBlurValue] = useState<number>(0);
-  const imageRef = useCanvasRef();
+  const imageRef:any = useCanvasRef();
   const [value, setValue] = useState(0);
   const [draw, setDraw] = useState<Boolean>(false)
   const [currenntLocation, setCurrentLocation] = useState<Position>()
