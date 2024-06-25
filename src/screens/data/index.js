@@ -4,6 +4,7 @@ import Slider from '@react-native-assets/slider'
 import SliderComponent from '../../components/slider'
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Alert } from 'react-native';
+import DropdownLn from '../../components/dropdownLn';
 
 export default function Data() {
   const [selected, setSelected] = useState('');
@@ -37,6 +38,7 @@ export default function Data() {
 
       />
       </ScrollView>
+      <DropdownLn />
 
      
 

@@ -7,6 +7,7 @@ import MainStack from './src/stack/MainStack'
 import notifee, { AndroidImportance, AndroidStyle, AndroidVisibility, EventType } from '@notifee/react-native';
 import RNFS from 'react-native-fs'
 import { Appearance } from 'react-native';
+import {  Provider as PaperProvider } from 'react-native-paper';
 
 export default function App() {
 
@@ -38,7 +39,11 @@ export default function App() {
   // },[])
   return (
     <NavigationContainer>
-      <MainStack />
+      <PaperProvider>
+
+        <MainStack />
+      </PaperProvider>
+
     </NavigationContainer>
   )
 }
