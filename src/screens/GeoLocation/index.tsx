@@ -25,6 +25,9 @@ export default function GeoLoaction() {
 
     const [currenntLocation, setCurrentLocation] = useState<Position>()
     const [resultStatus, setResultStatus] = useState(false)
+    const [city, setCity] = useState(null)
+    const width = Dimensions.get('screen').width
+
     const checkPermission = async () => {
         try {
             const res = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
@@ -44,10 +47,8 @@ export default function GeoLoaction() {
     }
     useEffect(() => {
         checkPermission()
-        // console.log(currenntLocation)
     }, [])
 
-    const [city, setCity] = useState(null)
 
 
     const getLocation = async () => {
@@ -59,7 +60,6 @@ export default function GeoLoaction() {
             if (hasGPS) {
                 Geolocation.getCurrentPosition(
                     (position) => {
-                        // console.log(position)
                         setCurrentLocation(position)
                         setResultStatus(true)
                     },
@@ -67,7 +67,6 @@ export default function GeoLoaction() {
                         console.log(error)
                         if (error.code === 2) {
                             Alert.alert("Please turn on the Location")
-                            // Linking.openSettings()
                         }
                         Alert.alert(error.message)
                     },
@@ -82,7 +81,7 @@ export default function GeoLoaction() {
                     const enableResult = await promptForEnableLocationIfNeeded();
                     console.log('enableResult', enableResult);
                 } catch (err) {
-                    console.log(err) 
+                    console.log(err)
                 }
             }
 
@@ -90,23 +89,6 @@ export default function GeoLoaction() {
             checkPermission()
         }
     }
-    console.log(city)
-    console.log(resultStatus)
-    const width = Dimensions.get('screen').width
-
-
-    //    useEffect(()=>{
-    //    Geolocation.watchPosition(
-    //         (posistion)=>{
-    //             setCurrentLocation(posistion)
-    //         },
-    //         (error)=>{
-    //             console.log(error)
-    //         },
-    //     )
-    //    },[])
-    // console.log(currenntLocation)
-
 
 
 
@@ -141,9 +123,6 @@ export default function GeoLoaction() {
     }, [])
 
 
-    // setInterval(() => {
-    //     Geolocation.getCurrentPosition();
-    //   }, 1000);
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Text>GeoLoaction</Text>

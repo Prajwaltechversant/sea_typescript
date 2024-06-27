@@ -18,13 +18,8 @@ export default function UiSamples() {
 
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-
     const { theme, setTheme } = useContext(ColorThemeContextAPI)
-    console.log(theme)
-    // let colors = theme === 'dark' ? colorPalette.dark : colorPalette.light
-
     const { colors } = useTheme()
-    console.log(colors)
     return (
         <View style={styles.container}>
             <View style={{ width: 200, height: 200, backgroundColor: colors.primary }}>

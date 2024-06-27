@@ -7,17 +7,16 @@ import Scanner from '../../components/scanner'
 import { Image } from 'react-native'
 import { RootStackParams } from '../../stack/MainStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-
+import { useTheme } from '@react-navigation/native'
 
 type NavigaionProps = NativeStackScreenProps<RootStackParams,'TabStack' >
 
-
 const Home= ({navigation}:NavigaionProps) => {
+
+  const [openScanner, setOpenScanner] = useState(false)
+
   const { hasPermission, requestPermission } = useCameraPermission()
 
-  console.log(hasPermission)
-  
-  const [openScanner, setOpenScanner] = useState(false)
   const checkPermission = useCallback(async () => {
     const cameraPermission = await Camera.getCameraPermissionStatus()
     if (cameraPermission !== 'granted') {
@@ -31,16 +30,20 @@ const Home= ({navigation}:NavigaionProps) => {
       ]);
     }
   }, [])
+
+
   useEffect(() => {
     if (!hasPermission) {
       requestPermission()
     }
   }, [hasPermission])
-  checkPermission()
-  console.log(openScanner)
+  // checkPermission()
+
+
+  // console.log(openScanner)
 
   const theme = useColorScheme()
-  // console.log(theme,'sj')
+  const {colors} = useTheme()
 
   return (
     <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -60,7 +63,7 @@ const Home= ({navigation}:NavigaionProps) => {
                 name: 'qrcode',
                 type: 'font-awesome',
                 size: 15,
-                color: 'white',
+                color: colors.text,
               }}
               iconRight
               iconContainerStyle={{ marginLeft: 10 }}

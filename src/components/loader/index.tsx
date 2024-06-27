@@ -18,37 +18,29 @@ export default function Loader({ progress }: Props) {
     const half_circle = R + strokeWidth
     const diameter = half_circle * 2
 
-
+    // animation values
 
     const progressValue = useSharedValue(0)
     const rotation = useSharedValue(0)
 
     const loadingAnimation = () => {
         progressValue.value = withTiming(0.6, { duration: 1000 })
-
         progressValue.value = withRepeat(
             withRepeat(
                 withTiming(0.7, { duration: 800 }),
                 withTiming(0.1, { duration: 2000 })
             ), -1, true
         )
-
         rotation.value = withRepeat(
             withTiming(360, { duration: 900 }), -1, false
         )
     }
 
 
-    // useEffect(() => {
-    //     if (!progress) {
-    //         progressValue.value = withTiming(0, { duration: 2000 })
-    //     } else {
-    //         progressValue.value = withTiming(progress, { duration: 2000 })
-    //     }
-    // }, [])
     useEffect(() => {
         loadingAnimation()
     }, [])
+
 
     const animatedProps = useAnimatedProps(() => {
         return {
@@ -63,10 +55,8 @@ export default function Loader({ progress }: Props) {
 
     },[])
 const height = Dimensions.get('screen').height
-    // const
     return (
         <View style={{justifyContent:'center', alignItems:'center', transform:[{translateY:height/4}]}}>
-            {/* <Text>Loader</Text> */}
             <Animated.View style={animatedViewStyle}>
                 <Svg width={diameter} height={diameter}>
                     <G

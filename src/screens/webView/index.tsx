@@ -10,7 +10,6 @@ import { RootStackParams } from '../../stack/MainStack';
 
 type Props = NativeStackScreenProps<RootStackParams, 'ResultView'>
 const ResultView = ({ route, navigation, }: Props) => {
-    console.log(route.params.url)
     return (
         <View style={{ flex: 1 }}>
             <WebView

@@ -17,8 +17,11 @@ export default function Languages() {
 
     const [users, setUsers] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
-
     const [currentPage, setCurrentPage] = useState(1)
+
+    const {colors} = useTheme()
+    const { t } = useTranslation() // localization
+    // sample data from api
     const getData = async (page: number) => {
         try {
             const response = await axios.get(`https://randomuser.me/api/?page=${page}&results=5&seed=abc`)
@@ -39,6 +42,8 @@ export default function Languages() {
     }
 
 
+
+    // pagination
     const loadMore = async () => {
         try {
             const nextPage = currentPage + 1;
@@ -54,7 +59,6 @@ export default function Languages() {
     }
     const getItem = (data: unknown[], index: number) => {
         return data[index]
-
     }
     const getItemCount = (data: any) => data.length
 
@@ -62,10 +66,8 @@ export default function Languages() {
         getData(currentPage)
     }, [])
 
-    // console.log(users)
 
-    const {colors} = useTheme()
-    const { t } = useTranslation()
+
     return (
         <View style={[styles.container,]}>
             <LinearGradient

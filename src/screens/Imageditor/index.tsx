@@ -32,12 +32,24 @@ export default function Editor() {
   const [draw, setDraw] = useState<Boolean>(false)
   const [currenntLocation, setCurrentLocation] = useState<Position>()
   const [resultStatus, setResultStatus] = useState(false)
+  const currentPath = useRef<SkPath | null>()
+  const [path, setPath] = useState<SkPath>(Skia.Path.Make())
+
+
+  // custom font for adding Text in canvas
+  const font = useFont(require('../../assets/fonts/PlayfairDisplay-Black.ttf'), 12)
+
+  const { theme } = useContext(ColorThemeContextAPI);
+  const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
+  const style = styles(activeColor)
+
+
+
+  // function to check location  permission 
 
   const checkPermission = async () => {
     try {
       const res = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
-      console.log('permission', res)
-
       if (!res) {
         const res = await PermissionsAndroid.request('android.permission.ACCESS_FINE_LOCATION')
         return true
@@ -50,13 +62,15 @@ export default function Editor() {
       console.log(err)
     }
   }
-  useEffect(() => {
-    checkPermission()
-  }, [])
 
+
+
+
+
+
+// function to get location details and save to state
 
   const getLocation = async () => {
-
     const hasPermission = await checkPermission()
     console.log(hasPermission, 'aka')
     if (hasPermission) {
@@ -75,7 +89,6 @@ export default function Editor() {
             console.log(error)
             if (error.code === 2) {
               Alert.alert("Please turn on the Location")
-              // Linking.openSettings()
             }
             Alert.alert(error.message)
           },
@@ -99,11 +112,13 @@ export default function Editor() {
   }
 
 
-  const font = useFont(require('../../assets/fonts/PlayfairDisplay-Black.ttf'), 12)
-  const currentPath = useRef<SkPath | null>()
-  // const [path, setPath] = useState(Skia.Path.Make())
-  const [path, setPath] = useState<SkPath>(Skia.Path.Make())
+  useEffect(() => {
+    checkPermission()
+    getLocation()
+  }, [])
 
+
+   // function to open image from file using file picker
   const getImageFromFile = async () => {
     try {
       const res: any = await ImageCropPicker.openPicker({ mediaType: 'photo', includeBase64: true, cropping: true });
@@ -118,6 +133,9 @@ export default function Editor() {
   const rotateImage = () => {
     setRotate(rotate + 90);
   };
+
+
+  // drawing over image using gesture handler
 
   // const [paths, setPaths] = useState<any>([]);
   // const pan = Gesture.Pan()
@@ -139,6 +157,8 @@ export default function Editor() {
   //   });
 
   // console.log(path)
+
+// function to draw using useTouchandler  from react native skia
 
   const touch = useTouchHandler({
     onStart(touchInfo) {
@@ -162,16 +182,11 @@ export default function Editor() {
     path.reset()
   }
 
-  // const convertToDate = () => {
-  //   let time:any = currenntLocation?.timestamp
-  //   const date = new Date(time)
-  //   let readableDate = date.toTimeString()
-  //   console.log(readableDate)
-  //   setDate(readableDate)
-  // }
-  // useEffect(() => {
-  //   convertToDate()
-  // }, [currenntLocation])
+
+
+
+    // function to display current position and timestamp in image
+
   const paragraph = useMemo(() => {
     if (!font) {
       return null;
@@ -193,6 +208,10 @@ export default function Editor() {
       .build();
   }, [font]);
 
+
+
+  // funcion to save image to device using RNFS
+
   const saveImage = async () => {
     const imageValue: any = imageRef.current?.makeImageSnapshot().encodeToBase64();
     const date = new Date()
@@ -207,9 +226,7 @@ export default function Editor() {
       console.log(error, 'failed')
     }
   }
-  const { theme } = useContext(ColorThemeContextAPI);
-  const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
-  const style = styles(activeColor)
+
 
 
   return (

@@ -17,39 +17,36 @@ import ChangeTheme from '../../components/Theme'
 import { useTheme } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import ThreeDSample from '../../screens/3d'
+import ParallaxScroll from '../../screens/parallax'
 
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
+    
     const { t } = useTranslation()
-
     let date = new Date()
-
     const { colors } = useTheme()
 
     return (
         <Drawer.Navigator
-
-
             screenOptions={({ navigation }) => ({
                 headerLeft: () => (
                     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
                         <Entypo name="menu" size={25} color={colors.text} style={{ marginLeft: 15 }} />
                     </TouchableOpacity>
                 ),
-                headerStyle: { backgroundColor: colors.background, borderWidth: 2, elevation: 6, shadowColor: colors.text },
+
+                headerRight:()=>(
+                    <Text>{date.toDateString}</Text>
+                ),
+                headerStyle: { backgroundColor: colors.background },
 
                 drawerStyle: { backgroundColor: colors.background, elevation: 6, shadowColor: colors.text }
-            , drawerStatusBarAnimation:'fade'
-            
+                , drawerStatusBarAnimation: 'fade',
+
             })}
-
             drawerContent={(props) => <ChangeTheme props={props}
-
             />
-
-
             }
-
         >
             <Drawer.Screen name={t('data')} component={Data}
                 options={{
@@ -59,30 +56,12 @@ export default function DrawerStack() {
                     drawerIcon: () => (
                         <Entypo name='home' color={colors.text} />
                     ),
-                    // headerShown:false
                 }}
             />
-            <Drawer.Screen name={t('geolocation')} component={GeoLoaction}
-
-            // options={{
-            //     headerTitleStyle: {
-            //         color: colors.text
-            //     },
-            //     drawerIcon: () => (
-            //         <Entypo name='home' color={colors.text} />
-            //     ),
-            //     // headerShown:false
-            // }}
-
-            />
+            <Drawer.Screen name={t('geolocation')} component={GeoLoaction}  />
             <Drawer.Screen name={t('editor')} component={Editor} />
             <Drawer.Screen name={t('chart')} component={SampleChart} />
-            <Drawer.Screen name={t('uiSample')} component={UiSamples}
-            // options={{
-            //     headerShown:false
-            // }}
-            />
-
+            <Drawer.Screen name={t('uiSample')} component={UiSamples}/>
             <Drawer.Screen name={t('header')} component={Languages}
                 options={{
                     headerRight: () => (
@@ -92,12 +71,8 @@ export default function DrawerStack() {
                     ),
                 }}
             />
-
-            <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample}
-            
-            
-            
-            />
+            <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample}    />
+            <Drawer.Screen  name='ParallaxScroll'   component={ParallaxScroll} />
 
         </Drawer.Navigator>
     )

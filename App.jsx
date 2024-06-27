@@ -33,9 +33,9 @@ function ThemeProviderWrapper() {
   const { theme,setTheme } = useContext(ColorThemeContextAPI);
   const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
   Appearance.addChangeListener((scheme)=>{
-    console.log('====================================');
-    console.log(scheme);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log(scheme);
+    // console.log('====================================');
     setTheme(scheme.colorScheme)
   })
 
