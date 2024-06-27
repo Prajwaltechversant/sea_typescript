@@ -22,8 +22,6 @@ const styles = (colors, width, height, ITEM_WIDTH, ITEM_HEIGHT) => StyleSheet.cr
         overflow: 'hidden',
         alignItems: 'center',
         borderRadius: 14,
-
-
     },
     profileContainer: {
         width: 60,

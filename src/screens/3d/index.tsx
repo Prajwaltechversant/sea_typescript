@@ -13,6 +13,7 @@ import {
 import styles from './style';
 import axios from 'axios';
 import { ActivityIndicator } from 'react-native-paper';
+import { faker } from '@faker-js/faker';
 
 export default function App() {
 
