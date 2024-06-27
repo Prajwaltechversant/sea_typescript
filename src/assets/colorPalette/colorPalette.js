@@ -1,18 +1,55 @@
-export default ColorPalette={
-    
-    light:{
-        primary:'#4D869C',
-        secondary:'#7AB2B2',
-        tertiary:'#EEF7FF',
-        backgroud:'#CDE8E5'
+const colorPalette = {
+    light: {
+        dark: false,
+        colors: {
+            primary: '#B3C8CF',
+            secondary: '#BED7DC',
+            tertiary: '#F1EEDCF',
+            background: 'white',
+            card: '#ffffff',
+            text: '#000000',
+            border: '#cccccc',
+            notification: '#ff0000',
+            bgGray: '#202125',
+            btnGray: '#8c9498',
+            lightGray: '#3b3c44',
+            canvasBg: '#3b3c44',
+        },
     },
+    dark: {
+        dark: true,
+        colors: {
+            primary: '#78A083',
+            secondary: '#344955',
+            tertiary: '#50727B',
+            background: '#35374B',
+            card: '#1c1c1c',
+            text: '#ffffff',
+            border: '#333333',
+            notification: '#ff0000',
+            bgGray: '#202125',
+            btnGray: '#8c9498',
+            lightGray: '#3b3c44',
+            canvasBg: '#3b3c44',
+        },
+    },
+    // custom: {
+    //     dark: false,
+    //     colors: {
+    //         primary: '#538392',
+    //         secondary: '#6295A2',
+    //         tertiary: '#F1EEDCF',
+    //         background: '#B3E2A7',
+    //         card: '#ffffff',
+    //         text: '#000000',
+    //         border: '#cccccc',
+    //         notification: '#ff0000',
+    //         bgGray: '#202125',
+    //         btnGray: '#8c9498',
+    //         lightGray: '#3b3c44',
+    //         canvasBg: '#3b3c44',
+    //     },
+    // },
+};
 
-    imageEdior:{
-        bgGray:'#202125',
-        btnGray:'#8c9498',
-        lightFray:'#3b3c44',
-        canvasBg:'#3b3c44'
-    }
-
-
-}
+export default colorPalette;

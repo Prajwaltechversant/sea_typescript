@@ -1,0 +1,13 @@
+{
+    "sample": "hello world",
+    "header": "Languages",
+    "cancel": "cancel",
+    "ok": "ok",
+    "home": "Home",
+    "tasks": "tasks",
+    "data": "data",
+    "geolocation": "geolocation",
+    "editor": "editor",
+    "chart": "chart",
+    "uiSample": "uisample"
+}

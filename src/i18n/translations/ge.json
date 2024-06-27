@@ -1,0 +1,14 @@
+
+{
+    "sample":"Hallo Welt",
+    "header":"Langages",
+    "cancel":"stornieren",
+    "ok":"OK",
+    "home":"Heim",
+    "tasks":"Aufgaben",
+    "data": "Daten",
+    "geolocation": "Geolokalisierung",
+    "editor": "Redakteur",
+    "chart": "Diagramm",
+    "uiSample": "ui-Beispiel"
+}

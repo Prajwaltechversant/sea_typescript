@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, Linking } from 'react-native'
+import { View, Text, StyleSheet, Alert, Linking, useColorScheme } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Camera, CameraDevice, CodeScanner, useCameraDevice, useCameraDevices, useCameraPermission } from 'react-native-vision-camera'
 import styles from './style'
@@ -38,6 +38,10 @@ const Home= ({navigation}:NavigaionProps) => {
   }, [hasPermission])
   checkPermission()
   console.log(openScanner)
+
+  const theme = useColorScheme()
+  // console.log(theme,'sj')
+
   return (
     <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>

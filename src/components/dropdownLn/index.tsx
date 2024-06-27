@@ -1,29 +1,33 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useTransition } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Menu, Divider, Provider as PaperProvider } from 'react-native-paper';
 import colorPalette from '../../assets/colorPalette/colorPalette';
+import { useTranslation } from 'react-i18next';
 
 const DropdownLn: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English')
-
   const openMenu = useCallback(() => {
     console.log('Opening menu');
     setMenuVisible(true);
   }, []);
-
   const closeMenu = useCallback(() => {
     console.log('Closing menu');
     setMenuVisible(false);
   }, []);
 
-  const handleItemPress = useCallback(() => {
-    // console.log('Item selected');
-    // setSelectedLanguage(title)
+
+  const {i18n} = useTranslation()
+
+  const handleItemPress = useCallback((ln:string) => {
+    i18n.changeLanguage(ln)
     closeMenu(); 
   }, [closeMenu]);
 
-  console.log('Menu visible:', menuVisible);
+
+
+
+  
   return (
       <View style={styles.container}>
         <Menu
@@ -33,10 +37,10 @@ const DropdownLn: React.FC = () => {
           anchorPosition='bottom'
           onDismiss={closeMenu}
         >
-          <Menu.Item style={{borderWidth:2}} onPress={handleItemPress}  title="English"  />
-          <Menu.Item onPress={handleItemPress} title="Spanish" />
-          <Divider />
-          <Menu.Item onPress={handleItemPress} title="German" />
+          <Menu.Item style={{borderWidth:2}} onPress={()=>handleItemPress('en')}  title="English"  />
+          <Menu.Item onPress={()=>handleItemPress('fr')} title="French" />
+          {/* <Divider /> */}
+          <Menu.Item onPress={()=>handleItemPress('ge')} title="German" />
         </Menu>
       </View>
   );

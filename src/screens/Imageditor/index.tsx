@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, Pressable, Dimensions, FlatList, Alert, PermissionsAndroid } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +16,7 @@ import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native
 import Geolocation from '@react-native-community/geolocation';
 import { Position } from '../GeoLocation';
 import RNFS, { DownloadDirectoryPath } from 'react-native-fs'
+import { ColorThemeContextAPI } from '../../context/ColorThemeContext';
 
 export default function Editor() {
 
@@ -205,31 +206,34 @@ export default function Editor() {
     } catch (error) {
       console.log(error, 'failed')
     }
-  }   
+  }
+  const { theme } = useContext(ColorThemeContextAPI);
+  const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
+  const style = styles(activeColor)
 
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
+    <View style={style.container}>
+      <View style={style.headerContainer}>
         <TouchableOpacity onPress={resetAndOpenNewImage}>
-          <MaterialCommunityIcons name="plus-circle-outline" size={40} color={colorPalette.imageEdior.btnGray} />
+          <MaterialCommunityIcons name="plus-circle-outline" size={40} color={activeColor.colors.bgGray} />
         </TouchableOpacity>
         {path && <TouchableOpacity
           onPress={resetPath}
         >
-          <MaterialCommunityIcons name="undo-variant" size={40} color={colorPalette.imageEdior.btnGray} />
+          <MaterialCommunityIcons name="undo-variant" size={40} color={activeColor.colors.btnGray} />
         </TouchableOpacity>}
         <TouchableOpacity
           onPress={saveImage}
         >
-          <MaterialIcons name="save" color={colorPalette.imageEdior.btnGray} size={40} />
+          <MaterialIcons name="save" color={activeColor.colors.btnGray} size={40} />
         </TouchableOpacity>
       </View>
-      <View style={styles.contentContainer}>
+      <View style={style.contentContainer}>
         {!image && (
-          <Pressable style={styles.pressableContainer} onPress={getImageFromFile}>
-            <MaterialCommunityIcons name="plus-circle-outline" size={200} color={colorPalette.imageEdior.btnGray} />
-            <Text style={styles.pressableText}>Tap anywhere to open a photo</Text>
+          <Pressable style={style.pressableContainer} onPress={getImageFromFile}>
+            <MaterialCommunityIcons name="plus-circle-outline" size={200} color={activeColor.colors.btnGray} />
+            <Text style={style.pressableText}>Tap anywhere to open a photo</Text>
           </Pressable>
         )}
         {image && (
@@ -277,7 +281,7 @@ export default function Editor() {
         </Portal >
       </PaperProvider >
       {image && (
-        <View style={styles.footerContainer}>
+        <View style={style.footerContainer}>
           <FlatList
             data={tools}
             renderItem={({ item }) => (

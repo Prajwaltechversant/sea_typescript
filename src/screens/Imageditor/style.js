@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
 import colorPalette from '../../assets/colorPalette/colorPalette';
 
-const styles = StyleSheet.create({
+const styles =(activeColor)=>
+     StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colorPalette.imageEdior.canvasBg,
+        backgroundColor: activeColor.canvasBg,
     },
     headerContainer: {
         flex: 0.5,
