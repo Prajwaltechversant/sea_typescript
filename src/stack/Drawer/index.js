@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import Data from '../../screens/data'
 import GeoLoaction from '../../screens/GeoLocation'
@@ -26,6 +26,7 @@ export default function DrawerStack() {
     const { t } = useTranslation()
     let date = new Date()
     const { colors } = useTheme()
+
 
     return (
         <Drawer.Navigator
