@@ -18,6 +18,7 @@ import { useTheme } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import ThreeDSample from '../../screens/3d'
 import ParallaxScroll from '../../screens/parallax'
+import Downloads from '../../screens/Downloads'
 
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
@@ -73,6 +74,7 @@ export default function DrawerStack() {
             />
             <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample}    />
             <Drawer.Screen  name='ParallaxScroll'   component={ParallaxScroll} />
+            <Drawer.Screen name='Download' component={Downloads} />
 
         </Drawer.Navigator>
     )

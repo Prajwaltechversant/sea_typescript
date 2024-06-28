@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const styles = (width, height, imageH, imageW) => StyleSheet.create({
+ 
     container: {
         flex: 1, backgroundColor: '#000'
     },

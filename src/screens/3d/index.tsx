@@ -23,10 +23,9 @@ export default function App() {
   const [allImage, setAllImages] = React.useState<any>([])
   const { colors } = useTheme()
   const style = styles(colors, width, height, ITEM_WIDTH, ITEM_HEIGHT)
-
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
-
+  
   const getData = async () => {
     try {
       const response = await axios.get('https://api.pexels.com/v1/curated?per_page=10', {
@@ -43,12 +42,9 @@ export default function App() {
       console.log(err)
     }
   }
-
-
   React.useEffect(() => {
     getData()
   }, [])
-
 
   const data = allImage.map((url: string, index: number) => ({
     key: String(index),
@@ -57,8 +53,6 @@ export default function App() {
       Math.random() * 40
     )}.jpg`,
   }));
-
-
   return (
     <View style={style.container}>
       <StatusBar backgroundColor={colors.background} />

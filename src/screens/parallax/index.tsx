@@ -9,7 +9,6 @@ const ParallaxScroll: React.FC = () => {
     const imageW = width * 0.7;
     const imageH = imageW * 1.54;
     const scrollX = React.useRef(new Animated.Value(0)).current;
-
     const style = styles(width, height, imageH, imageW)
     const [allImage, setAllImages] = React.useState<any>([])
 
@@ -36,7 +35,7 @@ const ParallaxScroll: React.FC = () => {
     }, [])
     return (
         <View style={style.container}>
-            <StatusBar hidden />
+            <StatusBar hidden  />
             <View style={StyleSheet.absoluteFillObject}>
                 {allImage.map((item: string, index: number) => {
                     const inputRange = [
@@ -44,7 +43,6 @@ const ParallaxScroll: React.FC = () => {
                         index * width,
                         (index + 1) * width
                     ]
-
                     const opacity = scrollX.interpolate({
                         inputRange,
                         outputRange: [0, 1, 0]
