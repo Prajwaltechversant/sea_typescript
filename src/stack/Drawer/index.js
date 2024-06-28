@@ -8,8 +8,8 @@ import SampleChart from '../../screens/chart'
 import UiSamples from '../../screens/ui'
 import Languages from '../../screens/language'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import colorPalette from '../../assets/colorPalette/colorPalette'
-import { Dropdown } from 'react-native-element-dropdown';
+// import colorPalette from '../../assets/colorPalette/colorPalette'
+// import { Dropdown } from 'react-native-element-dropdown';
 import DropdownComponent from '../../components/dropdownLn'
 import DropdownLn from '../../components/dropdownLn'
 import { useTranslation } from 'react-i18next'
@@ -22,11 +22,10 @@ import Downloads from '../../screens/Downloads'
 
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
-    
+
     const { t } = useTranslation()
     let date = new Date()
     const { colors } = useTheme()
-
 
     return (
         <Drawer.Navigator
@@ -37,7 +36,7 @@ export default function DrawerStack() {
                     </TouchableOpacity>
                 ),
 
-                headerRight:()=>(
+                headerRight: () => (
                     <Text>{date.toDateString}</Text>
                 ),
                 headerStyle: { backgroundColor: colors.background },
@@ -60,10 +59,10 @@ export default function DrawerStack() {
                     ),
                 }}
             />
-            <Drawer.Screen name={t('geolocation')} component={GeoLoaction}  />
+            <Drawer.Screen name={t('geolocation')} component={GeoLoaction} />
             <Drawer.Screen name={t('editor')} component={Editor} />
             <Drawer.Screen name={t('chart')} component={SampleChart} />
-            <Drawer.Screen name={t('uiSample')} component={UiSamples}/>
+            <Drawer.Screen name={t('uiSample')} component={UiSamples} />
             <Drawer.Screen name={t('header')} component={Languages}
                 options={{
                     headerRight: () => (
@@ -73,8 +72,8 @@ export default function DrawerStack() {
                     ),
                 }}
             />
-            <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample}    />
-            <Drawer.Screen  name='ParallaxScroll'   component={ParallaxScroll} />
+            <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample} />
+            <Drawer.Screen name='ParallaxScroll' component={ParallaxScroll} />
             <Drawer.Screen name='Download' component={Downloads} />
 
         </Drawer.Navigator>
