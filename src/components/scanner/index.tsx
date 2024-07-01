@@ -40,7 +40,6 @@ const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
                 setError('')
             }
             for (const code of codes) {
-                console.log(typeof (code.value))
                 setResult(code.value ? code.value : '')
                 Alert.alert('Success', 'Click to open the result', [
                     {
@@ -81,7 +80,6 @@ const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
     }, [])
     const { width, height } = Dimensions.get('screen')
     const [flash, setFlash] = useState(false)
-    console.log(result)
 
     // const frameProcessor = useSkiaFrameProcessor((frame) => {
     //     'worklet'
@@ -166,7 +164,6 @@ const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
 
 
     const downLoadResult = async (url: string) => {
-        console.log(result)
         const date = new Date()
         const fileName = `${date.getTime()}_sample.pdf`
         await RNFS.mkdir(RNFS.DownloadDirectoryPath)
@@ -182,7 +179,6 @@ const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
                     setDownLoadingProgress(progressPercent.toFixed(2))
                 },
             })
-            console.log(path)
             const res = await downLoadedFile.promise
             await notifee.requestPermission()
             if (res.statusCode === 200) {

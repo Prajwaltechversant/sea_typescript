@@ -6,12 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native';
 
 const DropdownLn: React.FC = () => {
+
+
   const [menuVisible, setMenuVisible] = useState(false);
   const { i18n } = useTranslation()
-
-  const {colors} = useTheme()
-
-
+  const { colors } = useTheme()
   const openMenu = useCallback(() => {
     setMenuVisible(true);
   }, []);
@@ -28,14 +27,11 @@ const DropdownLn: React.FC = () => {
   }, [closeMenu]);
 
 
-
-
-
   return (
     <View style={styles.container}>
       <Menu
         visible={menuVisible}
-        anchor={<Button textColor='white' onPress={openMenu} style={{ backgroundColor:colors.primary, borderRadius: 0 }}>Language</Button>}
+        anchor={<Button textColor='white' onPress={openMenu} style={{ backgroundColor: colors.primary, borderRadius: 0 }}>Language</Button>}
         anchorPosition='bottom'
         onDismiss={closeMenu}
       >

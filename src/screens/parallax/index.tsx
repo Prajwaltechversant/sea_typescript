@@ -29,13 +29,14 @@ const ParallaxScroll: React.FC = () => {
             console.log(err)
         }
     }
-
     React.useEffect(() => {
         getData()
     }, [])
+
+
     return (
         <View style={style.container}>
-            <StatusBar hidden  />
+            <StatusBar hidden />
             <View style={StyleSheet.absoluteFillObject}>
                 {allImage.map((item: string, index: number) => {
                     const inputRange = [

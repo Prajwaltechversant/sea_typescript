@@ -155,4 +155,3 @@ const a = {
     "total_results": 1
   }
 
-  console.log(a.results[0].components.building)

@@ -54,6 +54,7 @@ export default function Loader({ progress }: Props) {
         }
 
     },[])
+    
 const height = Dimensions.get('screen').height
     return (
         <View style={{justifyContent:'center', alignItems:'center', transform:[{translateY:height/4}]}}>

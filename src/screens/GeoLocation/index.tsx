@@ -31,7 +31,6 @@ export default function GeoLoaction() {
     const checkPermission = async () => {
         try {
             const res = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
-            console.log('permission', res)
 
             if (!res) {
                 const res = await PermissionsAndroid.request('android.permission.ACCESS_FINE_LOCATION')
@@ -54,7 +53,6 @@ export default function GeoLoaction() {
     const getLocation = async () => {
 
         const hasPermission = await checkPermission()
-        console.log(hasPermission, 'aka')
         if (hasPermission) {
             const hasGPS = await isLocationEnabled()
             if (hasGPS) {
@@ -103,7 +101,6 @@ export default function GeoLoaction() {
         let time: any = currenntLocation?.timestamp
         const date = new Date(time)
         let readableDate = date.toTimeString()
-        console.log(readableDate)
         setDate(readableDate)
     }
     useEffect(() => {

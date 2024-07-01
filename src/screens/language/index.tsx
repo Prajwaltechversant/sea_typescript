@@ -26,12 +26,10 @@ export default function Languages() {
         try {
             const response = await axios.get(`https://randomuser.me/api/?page=${page}&results=5&seed=abc`)
             if (response.status === 200) {
-                // console.log(response.data.results)
                 setUsers(response.data.results)
                 setIsLoading(false)
                 return response.data.results;
             } else {
-                console.log(`${response.status} : ${response.statusText}`)
                 setIsLoading(true)
             }
 

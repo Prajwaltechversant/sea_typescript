@@ -19,7 +19,6 @@ type UserData = {
 export default function UserCard({ data }: UserData) {
 
     const {t} = useTranslation()
-    console.log(data.name)
 
     const imageUrl = data.picture?.thumbnail || data.picture?.large || 'https://picsum.photos/700'
     const name =`${data?.name?.title || ''} ${data?.name?.first || ''} ${data?.name?.last || ''}`;

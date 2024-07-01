@@ -17,9 +17,7 @@ export default function ChangeTheme({ props }) {
     // const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
     const { colors } = useTheme()
 
-    console.log('====================================');
-    console.log(theme);
-    console.log('====================================');
+
     const changeTheme = () => {
         setIsSwitchOn(!isSwitchOn)
         if (theme === 'dark') {

@@ -8,7 +8,6 @@ import DropdownLn from '../../components/dropdownLn';
 
 export default function Data() {
   const [selected, setSelected] = useState('');
-  console.log(selected)
 
   return (
     <View style={{padding:10}}>

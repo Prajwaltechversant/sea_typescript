@@ -72,21 +72,18 @@ export default function Editor() {
 
   const getLocation = async () => {
     const hasPermission = await checkPermission()
-    console.log(hasPermission, 'aka')
     if (hasPermission) {
       const hasGPS = await isLocationEnabled()
 
       if (hasGPS) {
         Geolocation.getCurrentPosition(
           (position) => {
-            console.log("insidee fn", position)
 
             setCurrentLocation(position)
             setResultStatus(true)
           },
           (error) => {
 
-            console.log(error)
             if (error.code === 2) {
               Alert.alert("Please turn on the Location")
             }
@@ -98,13 +95,11 @@ export default function Editor() {
       } else {
         try {
           const enableResult = await promptForEnableLocationIfNeeded();
-          console.log('enableResult', enableResult);
 
         } catch (err) {
           console.log(err)
         }
       }
-      console.log(currenntLocation)
 
     } else {
       checkPermission()
@@ -216,7 +211,6 @@ export default function Editor() {
     const imageValue: any = imageRef.current?.makeImageSnapshot().encodeToBase64();
     const date = new Date()
     const fileName = `${date.getTime()}_sample.jpeg`
-    console.log(fileName)
     try {
       const path = `${RNFS.DownloadDirectoryPath}/${fileName}`
       await RNFS.mkdir(RNFS.DownloadDirectoryPath)
