@@ -10,6 +10,7 @@ import Codelogo from '../../assets/images/code.svg'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@react-navigation/native'
 import Screen2 from '../../screens/screen2'
+import CustomTabBar from './customTabBar'
 
 const Stack = createNativeStackNavigator()
 const HomeStack = () => {
@@ -28,6 +29,8 @@ export default function TabStack({navigation}:any) {
   const { colors } = useTheme()
   return (
     <Tab.Navigator
+
+    tabBar={props=><CustomTabBar {...props} />}
     
 
       screenOptions={{
@@ -44,7 +47,7 @@ export default function TabStack({navigation}:any) {
       <Tab.Screen name={t('home')} component={Home}
     
         options={{
-          tabBarIcon: ({ focused, }) => {
+          tabBarIcon: ({ focused }) => {
             return (
               focused ? <Homelogo width={25} height={25} color='red' /> :
                 <Homelogo width={25} height={25} color={colors.text} />
@@ -55,18 +58,19 @@ export default function TabStack({navigation}:any) {
         }}
       />
       <Tab.Screen name={t('tasks')} component={HomeStack}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              focused ? <Codelogo width={25} height={25} color='red' /> :
-                <Codelogo width={25} height={25} color={colors.text} />
-            )
-          },
-          tabBarActiveTintColor: 'gray'
-        }
+        // options={{
+        //   tabBarIcon: ({ focused }) => {
+        //     return (
+        //       focused ? <Codelogo width={25} height={25} color='red' /> :
+        //         <Codelogo width={25} height={25} color={colors.text} />
+        //     )
+        //   },
+        //   tabBarActiveTintColor: 'gray'
+        // }
 
-        } />
-        <Tab.Screen name='screen2' component={Screen2}  />
+        // }
+         />
+        {/* <Tab.Screen name='screen2' component={Screen2}  /> */}
     </Tab.Navigator>
   )
 }
