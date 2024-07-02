@@ -1,6 +1,6 @@
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, Dimensions, Alert } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import styles from './style'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -8,6 +8,8 @@ import { faker } from '@faker-js/faker'
 import ProgressLoader from '../../components/progressLoader'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
 
+
+const { height, width } = Dimensions.get('screen')
 const Downloads: React.FC = () => {
 
     const { colors } = useTheme()
@@ -54,19 +56,22 @@ const Downloads: React.FC = () => {
 
     // loading animation for button 
     useMemo(() => {
-        opacity.value = withRepeat(withTiming(0.5, {
-            duration: 600
-            , easing: Easing.linear
+        opacity.value = withRepeat(withTiming(0.3, {
+            duration: 700
+            , easing: Easing.circle
         }),
             -1,
-            true)
+            false)
     }, [downloadToggle])
+    
+
 
 
 
     return (
         <View style={style.container}>
             <View style={style.actionContainer}>
+
                 {
                     !downloadToggle && !downLoadStatus ?
                         (
@@ -112,17 +117,27 @@ const Downloads: React.FC = () => {
             }
 
 
-            <FlatList
-                data={files}
-                renderItem={({ item }) => (
-                    <View style={{ width: 100, height: 100, backgroundColor: 'red', marginHorizontal: 30, marginVertical: 10 }}>
-                        <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
-                    </View>
-                )}
-                pagingEnabled
-                horizontal
-                keyExtractor={(item, index) => index.toString()}
-            />
+            <View style={{ marginTop: height * 0.1 }}>
+                <FlatList
+                    data={files}
+                    renderItem={({ item }) => (
+                        <View style={{ width: 100, height: 100, backgroundColor: 'red', marginHorizontal: 30, marginVertical: 10 }}>
+                            <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
+                        </View>
+                    )}
+                    pagingEnabled
+                    horizontal
+                    // numColumns={2}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+            </View>
+            {/* <TouchableOpacity
+                style={[style.downloadBtnContainer, { backgroundColor: 'green' }]}
+                onPress={() => setFiles([])}
+            >
+                <Text style={style.btnText}>reset</Text>
+                <MaterialIcons name='file-download-done' size={22} color={colors.text} />
+            </TouchableOpacity> */}
 
         </View>
     )

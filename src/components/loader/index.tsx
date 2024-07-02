@@ -90,6 +90,7 @@ const height = Dimensions.get('screen').height
                     </G>
                 </Svg>
             </Animated.View>
+            
         </View>
     )
 }

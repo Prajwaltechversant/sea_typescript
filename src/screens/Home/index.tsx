@@ -8,6 +8,7 @@ import { Image } from 'react-native'
 import { RootStackParams } from '../../stack/MainStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useTheme } from '@react-navigation/native'
+import Animated from 'react-native-reanimated';
 
 type NavigaionProps = NativeStackScreenProps<RootStackParams,'TabStack' >
 
@@ -51,10 +52,11 @@ const Home= ({navigation}:NavigaionProps) => {
         {
           !openScanner &&
           <>
-            <Image
+            <Animated.Image
               source={{
                 uri: 'https://static.vecteezy.com/system/resources/previews/021/115/776/original/qr-code-free-png.png'
               }} width={300} height={300}
+              sharedTransitionTag='tag'
             />
             <Button
               onPress={() => setOpenScanner(true)}

@@ -24,6 +24,8 @@ const ProgressLoader: React.FC<Props> = ({ progress }) => {
     const half_Circle = R + strokeWidth;
     const diameter = half_Circle * 2
 
+    
+
     const animatedProps = useAnimatedProps(() => {
         return {
             strokeDashoffset: withSpring(circumference * (1 - progress))
@@ -53,7 +55,7 @@ const ProgressLoader: React.FC<Props> = ({ progress }) => {
                                 cx={'50%'}
                                 cy={'50%'}
                                 stroke={colors.text}
-                                strokeLinecap="round"
+                                strokeLinecap="butt"
                                 strokeDasharray={circumference}
                                 strokeOpacity={1}
                             />

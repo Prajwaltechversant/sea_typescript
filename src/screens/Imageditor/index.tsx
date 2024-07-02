@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, Pressable, Dimensions, FlatList, Alert, PermissionsAndroid } from 'react-native';
+import { View, Text, Pressable, Dimensions, FlatList, Alert, PermissionsAndroid, useWindowDimensions, Platform, UIManager, LayoutAnimation, Animated } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Gesture, GestureDetector, GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -17,12 +17,14 @@ import Geolocation from '@react-native-community/geolocation';
 import { Position } from '../GeoLocation';
 import RNFS, { DownloadDirectoryPath } from 'react-native-fs'
 import { ColorThemeContextAPI } from '../../context/ColorThemeContext';
+import Orientation, { useOrientationChange } from 'react-native-orientation-locker';
+
 
 export default function Editor() {
 
   const [image, setImage] = useState<SkImage | null>(null);
   const [rotate, setRotate] = useState(0);
-  const { width } = Dimensions.get('screen');
+  // const { width } = Dimensions.get('screen');
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -35,21 +37,41 @@ export default function Editor() {
   const currentPath = useRef<SkPath | null>()
   const [path, setPath] = useState<SkPath>(Skia.Path.Make())
 
-
+  const { width, height } = useWindowDimensions()
+  const { theme } = useContext(ColorThemeContextAPI);
+  const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
+  const isLandscape = width >= height ? true : false
+  const style = styles(activeColor, width, height, isLandscape)
   // custom font for adding Text in canvas
   const font = useFont(require('../../assets/fonts/PlayfairDisplay-Black.ttf'), 12)
 
-  const { theme } = useContext(ColorThemeContextAPI);
-  const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
-  const style = styles(activeColor)
 
+  const bounceValue = useRef(new Animated.Value(1)).current
 
+  const startBounceAnimation = () => {
+    Animated.sequence([
+      Animated.timing(bounceValue, { toValue: 1.2, duration: 100, useNativeDriver: true }),
+      Animated.spring(bounceValue, { toValue: 1, friction: 4, useNativeDriver: true })
+    ]).start();
+  };
 
-  // function to check location  permission 
+  const horizontal = width>=height ? false : true
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
+  useOrientationChange((e) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    startBounceAnimation()
+  })
+
 
   const checkPermission = async () => {
     try {
       const res = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
+      await PermissionsAndroid.requestMultiple(['android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE'])
       if (!res) {
         const res = await PermissionsAndroid.request('android.permission.ACCESS_FINE_LOCATION')
         return true
@@ -57,6 +79,8 @@ export default function Editor() {
       else {
         return true
       }
+
+
     }
     catch (err) {
       console.log(err)
@@ -68,7 +92,7 @@ export default function Editor() {
 
 
 
-// function to get location details and save to state
+  // function to get location details and save to state
 
   const getLocation = async () => {
     const hasPermission = await checkPermission()
@@ -113,7 +137,7 @@ export default function Editor() {
   }, [])
 
 
-   // function to open image from file using file picker
+  // function to open image from file using file picker
   const getImageFromFile = async () => {
     try {
       const res: any = await ImageCropPicker.openPicker({ mediaType: 'photo', includeBase64: true, cropping: true });
@@ -121,9 +145,10 @@ export default function Editor() {
       const skiaImage = Skia.Image.MakeImageFromEncoded(data);
       setImage(skiaImage);
     } catch (error) {
-      console.error(error);
+      console.error(error, "Image Picker");
     }
-  };
+
+  }
 
   const rotateImage = () => {
     setRotate(rotate + 90);
@@ -153,7 +178,7 @@ export default function Editor() {
 
   // console.log(path)
 
-// function to draw using useTouchandler  from react native skia
+  // function to draw using useTouchandler  from react native skia
 
   const touch = useTouchHandler({
     onStart(touchInfo) {
@@ -179,8 +204,7 @@ export default function Editor() {
 
 
 
-
-    // function to display current position and timestamp in image
+  // function to display current position and timestamp in image
 
   const paragraph = useMemo(() => {
     if (!font) {
@@ -224,65 +248,91 @@ export default function Editor() {
 
 
   return (
-    <View style={style.container}>
-      <View style={style.headerContainer}>
-        <TouchableOpacity onPress={resetAndOpenNewImage}>
-          <MaterialCommunityIcons name="plus-circle-outline" size={40} color={activeColor.colors.bgGray} />
-        </TouchableOpacity>
-        {path && <TouchableOpacity
-          onPress={resetPath}
-        >
-          <MaterialCommunityIcons name="undo-variant" size={40} color={activeColor.colors.btnGray} />
-        </TouchableOpacity>}
-        <TouchableOpacity
-          onPress={saveImage}
-        >
-          <MaterialIcons name="save" color={activeColor.colors.btnGray} size={40} />
-        </TouchableOpacity>
-      </View>
-      <View style={style.contentContainer}>
-        {!image && (
-          <Pressable style={style.pressableContainer} onPress={getImageFromFile}>
-            <MaterialCommunityIcons name="plus-circle-outline" size={200} color={activeColor.colors.btnGray} />
-            <Text style={style.pressableText}>Tap anywhere to open a photo</Text>
-          </Pressable>
-        )}
-        {image && (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            {/* <GestureHandlerRootView> */}
-            {/* <GestureDetector gesture={pan} > */}
-            <Canvas ref={imageRef} style={{ width: width - 40, height: width - 40 }}
-              onTouch={touch}
-            >
-              <Group
-                origin={{ x: (width - 40) / 2, y: (width - 40) / 2 }}
-                transform={[{ rotate: (rotate * Math.PI) / 180 }]}
-              >
-                <Image x={0} y={0} image={image} width={width - 40} height={width - 40} fit="cover" />
-                <Blur blur={blurValue} mode="clamp" />
-                {
-                  draw &&
-                  <Path path={path} style={'stroke'} color={'red'} strokeWidth={2} />
+    <>
 
-                }
-                {/* <SkText 
+      <Animated.View style={[style.container,{transform:[{scale:bounceValue}]}]}>
+        <View style={style.headerContainer}>
+          <TouchableOpacity onPress={resetAndOpenNewImage}>
+            <MaterialCommunityIcons name="plus-circle-outline" size={40} color={activeColor.colors.bgGray} />
+          </TouchableOpacity>
+          {path && <TouchableOpacity
+            onPress={resetPath}
+          >
+            <MaterialCommunityIcons name="undo-variant" size={40} color={activeColor.colors.btnGray} />
+          </TouchableOpacity>}
+          <TouchableOpacity
+            onPress={saveImage}
+          >
+            <MaterialIcons name="save" color={activeColor.colors.btnGray} size={40} />
+          </TouchableOpacity>
+        </View>
+        <View style={style.contentContainer}>
+          {!image && (
+            <Pressable style={style.pressableContainer} onPress={getImageFromFile}>
+              <MaterialCommunityIcons name="plus-circle-outline" size={width > height ? width / 8 : width / 2} color={activeColor.colors.btnGray} />
+              <Text style={style.pressableText}>Tap anywhere to open a photo</Text>
+            </Pressable>
+          )}
+          {image && (
+            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              {/* <GestureHandlerRootView> */}
+              {/* <GestureDetector gesture={pan} > */}
+              <Canvas ref={imageRef} style={{ width: width > height ? height - 40 : width - 40, height: width > height ? height - 40 : width - 40 }}
+                onTouch={touch}
+              >
+                <Group
+                  origin={{ x: (width - 40) / 2, y: (width - 40) / 2 }}
+                  transform={[{ rotate: (rotate * Math.PI) / 180 }]}
+                >
+                  <Image x={0} y={0} image={image} width={width > height ? height : width - 40} height={width > height ? height - 40 : width - 40} fit="cover" />
+                  <Blur blur={blurValue} mode="clamp" />
+                  {
+                    draw &&
+                    <Path path={path} style={'stroke'} color={'red'} strokeWidth={2}  />
+                  }
+                  {/* <SkText 
                 font={font}
                 x={5}
                 y={width-48}
                 color={'white'}          
                 text={locationText}
                    /> */}
-                <Paragraph paragraph={paragraph} x={150} y={320} width={300} />
-              </Group>
-            </Canvas>
-            {/* </GestureDetector> */}
-            {/* </GestureHandlerRootView> */}
+                  <Paragraph paragraph={paragraph} x={width > height ? height * 0.4 : 150} y={width > height ? width * .34 : 320} width={300} />
+                </Group>
+              </Canvas>
+              {/* </GestureDetector> */}
+              {/* </GestureHandlerRootView> */}
+            </View>
+          )}
+        </View>
+
+        {image && (
+          <View style={style.footerContainer}>
+            <FlatList
+              data={tools}
+              renderItem={({ item }) => (
+                <Tools
+                  item={item}
+                  rotateImage={rotateImage}
+                  setRotate={setRotate}
+                  showModal={showModal}
+                  hideModal={hideModal}
+                  setBlurValue={setBlurValue}
+                  setDraw={setDraw}
+                  draw={draw}
+                />
+              )}
+
+              horizontal={horizontal}
+            />
           </View>
-        )}
-      </View>
+        )
+        }
+
+      </Animated.View >
       <PaperProvider>
         <Portal>
-          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, width: width - 40, alignSelf: 'center' }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, width: width > height ? width * .6 : width - 40, alignSelf: 'center', }}>
             <Modal visible={visible} onDismiss={hideModal}>
               <View style={{}} >
                 <SliderComponent blurValue={blurValue} setBlurValue={setBlurValue} hideModal={hideModal} />
@@ -291,27 +341,7 @@ export default function Editor() {
           </View>
         </Portal >
       </PaperProvider >
-      {image && (
-        <View style={style.footerContainer}>
-          <FlatList
-            data={tools}
-            renderItem={({ item }) => (
-              <Tools
-                item={item}
-                rotateImage={rotateImage}
-                setRotate={setRotate}
-                showModal={showModal}
-                hideModal={hideModal}
-                setBlurValue={setBlurValue}
-                setDraw={setDraw}
-                draw={draw}
-              />
-            )}
-            horizontal
-          />
-        </View>
-      )
-      }
-    </View >
+    </>
+
   );
 }

@@ -7,8 +7,13 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import colorPalette from './src/assets/colorPalette/colorPalette';
 import ColorThemeContext, { ColorThemeContextAPI } from './src/context/ColorThemeContext';
 import { Appearance } from 'react-native';
+import ScreenContextProvider from './src/context/ScreenContextProvider';
+import Orientation from 'react-native-orientation-locker';
 
 export default function App() {
+      // Orientation.lockToPortrait()
+      // Orientation.unlockAllOrientations()
+
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
       switch (type) {
@@ -30,22 +35,25 @@ export default function App() {
   );
 }
 function ThemeProviderWrapper() {
-  const { theme,setTheme } = useContext(ColorThemeContextAPI);
+  const { theme, setTheme } = useContext(ColorThemeContextAPI);
   const activeColor = theme === 'dark' ? colorPalette.dark : colorPalette.light
-  Appearance.addChangeListener((scheme)=>{
+  Appearance.addChangeListener((scheme) => {
     // console.log('====================================');
     // console.log(scheme);
     // console.log('====================================');
     setTheme(scheme.colorScheme)
   })
 
-  const {colors} = useTheme()
+  const { colors } = useTheme()
 
   return (
-    <NavigationContainer theme={activeColor}  >
-      <PaperProvider>
-        <MainStack   />
-      </PaperProvider>
-    </NavigationContainer>
+    <ScreenContextProvider>
+      <NavigationContainer theme={activeColor}  >
+        <PaperProvider>
+          <MainStack />
+        </PaperProvider>
+      </NavigationContainer>
+    </ScreenContextProvider>
+
   );
 }

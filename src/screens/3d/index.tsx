@@ -14,6 +14,7 @@ import styles from './style';
 import axios from 'axios';
 import { ActivityIndicator } from 'react-native-paper';
 import { faker } from '@faker-js/faker';
+import Orientation, { OrientationLocker, PORTRAIT, LANDSCAPE, useOrientationChange } from "react-native-orientation-locker";
 
 export default function App() {
 
@@ -25,7 +26,7 @@ export default function App() {
   const style = styles(colors, width, height, ITEM_WIDTH, ITEM_HEIGHT)
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
-  
+
   const getData = async () => {
     try {
       const response = await axios.get('https://api.pexels.com/v1/curated?per_page=10', {
@@ -53,8 +54,26 @@ export default function App() {
       Math.random() * 40
     )}.jpg`,
   }));
+
+  React.useEffect(() => {
+    getData();
+    // Orientation.lockToPortrait();
+    // return () => {
+    //     Orientation.unlockAllOrientations();
+    // };
+  }, []);
+
+  // useOrientationChange((o) => {
+  //   Orientation.lockToPortrait()
+  // });
+        // Orientation.unlockAllOrientations();
+
   return (
+
     <View style={style.container}>
+      {/* <OrientationLocker orientation='PORTRAIT'
+        onChange={orientation => console.log('onChange', orientation)}
+      /> */}
       <StatusBar backgroundColor={colors.background} />
       <Animated.FlatList
         data={data}
@@ -110,6 +129,7 @@ export default function App() {
 
       />
     </View>
+
   )
 }
 

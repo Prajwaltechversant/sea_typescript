@@ -9,6 +9,7 @@ import Homelogo from '../../assets/images/home.svg'
 import Codelogo from '../../assets/images/code.svg'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@react-navigation/native'
+import Screen2 from '../../screens/screen2'
 
 const Stack = createNativeStackNavigator()
 const HomeStack = () => {
@@ -21,21 +22,26 @@ const HomeStack = () => {
 
 
 const Tab = createBottomTabNavigator<RootStackParams>()
-export default function TabStack() {
+export default function TabStack({navigation}:any) {
   const deviceTheme = Appearance.getColorScheme()
   const { t } = useTranslation()
   const { colors } = useTheme()
   return (
     <Tab.Navigator
+    
 
       screenOptions={{
+        
+        // animation:'fade',
+        // tabBarVisibilityAnimationConfig:{'show'},
         tabBarStyle: { backgroundColor: colors.background, borderWidth: 2, elevation: 6, shadowColor: colors.text },
         headerStyle: { backgroundColor: colors.background, },
         headerShown: false,
-        headerShadowVisible: false
+        headerShadowVisible: false, tabBarHideOnKeyboard:true, tabBarBadgeStyle:{backgroundColor:'red'}
       }}
     >
       <Tab.Screen name={t('home')} component={Home}
+    
         options={{
           tabBarIcon: ({ focused }) => {
             return (
@@ -59,6 +65,7 @@ export default function TabStack() {
         }
 
         } />
+        <Tab.Screen name='screen2' component={Screen2}  />
     </Tab.Navigator>
   )
 }

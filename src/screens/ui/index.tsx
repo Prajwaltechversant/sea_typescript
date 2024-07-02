@@ -10,6 +10,7 @@ import DatePicker from 'react-native-date-picker'
 import colorPalette from '../../assets/colorPalette/colorPalette';
 import ColorThemeContext, { ColorThemeContextAPI } from '../../context/ColorThemeContext';
 import { useTheme } from '@react-navigation/native';
+// import Icon from '../../assets/svg/icon.svg'
 export default function UiSamples() {
     const skew = useSharedValue(0);
 
@@ -22,26 +23,12 @@ export default function UiSamples() {
     const { colors } = useTheme()
     return (
         <View style={styles.container}>
-            <View style={{ width: 200, height: 200, backgroundColor: colors.primary }}>
-
-            </View>
-            <Button title="Open" onPress={() => setOpen(true)} />
-            <DatePicker
-                modal
-                mode='date'
-                open={open}
-                date={date}
-                onConfirm={(date) => {
-                    setOpen(false)
-                    setDate(date)
-                }}
-                onCancel={() => {
-                    setOpen(false)
-                }}
-            />
-            <Text style={{ color: 'black' }}>{date.toDateString()}</Text>
-            <Button title="Dark" onPress={() => Appearance.setColorScheme('dark')} />
-            <Button title="Light" onPress={() => Appearance.setColorScheme('light')} />
+            {/* <Svg>
+                <polygon />
+            </Svg> */}
+         
+           
+    
         </View>
     );
 }

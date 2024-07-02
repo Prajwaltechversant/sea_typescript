@@ -1,22 +1,25 @@
 import { StyleSheet } from 'react-native';
 import colorPalette from '../../assets/colorPalette/colorPalette';
 
-const styles =(activeColor)=>
+const styles =(activeColor,width, height,isLandscape)=>
      StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: activeColor.canvasBg,
+        flex: 8,
+        height, width,
+        backgroundColor: activeColor.canvasBg,flexDirection:width>height ? 'row' : 'column'
     },
     headerContainer: {
-        flex: 0.5,
-        flexDirection: 'row',
+        flex:1,
+        flexDirection:width>height ? 'column':'row',
         justifyContent: 'space-between',
-        padding: 20,
+        padding:isLandscape ? width*0.01 : height*0.02,
+        
     },
     contentContainer: {
-        flex: 4,
+        flex: 6,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center',    
+
     },
     pressableContainer: {
         justifyContent: 'center',
@@ -29,9 +32,9 @@ const styles =(activeColor)=>
     },
     footerContainer: {
         flex:1,
-        borderTopWidth: 1,
-        borderColor: '#ddd',
-    },
+    },canvasImage:{
+
+    }
 });
 
 export default styles;

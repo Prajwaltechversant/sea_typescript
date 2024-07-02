@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = (width, height, imageH, imageW) => StyleSheet.create({
  
     container: {
-        flex: 1, backgroundColor: '#000'
+        flex: 1, backgroundColor: '#000',
     },
 
     cardContainer: {
@@ -17,8 +17,8 @@ const styles = (width, height, imageH, imageW) => StyleSheet.create({
         }
     },
     cardImage: {
-        width: imageW,
-        height: imageH,
+        width:height<width ? width/2 : imageW,
+        height: height/2,
         resizeMode: 'cover',
         borderRadius: 14
     }

@@ -4,6 +4,7 @@ import TabStack from '../Tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ResultView from '../../screens/webView'
 import { ColorThemeContextAPI } from '../../context/ColorThemeContext'
+import Login from '../../screens/Login'
 
 const Stack = createNativeStackNavigator()
 
@@ -27,7 +28,7 @@ export default function MainStack() {
             statusBarColor: colors.background,
             headerShown: false
         }}>
-            {/* <Stack.Screen name='drawer' component={DrawerStack}  /> */}
+            <Stack.Screen name='Login' component={Login}  />
             <Stack.Screen name='TabStack' component={TabStack} options={{
                 headerShown: false
             }} />

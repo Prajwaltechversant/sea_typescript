@@ -8,9 +8,6 @@ import SampleChart from '../../screens/chart'
 import UiSamples from '../../screens/ui'
 import Languages from '../../screens/language'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-// import colorPalette from '../../assets/colorPalette/colorPalette'
-// import { Dropdown } from 'react-native-element-dropdown';
-import DropdownComponent from '../../components/dropdownLn'
 import DropdownLn from '../../components/dropdownLn'
 import { useTranslation } from 'react-i18next'
 import ChangeTheme from '../../components/Theme'
@@ -19,6 +16,11 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import ThreeDSample from '../../screens/3d'
 import ParallaxScroll from '../../screens/parallax'
 import Downloads from '../../screens/Downloads'
+import LayoutAnimations from '../../screens/layoutAnimation'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import Layout2 from '../../screens/layoutSample'
+import ButtonAnim from '../../screens/Login'
+import Login from '../../screens/Login'
 
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
@@ -60,7 +62,7 @@ export default function DrawerStack() {
                 }}
             />
             <Drawer.Screen name={t('geolocation')} component={GeoLoaction} />
-            <Drawer.Screen name={t('editor')} component={Editor} />
+            <Drawer.Screen name={t('editor')} component={Editor} options={{ headerShown: false }} />
             <Drawer.Screen name={t('chart')} component={SampleChart} />
             <Drawer.Screen name={t('uiSample')} component={UiSamples} />
             <Drawer.Screen name={t('header')} component={Languages}
@@ -75,6 +77,27 @@ export default function DrawerStack() {
             <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample} />
             <Drawer.Screen name='ParallaxScroll' component={ParallaxScroll} />
             <Drawer.Screen name='Download' component={Downloads} />
+            <Drawer.Screen name='layoutAnimations' component={LayoutAnimations} options={{
+                drawerIcon: () => (
+                    <AntDesign name='layout' color={colors.text} />
+                ),
+                title: "Layouts",
+
+            }} />
+            <Drawer.Screen name='layoutSample' component={Layout2} options={{
+                drawerIcon: () => (
+                    <AntDesign name='layout' color={colors.text} />
+                ),
+                title: "Layouts 2",
+
+            }} />
+            {/* <Drawer.Screen name='Login' component={Login} options={{
+                drawerIcon: () => (
+                    <AntDesign name='layout' color={colors.text} />
+                ),
+                title: "Login",
+
+            }} /> */}
 
         </Drawer.Navigator>
     )
