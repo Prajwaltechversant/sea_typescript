@@ -39,11 +39,12 @@ export default function TabStack({navigation}:any) {
         headerShown: false,
         headerShadowVisible: false, tabBarHideOnKeyboard:true, tabBarBadgeStyle:{backgroundColor:'red'}
       }}
+      
     >
       <Tab.Screen name={t('home')} component={Home}
     
         options={{
-          tabBarIcon: ({ focused }) => {
+          tabBarIcon: ({ focused, }) => {
             return (
               focused ? <Homelogo width={25} height={25} color='red' /> :
                 <Homelogo width={25} height={25} color={colors.text} />

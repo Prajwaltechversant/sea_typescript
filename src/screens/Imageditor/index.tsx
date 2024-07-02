@@ -183,6 +183,7 @@ export default function Editor() {
   const touch = useTouchHandler({
     onStart(touchInfo) {
       const { x, y } = touchInfo
+      
       path?.moveTo(x, y)
     },
     onActive(touchInfo) {
