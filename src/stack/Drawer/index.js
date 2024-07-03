@@ -76,7 +76,7 @@ export default function DrawerStack() {
             />
             <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample} />
             <Drawer.Screen name='ParallaxScroll' component={ParallaxScroll} />
-            <Drawer.Screen name='Download' component={Downloads} />
+            {/* <Drawer.Screen name='Download' component={Downloads} /> */}
             <Drawer.Screen name='layoutAnimations' component={LayoutAnimations} options={{
                 drawerIcon: () => (
                     <AntDesign name='layout' color={colors.text} />

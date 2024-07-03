@@ -10,6 +10,7 @@ import DatePicker from 'react-native-date-picker'
 import colorPalette from '../../assets/colorPalette/colorPalette';
 import ColorThemeContext, { ColorThemeContextAPI } from '../../context/ColorThemeContext';
 import { useTheme } from '@react-navigation/native';
+import AnimatedIcon from '../../components/AnimatedIcon/AnimatedIcon';
 // import Icon from '../../assets/svg/icon.svg'
 export default function UiSamples() {
     const skew = useSharedValue(0);
@@ -26,9 +27,9 @@ export default function UiSamples() {
             {/* <Svg>
                 <polygon />
             </Svg> */}
-         
-           
-    
+            <AnimatedIcon />
+
+
         </View>
     );
 }

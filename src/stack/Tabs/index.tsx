@@ -23,54 +23,26 @@ const HomeStack = () => {
 
 
 const Tab = createBottomTabNavigator<RootStackParams>()
-export default function TabStack({navigation}:any) {
+export default function TabStack({ navigation }: any) {
   const deviceTheme = Appearance.getColorScheme()
   const { t } = useTranslation()
   const { colors } = useTheme()
   return (
+
     <Tab.Navigator
-
-    tabBar={props=><CustomTabBar {...props} />}
-    
-
+      tabBar={props => <CustomTabBar {...props} />}
       screenOptions={{
-        
-        // animation:'fade',
-        // tabBarVisibilityAnimationConfig:{'show'},
         tabBarStyle: { backgroundColor: colors.background, borderWidth: 2, elevation: 6, shadowColor: colors.text },
         headerStyle: { backgroundColor: colors.background, },
         headerShown: false,
-        headerShadowVisible: false, tabBarHideOnKeyboard:true, tabBarBadgeStyle:{backgroundColor:'red'}
+        headerShadowVisible: false, tabBarHideOnKeyboard: true, tabBarBadgeStyle: { backgroundColor: 'red' },
+
       }}
-      
     >
       <Tab.Screen name={t('home')} component={Home}
-    
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              focused ? <Homelogo width={25} height={25} color='red' /> :
-                <Homelogo width={25} height={25} color={colors.text} />
-            )
-          },
-          tabBarActiveTintColor: 'gray'
-
-        }}
       />
-      <Tab.Screen name={t('tasks')} component={HomeStack}
-        // options={{
-        //   tabBarIcon: ({ focused }) => {
-        //     return (
-        //       focused ? <Codelogo width={25} height={25} color='red' /> :
-        //         <Codelogo width={25} height={25} color={colors.text} />
-        //     )
-        //   },
-        //   tabBarActiveTintColor: 'gray'
-        // }
-
-        // }
-         />
-        {/* <Tab.Screen name='screen2' component={Screen2}  /> */}
+      <Tab.Screen name={t('tasks')} component={HomeStack}  />
+      <Tab.Screen name='screen2' component={Screen2} />
     </Tab.Navigator>
   )
 }

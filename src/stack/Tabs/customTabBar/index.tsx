@@ -1,17 +1,28 @@
-import React, { useRef } from 'react';
-import { View, Text, Animated, TouchableOpacity, ToastAndroid } from 'react-native';
-// import HomeLogo from '../../../assets/images/home.svg';
-// import CodeLogo from '../../../assets/images/code.svg';
+import React from 'react';
+import { View, Text, Animated, TouchableOpacity, ToastAndroid, Easing, LayoutAnimation } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { useScreenContext } from '../../../context/ScreenContextProvider';
+import { useTheme } from '@react-navigation/native';
 import styles from './style';
+import { useOrientationChange } from 'react-native-orientation-locker';
 
-import Icon from 'react-native-vector-icons/AntDesign'
-export default function CustomTabBar({ state, descriptors, navigation }) {
+
+
+
+export default function CustomTabBar({ state, descriptors, navigation }: any) {
+  const screenContext = useScreenContext();
+  const { colors } = useTheme();
+
+  const isPortrait = screenContext.windowWidth > screenContext.windowHeight;
+  const screenStyles = styles(screenContext, screenContext[isPortrait ? 'windowWidth' : 'windowHeight'], screenContext[isPortrait ? 'windowHeight' : 'windowWidth'], colors);
+
   return (
-    <View style={styles.container}>
-      {state.routes.map((route, index) => {
+    <View style={screenStyles.container}>
+      {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
         const tabLabel = options.title !== undefined ? options.title : route.name;
         const isFocused = state.index === index;
+
         let name;
         switch (route.name) {
           case 'Home':
@@ -24,53 +35,79 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
             name = 'home';
         }
 
-        const scaleValue = useRef(new Animated.Value(1)).current
+        const scaleValue = React.useRef(new Animated.Value(1)).current;
+        const opacityValue = React.useRef(new Animated.Value(1)).current;
+        const rotateValue = React.useRef(new Animated.Value(0)).current;
 
-        const opacityValue = useRef(new Animated.Value(1)).current
 
-        const startscale = () => {
+        const startScale = () => {
           Animated.sequence([
             Animated.timing(scaleValue, { toValue: 0.5, duration: 200, useNativeDriver: true }),
             Animated.spring(scaleValue, { toValue: 1, friction: 4, useNativeDriver: true })
           ]).start();
         };
+
         const startOpacityAnimation = () => {
           Animated.sequence([
             Animated.timing(opacityValue, { toValue: 0.1, duration: 200, useNativeDriver: true }),
             Animated.spring(opacityValue, { toValue: 1, friction: 4, useNativeDriver: true }),
+          ]).start();
+        };
 
+        const startRotateAnimation = () => {
+          Animated.sequence([
+            Animated.timing(rotateValue, { toValue: 0.6, duration: 300, useNativeDriver: true, easing: Easing.ease }),
+            Animated.spring(rotateValue, { toValue: 0, friction: 15, useNativeDriver: true, })
           ]).start();
         };
 
         const onPress = () => {
           navigation.navigate(route.name);
-          startscale()
-          startOpacityAnimation()
+          if (!isFocused) {
+            startScale();
+            startOpacityAnimation();
+            startRotateAnimation();
+          }
         };
 
         const onLongPress = () => {
-         if(!isFocused){
-          ToastAndroid.showWithGravityAndOffset(
-            `navigate to ${route.name}`,
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-            25,
-            50,
-          );
-         }
-        }
+          if (!isFocused) {
+            ToastAndroid.showWithGravityAndOffset(
+              `navigate to ${route.name}`,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+              25,
+              50,
+            );
+          }
+        };
 
-
+        const rotation = rotateValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '360deg'],
+        });
+        
+        useOrientationChange((e) => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+        })
         return (
           <TouchableOpacity
             key={route.key}
-            style={[styles.tabBarItem, { backgroundColor: isFocused ? 'gray' : 'transparent', opacity: opacityValue }]}
+            style={[screenStyles.tabBarItem, { opacity: opacityValue }]}
             onPress={onPress}
             onLongPress={onLongPress}
           >
-            <Animated.View style={{ flexDirection: 'column', alignItems: 'center', transform: [{ scale: scaleValue }] }}>
-              <Icon name={name} size={20} />
-              <Text style={{ color: isFocused ? 'white' : 'black' }}>{tabLabel}</Text>
+            {isFocused && <View style={{ borderWidth: 1, width: 50, marginBottom: 5, transform: [{ translateX: 0 }] }}></View>}
+
+            <Animated.View style={[
+              { transform: [{ scale: scaleValue }, { rotate: rotation }] },
+              { backgroundColor: isFocused ? colors.primary : 'transparent', borderRadius: 50, padding: 5 },
+              screenStyles.labelContainer
+            ]}>
+              <View style={screenStyles.iconContainerWrapper}>
+                <Icon name={name} size={20} color={colors.text} />
+                <Text style={screenStyles.labelText}>{tabLabel}</Text>
+              </View>
             </Animated.View>
           </TouchableOpacity>
         );
