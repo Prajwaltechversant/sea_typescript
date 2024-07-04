@@ -8,21 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import {useTheme} from '@react-navigation/native';
 import {useScreenContext} from '../../context/ScreenContextProvider';
 import styles from './style';
 import InputBox from '../../components/InputElement';
 import DatePickerComponent from '../../components/datePicker';
-import {Checkbox, TextInput} from 'react-native-paper';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { useOrientationChange } from 'react-native-orientation-locker';
+import {Checkbox} from 'react-native-paper';
+import {useOrientationChange} from 'react-native-orientation-locker';
+import {Button} from 'react-native';
+import Education from './Education';
 
-
-const MemoTextInput = React.memo(TextInput)
 type Form = {
   name: string;
-  // lname: string;
   dob: Date | undefined;
   age: number | null;
   temporaryAddress: {
@@ -60,16 +58,14 @@ const Forms: React.FC = () => {
     colors,
   );
 
-  const [isDate, setisDate] = useState(false);
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
+
+  const [addEducation, setAddEducation] = useState(false);
 
   const currentYear = new Date().getFullYear();
 
-  // console.log(currentYear)
-
   const [formData, setFormData] = useState<Form>({
     name: '',
-    // lname: '',
     mobile: null,
     permanentAddress: {
       address: '',
@@ -87,7 +83,6 @@ const Forms: React.FC = () => {
     },
     dob: undefined,
     age: null,
-
     education: {
       degree: '',
       endDate: null,
@@ -97,91 +92,72 @@ const Forms: React.FC = () => {
     },
   });
 
-  const handleInputChange = (
-    field: keyof Form,
-    value: any,
-    subField?: string,
-  ) => {
-    setFormData(prevFormData => {
-      if (
-        field === 'permanentAddress' ||
-        field === 'temporaryAddress' ||
-        field === 'education'
-      ) {
-        return {
-          ...prevFormData,
-          [field]: {
-            ...prevFormData[field],
-            [subField!]: value,
-          },
-        };
-      } else {
-        return {
-          ...prevFormData,
-          [field]: value,
-        };
-      }
-    });
-  };
+  const handleInputChange = useCallback(
+    (field: keyof Form, value: any, subField?: string, index?: number) => {
+      setFormData(prevFormData => {
+        if (
+          field === 'permanentAddress' ||
+          field === 'temporaryAddress' ||
+          field === 'education'
+        ) {
+          return {
+            ...prevFormData,
+            [field]: {
+              ...prevFormData[field],
+              [subField!]: value,
+            },
+          };
+        } else {
+          return {
+            ...prevFormData,
+            [field]: value,
+          };
+        }
+      });
+    },
+    [],
+  );
 
-  useMemo(() => {
+  useEffect(() => {
     if (formData.dob) {
-      let userAge = currentYear - formData?.dob?.getFullYear();
+      const userAge = currentYear - formData.dob.getFullYear();
       setFormData(prevFormData => ({
         ...prevFormData,
         age: userAge,
       }));
     }
-  }, [formData.dob]);
+  }, [formData.dob, currentYear]);
 
-  
-  useOrientationChange((o)=>{
+  useOrientationChange(() => {
     LayoutAnimation.configureNext({
-        duration: 500,
-        create: {type: 'linear', property: 'scaleXY'},
-        update: {type: 'spring', springDamping:90},
-        delete: {type: 'linear', property: 'opacity'},
-      });    })
+      duration: 500,
+      create: {type: 'linear', property: 'scaleXY'},
+      update: {type: 'spring', springDamping: 90},
+      delete: {type: 'linear', property: 'opacity'},
+    });
+  });
+
+  // const handleAddEducation = () => {
+  //   setAddEducation(true);
+  //   handleInputChange('education', '', '', formData.education);
+  // };
 
   return (
-    <ScrollView
-    
-  
-    >
-      <KeyboardAvoidingView
-        enabled
-        style={screenStyles.container}
-        // keyboardVerticalOffset={0}
-      >
-        {/* <View id="addNewBox" style={screenStyles.addBtnContainer}>
-          <TouchableOpacity style={screenStyles.addbtn}>
-            <Text style={{color: colors.text, fontSize: 15}}>
-              Add New Details
-            </Text>
-          </TouchableOpacity>
-        </View> */}
-
+    <ScrollView>
+      <KeyboardAvoidingView enabled style={screenStyles.container}>
         <View id="content" style={screenStyles.contentContainer}>
-          {/* name */}
-          <TextInput
+          <InputBox
             label="Name"
-            placeholder="name"
-            mode="outlined"
-            value={formData.name}
             onChangeText={value => handleInputChange('name', value)}
-            style={screenStyles.inputContainer}
+            placeholder="Enter your name"
+            value={formData.name}
           />
-          {/* mob */}
-          <TextInput
+          <InputBox
             label="Mobile"
-            placeholder="Mobile Number"
-            value={formData.mobile?.toString()}
             onChangeText={value => handleInputChange('mobile', value)}
-            mode="outlined"
-            style={screenStyles.inputContainer}
-             
+            placeholder="Enter your mobile number"
+            value={formData.mobile?.toString() || ''}
           />
-          {/* dob */}
           <View style={screenStyles.inputContainer}>
             <DatePickerComponent
               setNewDate={value => handleInputChange('dob', value)}
@@ -194,140 +170,112 @@ const Forms: React.FC = () => {
               </Text>
             </View>
           )}
-          {/* permanent address */}
+
           <>
-            <TextInput
+            <InputBox
               label="address"
-              value={formData.permanentAddress.address?.toString()}
               onChangeText={value =>
                 handleInputChange('permanentAddress', value, 'address')
               }
-              mode="outlined"
-              style={screenStyles.inputContainer}
+              value={formData.permanentAddress.address}
             />
-            <TextInput
+            <InputBox
               label="city"
-              value={formData.permanentAddress.city?.toString()}
               onChangeText={value =>
                 handleInputChange('permanentAddress', value, 'city')
               }
-              mode="outlined"
-              style={screenStyles.inputContainer}
+              value={formData.permanentAddress.city}
             />
-            <TextInput
+            <InputBox
               label="state"
-              value={formData.permanentAddress.state?.toString()}
               onChangeText={value =>
                 handleInputChange('permanentAddress', value, 'state')
               }
-              mode="outlined"
-              style={screenStyles.inputContainer}
+              value={formData.permanentAddress.state}
             />
-            <TextInput
+            <InputBox
               label="country"
-              value={formData.permanentAddress.country?.toString()}
               onChangeText={value =>
                 handleInputChange('permanentAddress', value, 'country')
               }
-              mode="outlined"
-              style={screenStyles.inputContainer}
+              value={formData.permanentAddress.country}
             />
-            <TextInput
+            <InputBox
               label="pincode"
-              value={formData.permanentAddress.pincode?.toString()}
               onChangeText={value =>
                 handleInputChange('permanentAddress', value, 'pincode')
               }
-              mode="outlined"
-              style={screenStyles.inputContainer}
+              value={formData.permanentAddress.pincode}
             />
           </>
           <Checkbox.Item
             label="Copy Permanent address"
             status={checked ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked(!checked);
-            }}
+            onPress={() => setChecked(!checked)}
           />
+          {!checked && (
+            <>
+              <InputBox
+                label="address"
+                onChangeText={value =>
+                  handleInputChange('temporaryAddress', value, 'address')
+                }
+                value={
+                  checked
+                    ? formData.permanentAddress.address
+                    : formData.temporaryAddress.address
+                }
+              />
+              <InputBox
+                label="city"
+                onChangeText={value =>
+                  handleInputChange('temporaryAddress', value, 'city')
+                }
+                value={
+                  checked
+                    ? formData.permanentAddress.city
+                    : formData.temporaryAddress.city
+                }
+              />
+              <InputBox
+                label="state"
+                onChangeText={value =>
+                  handleInputChange('temporaryAddress', value, 'state')
+                }
+                value={formData.permanentAddress.state}
+              />
+              <InputBox
+                label="country"
+                onChangeText={value =>
+                  handleInputChange('temporaryAddress', value, 'country')
+                }
+                value={
+                  checked
+                    ? formData.permanentAddress.country
+                    : formData.temporaryAddress.country
+                }
+              />
+              <InputBox
+                label="pincode"
+                onChangeText={value =>
+                  handleInputChange('temporaryAddress', value, 'pincode')
+                }
+                value={
+                  checked
+                    ? formData.permanentAddress.pincode
+                    : formData.temporaryAddress.pincode
+                }
+              />
+            </>
+          )}
 
-          {/* current address */}
-          <>
-            <TextInput
-              label="address"
-              value={
-                checked
-                  ? formData.permanentAddress.address?.toString()
-                  : formData.temporaryAddress.address?.toString()
-              }
-              onChangeText={value =>
-                handleInputChange('temporaryAddress', value, 'address')
-              }
-              mode="outlined"
-              readOnly={checked ? true : false}
-              style={screenStyles.inputContainer}
-            />
-            <TextInput
-              label="city"
-              value={
-                checked
-                  ? formData.permanentAddress.city?.toString()
-                  : formData.temporaryAddress.city?.toString()
-              }
-              onChangeText={value =>
-                handleInputChange('temporaryAddress', value, 'city')
-              }
-              readOnly={checked ? true : false}
-              mode="outlined"
-              style={screenStyles.inputContainer}
-            />
-            <TextInput
-              label="state"
-              value={
-                checked
-                  ? formData.permanentAddress.state?.toString()
-                  : formData.temporaryAddress.state?.toString()
-              }
-              onChangeText={value =>
-                handleInputChange('temporaryAddress', value, 'state')
-              }
-              mode="outlined"
-              readOnly={checked ? true : false}
-              style={screenStyles.inputContainer}
-            />
-            <TextInput
-              label="country"
-              value={
-                checked
-                  ? formData.permanentAddress.country?.toString()
-                  : formData.temporaryAddress.country?.toString()
-              }
-              onChangeText={value =>
-                handleInputChange('temporaryAddress', value, 'country')
-              }
-              mode="outlined"
-              readOnly={checked ? true : false}
-              style={screenStyles.inputContainer}
-            />
-            <TextInput
-              label="pincode"
-              value={
-                checked
-                  ? formData.permanentAddress.pincode?.toString()
-                  : formData.temporaryAddress.pincode?.toString()
-              }
-              onChangeText={value =>
-                handleInputChange('temporaryAddress', value, 'pincode')
-              }
-              mode="outlined"
-              readOnly={checked ? true : false}
-              style={screenStyles.inputContainer}
-            />
-          </>
+          <Text>Education</Text>
+          <Button title="Add Education" onPress={() => setAddEducation(true)} />
+          {addEducation && <Education />}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
   );
 };
 
-
-export default React.memo(Forms)
+export default React.memo(Forms);
