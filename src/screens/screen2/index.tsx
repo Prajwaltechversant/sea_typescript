@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, SafeAreaView, Linking, PermissionsAndroid, Platform } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity, SafeAreaView, Linking, PermissionsAndroid, Platform, UIManager } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useScreenContext } from '../../context/ScreenContextProvider';
 import { useTheme } from '@react-navigation/native';
@@ -16,6 +16,11 @@ import options from '../../services/songs';
 import Blemanager from 'react-native-ble-manager'
 
 const Screen2: React.FC = () => {
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
 
   const screenContext = useScreenContext();
   const { colors } = useTheme();
@@ -61,7 +66,7 @@ const Screen2: React.FC = () => {
 
       setTimeout(() => {
         getConnectedDevices();
-      }, 2000); 
+      }, 2000);
     } catch (error) {
       console.error('Error initializing Bluetooth:', error);
     }
@@ -143,7 +148,7 @@ const Screen2: React.FC = () => {
   //     console.log(requestPermissions)
   //     try {
   //       Blemanager.start({ showAlert: false });
-  
+
   //       setTimeout(() => {
   //         Blemanager.getConnectedPeripherals([]).then((peripheralsArray) => {
   //           console.log(peripheralsArray, 'connected devices');
@@ -177,12 +182,9 @@ const Screen2: React.FC = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           pagingEnabled
-
         >
-
           <View style={screenStyles.imageContainer}>
             <Image source={{ uri: activeTrack?.artwork }} style={screenStyles.thumbnail} />
-
           </View>
 
           <View id='player' style={screenStyles.playerContainer}>

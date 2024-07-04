@@ -16,7 +16,7 @@ export default function SliderComponent({ blurValue, setBlurValue, hideModal, pr
 
 
     const durationMinutes = duration / 60
-    console.log(duration?.toFixed(2))
+    // console.log(duration?.toFixed(2))
 
     return (
 

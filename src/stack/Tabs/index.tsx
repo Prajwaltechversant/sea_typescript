@@ -11,12 +11,56 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@react-navigation/native'
 import Screen2 from '../../screens/screen2'
 import CustomTabBar from './customTabBar'
-
+import Profile from '../../screens/profile'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import Forms from '../../screens/forms'
+import Settings from '../../screens/settings'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import Entypo from 'react-native-vector-icons/Entypo'
+import { Text } from 'react-native-paper'
 const Stack = createNativeStackNavigator()
+const Drawer = createDrawerNavigator()
+
+const Profiledrawer = () => {
+
+  const { colors } = useTheme()
+
+  return (
+    <Drawer.Navigator
+      screenOptions={({ navigation }) => ({
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+            <Entypo name="menu" size={25} color={colors.text} style={{ marginLeft: 15 }} />
+          </TouchableOpacity>
+        ),
+
+        headerStyle: { backgroundColor: colors.background },
+
+        drawerStyle: { backgroundColor: colors.background, elevation: 6, shadowColor: colors.text }
+        , drawerStatusBarAnimation: 'fade',
+
+      })}
+    >
+      <Drawer.Screen name='form' component={Forms} />
+      <Drawer.Screen name='settings' component={Settings} />
+    </Drawer.Navigator>
+  )
+}
+
+
+
 const HomeStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name='drawer' component={DrawerStack} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  )
+}
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='profilepage' component={Profile} options={{ headerShown: false }} />
+      <Stack.Screen name='profile drawer' component={Profiledrawer} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }
@@ -41,8 +85,10 @@ export default function TabStack({ navigation }: any) {
     >
       <Tab.Screen name={t('home')} component={Home}
       />
-      <Tab.Screen name={t('tasks')} component={HomeStack}  />
-      <Tab.Screen name='screen2' component={Screen2} />
+      <Tab.Screen name={t('tasks')} component={HomeStack} />
+      <Tab.Screen name='Track Player' component={Screen2} />
+      <Tab.Screen name='Profile' component={ProfileStack} />
+
     </Tab.Navigator>
   )
 }

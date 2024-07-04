@@ -22,6 +22,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
         const { options } = descriptors[route.key];
         const tabLabel = options.title !== undefined ? options.title : route.name;
         const isFocused = state.index === index;
+        console.log(route.name)
 
         let name;
         switch (route.name) {
@@ -30,6 +31,12 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
             break;
           case 'tasks':
             name = 'plus';
+            break;
+          case 'Track Player':
+            name = 'playcircleo';
+            break;
+          case 'Profile':
+            name = 'user';
             break;
           default:
             name = 'home';
@@ -86,7 +93,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
           inputRange: [0, 1],
           outputRange: ['0deg', '360deg'],
         });
-        
+
         useOrientationChange((e) => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
         })
