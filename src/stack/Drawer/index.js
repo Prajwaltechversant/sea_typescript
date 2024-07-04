@@ -31,6 +31,7 @@ export default function DrawerStack() {
 
     return (
         <Drawer.Navigator
+        initialRouteName='ParallaxScroll'
             screenOptions={({ navigation }) => ({
                 headerLeft: () => (
                     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
@@ -51,7 +52,7 @@ export default function DrawerStack() {
             />
             }
         >
-            <Drawer.Screen name={t('data')} component={Data}
+            {/* <Drawer.Screen name={t('data')} component={Data}
                 options={{
                     headerTitleStyle: {
                         color: colors.text
@@ -60,7 +61,7 @@ export default function DrawerStack() {
                         <Entypo name='home' color={colors.text} />
                     ),
                 }}
-            />
+            /> */}
             <Drawer.Screen name={t('geolocation')} component={GeoLoaction} />
             <Drawer.Screen name={t('editor')} component={Editor} options={{ headerShown: false }} />
             <Drawer.Screen name={t('chart')} component={SampleChart} />
@@ -76,7 +77,7 @@ export default function DrawerStack() {
             />
             <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample} />
             <Drawer.Screen name='ParallaxScroll' component={ParallaxScroll} />
-            {/* <Drawer.Screen name='Download' component={Downloads} /> */}
+            <Drawer.Screen name='Download' component={Downloads} />
             <Drawer.Screen name='layoutAnimations' component={LayoutAnimations} options={{
                 drawerIcon: () => (
                     <AntDesign name='layout' color={colors.text} />
@@ -91,13 +92,6 @@ export default function DrawerStack() {
                 title: "Layouts 2",
 
             }} />
-            {/* <Drawer.Screen name='Login' component={Login} options={{
-                drawerIcon: () => (
-                    <AntDesign name='layout' color={colors.text} />
-                ),
-                title: "Login",
-
-            }} /> */}
 
         </Drawer.Navigator>
     )
