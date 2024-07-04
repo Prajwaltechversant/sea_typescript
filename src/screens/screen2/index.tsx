@@ -186,8 +186,8 @@ const Screen2: React.FC = () => {
           </View>
 
           <View id='player' style={screenStyles.playerContainer}>
-            <Text>{activeTrack?.title}</Text>
-            <Text>{activeTrack?.artist}</Text>
+            <Text style={screenStyles.titleText}>{activeTrack?.title}</Text>
+            <Text style={screenStyles.autherText}>{activeTrack?.artist}</Text>
             <View>
 
               <SliderComponent progress={position} duration={duration} />
