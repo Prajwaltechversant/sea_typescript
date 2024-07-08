@@ -52,7 +52,7 @@ export default function DrawerStack() {
             />
             }
         >
-            {/* <Drawer.Screen name={t('data')} component={Data}
+            <Drawer.Screen name={t('data')} component={Data}
                 options={{
                     headerTitleStyle: {
                         color: colors.text
@@ -61,7 +61,7 @@ export default function DrawerStack() {
                         <Entypo name='home' color={colors.text} />
                     ),
                 }}
-            /> */}
+            />
             <Drawer.Screen name={t('geolocation')} component={GeoLoaction} />
             <Drawer.Screen name={t('editor')} component={Editor} options={{ headerShown: false }} />
             <Drawer.Screen name={t('chart')} component={SampleChart} />

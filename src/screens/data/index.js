@@ -1,18 +1,16 @@
-import { View, Text, ScrollView, BackHandler, DevSettings } from 'react-native'
+import { View, Text, ScrollView, BackHandler, DevSettings, TouchableHighlight } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Slider from '@react-native-assets/slider'
-import SliderComponent from '../../components/slider'
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Alert } from 'react-native';
 import DropdownLn from '../../components/dropdownLn';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
-import SampleChart from '../chart';
 import { TextInput } from 'react-native-paper';
-// import {useBackHandler} from '@react-native-community/hooks'
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 export default function Data() {
   const [selected, setSelected] = useState('');
+  const [isToolTipVisible, setIsTooltipVisible] = useState(false)
 
 
 
@@ -79,10 +77,25 @@ export default function Data() {
       </ScrollView>
       <Button title='reload' onPress={() => DevSettings.reload()} />
 
-        <TextInput placeholder='name'  textColor='red'  />
-  
+      <TextInput placeholder='name' textColor='red' />
+
 
       <DropdownLn />
+
+
+      <Tooltip
+        isVisible={isToolTipVisible}
+        content={<Text style={{ color: 'black' }}>Check this out!</Text>}
+        placement="top"
+        onClose={() => setIsTooltipVisible(false)}
+      >
+        <TouchableHighlight
+          onPress={() => setIsTooltipVisible(true)}
+        >
+          <Text >Press me</Text>
+        </TouchableHighlight>
+      </Tooltip>
+
 
 
 

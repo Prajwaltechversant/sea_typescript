@@ -9,6 +9,7 @@ import ColorThemeContext, { ColorThemeContextAPI } from './src/context/ColorThem
 import { Appearance } from 'react-native';
 import ScreenContextProvider from './src/context/ScreenContextProvider';
 import Orientation from 'react-native-orientation-locker';
+import FlashMessage from "react-native-flash-message";
 
 export default function App() {
       // Orientation.lockToPortrait()
@@ -51,6 +52,7 @@ function ThemeProviderWrapper() {
       <NavigationContainer theme={activeColor}  >
         <PaperProvider>
           <MainStack />
+          <FlashMessage position="top" />
         </PaperProvider>
       </NavigationContainer>
     </ScreenContextProvider>

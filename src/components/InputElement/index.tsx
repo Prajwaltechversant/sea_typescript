@@ -12,14 +12,15 @@ interface Props {
   secureTextEntry?: boolean;
   label: string;
   style?: any;
+  type?:string;
+  error?:any;
 }
 
-const InputBox: React.FC<Props> = ({ label, onChangeText, placeholder, value, secureTextEntry, style }) => {
+const InputBox: React.FC<Props> = ({ label, onChangeText, placeholder, value, secureTextEntry, style, type,error }) => {
   const { colors } = useTheme();
   const screenContext = useScreenContext();
   const isPortrait = screenContext.windowWidth > screenContext.windowHeight;
   const screenStyles = styles(screenContext, screenContext[isPortrait ? 'windowWidth' : 'windowHeight'], screenContext[isPortrait ? 'windowHeight' : 'windowWidth'], colors, style);
-
   return (
     <View style={screenStyles.container}>
       <TextInput
@@ -30,7 +31,13 @@ const InputBox: React.FC<Props> = ({ label, onChangeText, placeholder, value, se
         value={value?.toString()}
         secureTextEntry={secureTextEntry}
         style={screenStyles.inputContainer}
+        inputMode={type==='numeric' ? 'numeric' : type==='email' ? 'email' : type==='tel' ? 'tel' : 'text'  }
+        
       />
+      {
+        type==='email' &&
+        <Text>{error}</Text> 
+      }
     </View>
   );
 };

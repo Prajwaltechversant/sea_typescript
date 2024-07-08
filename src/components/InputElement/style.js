@@ -8,9 +8,10 @@ const styles = (screenContext, width, height, colors,style) =>
                 padding:screenContext.windowisPortrait ? height * 0.01 : height*0.01
             },
             inputContainer: {
-                width: style ? screenContext.windowisPortrait ? width * 0.216 :width * 0.486 :screenContext.windowisPortrait ? width * 0.44 :width * 0.98,
+                width: style ? screenContext.windowisPortrait ? width * 0.216 :width * 0.486 :screenContext.windowisPortrait ? width * 0.44 :width * 0.44,
                 
-                height: screenContext.windowisPortrait ? width * 0.05 : height*0.1,
+                height:  width * 0.05,
+                marginVertical:10
             }
         }
     )
