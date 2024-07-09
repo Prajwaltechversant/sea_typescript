@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { Form } from '../../screens/forms';
 
 // const data = [
 //   { label: 'HTML', value: '1' },
@@ -21,8 +22,10 @@ type Props = {
     data:{label:string, value:string}[];
     label:string;
     icon:string;
+    formData?:Form;
+    setFormData?:(value:any)=>void
 }
-const DropdownComponent = ({data, label,icon}:Props) => {
+const DropdownComponent = ({data, label,icon,formData,setFormData}:Props) => {
 
   const [value, setValue] = useState(null);
 
@@ -45,6 +48,7 @@ const DropdownComponent = ({data, label,icon}:Props) => {
       value={value}
       onChange={(item) => {
         setValue(item?.value);
+        setFormData({...formData, skills:item?.label})
       }}
       renderLeftIcon={() => (
         <AntDesign style={styles.icon} color={colors.text} name={icon} size={20} />

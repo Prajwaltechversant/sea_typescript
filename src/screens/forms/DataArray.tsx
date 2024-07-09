@@ -98,9 +98,17 @@ export default function DataArray({
   React.useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
-  const updateAndUpload = async () => {
-    await setCount(count + 1);
-    await addAnother(tempData);
+  const updateAndUpload = () => {
+     setCount(count + 1);
+     addAnother(tempData);
+     setTempData({
+      school: '',
+      degree: '',
+      field: '',
+      startDate: null,
+      endDate: null,
+      id: count,
+    })
   };
 
   const {colors} = useTheme();
@@ -135,7 +143,7 @@ export default function DataArray({
 
         <View style={screenStyles.inputContainer}>
           <DatePickerComponent
-            setYear={value => setTempData({...tempData, endDate: value})}
+            setYear={value => setTempData({...tempData, startDate: value})}
             name="edu"
           />
         </View>

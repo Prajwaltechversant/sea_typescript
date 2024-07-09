@@ -1,15 +1,16 @@
 import React from 'react';
-import {Dimensions, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, TouchableOpacity} from 'react-native';
 import {Modal, Portal, Text, Button} from 'react-native-paper';
 import Pdf from 'react-native-pdf';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import styles from './style';
 import { useTheme } from '@react-navigation/native';
 type Props = {
-  url: string;
+  url?: string;
+  profile?:string
 };
 
-export default function PdfViewer({url}: Props) {
+export default function PdfViewer({url,profile}: Props) {
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(true);
@@ -33,7 +34,7 @@ export default function PdfViewer({url}: Props) {
       <Button
         style={{marginTop: 30, backgroundColor: colors.btnGray, height: 50,borderRadius:10, justifyContent:'center'}}
         onPress={showModal}>
-        View PDF
+       { url ?'View PDF' : 'View Sign'}
       </Button>
       <Portal>
         <Modal
@@ -48,7 +49,7 @@ export default function PdfViewer({url}: Props) {
           <TouchableOpacity style={styles.backBtn} onPress={hideModal}>
             <Ionicons  name='arrow-back-circle-outline' size={40} color={'black'} />
           </TouchableOpacity>
-          <Pdf
+         { url ? <Pdf
             style={{
               flex: 1,
               width: Dimensions.get('window').width,
@@ -70,6 +71,12 @@ export default function PdfViewer({url}: Props) {
             }}
    
           />
+        
+        :
+        profile ? 
+        <Image  source={{uri:profile}} width={Dimensions.get('screen').width} height={300}  />
+        :null
+        }
         </Modal>
       </Portal>
     </>

@@ -63,13 +63,13 @@ export default function AddSign({setFormData, formData}: Props) {
 
   const saveSign = async () => {
     if (pathRef.current) {
-      const res = canvasRef.current?.makeImageSnapshot().encodeToBase64();
+      const res = canvasRef.current?.makeImageSnapshot().encodeToBase64() as string
       const date = new Date();
       const fileName = `${date.getTime()}_sample.jpeg`;
       try {
         const path = `${RNFS.PicturesDirectoryPath}/${fileName}`;
         await RNFS.writeFile(path, res, 'base64');
-        setFormData({...formData, profile: path});
+        setFormData({...formData, signature: path});
         hideModal();
       } catch (error) {
         console.log(error, 'failed');

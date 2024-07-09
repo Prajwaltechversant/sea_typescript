@@ -10,6 +10,8 @@ import { Appearance } from 'react-native';
 import ScreenContextProvider from './src/context/ScreenContextProvider';
 import Orientation from 'react-native-orientation-locker';
 import FlashMessage from "react-native-flash-message";
+import { Provider } from 'react-redux'
+import { store } from './src/redux/store/store';
 
 export default function App() {
       // Orientation.lockToPortrait()
@@ -48,14 +50,16 @@ function ThemeProviderWrapper() {
   const { colors } = useTheme()
 
   return (
-    <ScreenContextProvider>
-      <NavigationContainer theme={activeColor}  >
-        <PaperProvider>
-          <MainStack />
-          <FlashMessage position="top" />
-        </PaperProvider>
-      </NavigationContainer>
-    </ScreenContextProvider>
+    <Provider store={store}>
+      <ScreenContextProvider>
+        <NavigationContainer theme={activeColor}  >
+          <PaperProvider>
+            <MainStack />
+            <FlashMessage position="top" />
+          </PaperProvider>
+        </NavigationContainer>
+      </ScreenContextProvider>
+    </Provider>
 
   );
 }

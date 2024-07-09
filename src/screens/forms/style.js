@@ -36,7 +36,7 @@ const styles = (screenContext, width, height, colors) =>
                 alignItems: 'center',
                 padding: 2
             }, signview: {
-                flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, width: width * 0.3
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 10,  width: width * 0.3
             },
             formSubmitBtn: {
                 width: width * 0.44,

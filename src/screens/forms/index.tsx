@@ -13,12 +13,12 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useMemo, useState, useEffect} from 'react';
-import {useTheme} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {useScreenContext} from '../../context/ScreenContextProvider';
 import styles from './style';
 import InputBox from '../../components/InputElement';
 import DatePickerComponent from '../../components/datePicker';
-import {Button, Checkbox} from 'react-native-paper';
+import {Button, Checkbox, Snackbar} from 'react-native-paper';
 import {useOrientationChange} from 'react-native-orientation-locker';
 import {FlatList} from 'react-native-gesture-handler';
 import DataArray from './DataArray';
@@ -31,10 +31,14 @@ import AddSign from '../../components/sign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SearchbleDropdown from '../../components/searchableDropdown';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import {useDispatch, useSelector} from 'react-redux';
+import {addData} from '../../redux/actions/formdata/actionType';
+import {addFormData} from '../../redux/actions/formdata/action';
+import {load} from 'react-native-track-player/lib/src/trackPlayer';
 
 export type Form = {
   name: string;
-  dob: Date | undefined;
+  dob: Date | undefined | string;
   age: number | null;
   email: string | null;
   temporaryAddress: string;
@@ -42,16 +46,16 @@ export type Form = {
   temporaryState: string;
   temporaryCountry: string;
   temporaryPincode: number;
-  permanentAddress: string;
-  permanentCity: string;
-  permanentState: string;
-  permanentCountry: string;
-  permanentPincode: number;
+  // permanentAddress: string;
+  // permanentCity: string;
+  // permanentState: string;
+  // permanentCountry: string;
+  // permanentPincode: number;
   mobile: number | null;
   cv: any;
   profile: string | null;
   signature: string | null;
-  skills: string[];
+  skills: string | null;
 };
 
 export type Education = {
@@ -63,11 +67,12 @@ export type Education = {
   id: number | null;
 }[];
 
-type FormType = Form & {education: Education};
+export type FormType = Form & {education: Education};
 
 const Forms: React.FC = () => {
   const {colors} = useTheme();
   const screenContext = useScreenContext();
+  const navigation = useNavigation()
   const isPortrait = screenContext.windowWidth > screenContext.windowHeight;
   const screenStyles = styles(
     screenContext,
@@ -77,16 +82,27 @@ const Forms: React.FC = () => {
   );
 
   const currentYear = new Date().getFullYear();
+  const [visible, setVisible] = React.useState(false);
+  const [tempSign, setTempSign] = useState('');
+
+  const dispatch = useDispatch();
+
+  const onToggleSnackBar = (value: any) => {
+    setTempSign(value);
+    setVisible(!visible);
+    setFormData({...formData, signature: null});
+  };
+  const onDismissSnackBar = () => setVisible(false);
 
   const [formData, setFormData] = useState<Form>({
     name: '',
     mobile: null,
     email: null,
-    permanentAddress: '',
-    permanentCity: '',
-    permanentCountry: '',
-    permanentState: '',
-    permanentPincode: 0,
+    // permanentAddress: '',
+    // permanentCity: '',
+    // permanentCountry: '',
+    // permanentState: '',
+    // permanentPincode: 0,
     temporaryAddress: '',
     temporaryCity: '',
     temporaryCountry: '',
@@ -97,7 +113,7 @@ const Forms: React.FC = () => {
     cv: '',
     profile: null,
     signature: null,
-    skills: [],
+    skills: null,
   });
 
   const [error, setError] = useState({
@@ -105,16 +121,7 @@ const Forms: React.FC = () => {
     mobileError: '',
   });
 
-  const [education, setEducation] = useState<Education>([
-    {
-      degree: '',
-      endDate: null,
-      field: '',
-      school: '',
-      startDate: null,
-      id: null,
-    },
-  ]);
+  const [education, setEducation] = useState<Education>([]);
 
   const allInputs = [
     {key: 'name', label: 'Name', name: 'textInput', type: 'text'},
@@ -150,7 +157,7 @@ const Forms: React.FC = () => {
       key: 'temporaryPincode',
       label: ' Pincode',
       name: 'textInput',
-      type: 'text',
+      type: 'tel',
     },
     {key: 'skills', label: 'Skills', name: 'dropdown'},
     {
@@ -173,10 +180,12 @@ const Forms: React.FC = () => {
 
   useEffect(() => {
     if (formData.dob) {
-      const userAge = currentYear - formData.dob.getFullYear();
+      const userAge = currentYear - formData.dob?.getFullYear();
+      // let dobString = formData.dob?.toDateString()
       setFormData(prevFormData => ({
         ...prevFormData,
         age: userAge,
+        // dob:dobString
       }));
     }
   }, [formData.dob, currentYear]);
@@ -192,7 +201,8 @@ const Forms: React.FC = () => {
 
   const addAnother = useCallback((tempData: Education[0]) => {
     const {degree, endDate, field, id, school, startDate} = tempData;
-    if (!degree || !endDate || !field || school || !startDate) {
+
+    if (!degree || !endDate || !field || !school || !startDate) {
       showMessage({
         message: 'Please Add Details',
         type: 'info',
@@ -200,7 +210,16 @@ const Forms: React.FC = () => {
         position: 'bottom',
       });
     } else {
-      setEducation(prevEducation => [...prevEducation, tempData]);
+      if (startDate > endDate) {
+        showMessage({
+          message: 'End date Should be greater than Start date',
+          type: 'info',
+          duration: 1000,
+          position: 'top',
+        });
+      } else {
+        setEducation(prevEducation => [...prevEducation, tempData]);
+      }
     }
   }, []);
 
@@ -269,7 +288,7 @@ const Forms: React.FC = () => {
   };
 
   const validateInputs = () => {
-    const {age, cv, dob, email, mobile, permanentPincode} = formData;
+    const {age, cv, dob, email, mobile} = formData;
 
     if (email !== null) {
       if (validator.isEmail(email)) {
@@ -285,14 +304,36 @@ const Forms: React.FC = () => {
     validateInputs();
   }, [formData.email]);
 
+  const handleFormSubmit = () => {
+    let data = {...formData, education};
 
-  const handleFormSubmit = ()=>{
-    const {age,cv,dob,email,mobile,name,permanentAddress,permanentCity,permanentCountry,permanentPincode,permanentState,profile,signature,skills,temporaryAddress,temporaryCity,temporaryCountry,temporaryPincode,temporaryState,} = formData;
+    let isData = false;
 
+    function Alert() {
+      showMessage({
+        message: 'Please fill all details before submitting',
+        type: 'info',
+        duration: 1000,
+        position: 'top',
+      });
+    }
 
+    for (let item in formData) {
+      if (!formData[item]) {
+        Alert();
+        return;
+      } else {
+        isData = true;
+      }
+    }
+
+    if (isData) {
+      dispatch(addFormData(data));
+      navigation.navigate('profilepage')
   
-    
-  }
+    }
+  };
+
   return (
     <ScrollView>
       <KeyboardAvoidingView
@@ -327,6 +368,12 @@ const Forms: React.FC = () => {
                           name="dob"
                         />
                       </View>
+                      {formData.age && (
+                        <Text
+                          style={{alignItems: 'center', textAlign: 'center'}}>
+                          Age : {formData.age}
+                        </Text>
+                      )}
                     </>
                   ) : name === 'educationArray' ? (
                     <DataArray
@@ -349,15 +396,34 @@ const Forms: React.FC = () => {
                       {formData.cv && <PdfViewer url={formData?.cv} />}
                     </>
                   ) : name === 'profilePicker' ? (
-                    <View style={screenStyles.inputContainer}>
-                      <TouchableOpacity
-                        onPress={() => handleFilePicker('image')}
-                        style={screenStyles.pdfBtn}>
-                        <Text style={{fontSize: 20}}>Upload Image</Text>
+                    <>
+                      <View style={screenStyles.inputContainer}>
+                        <TouchableOpacity
+                          onPress={() => handleFilePicker('image')}
+                          style={screenStyles.pdfBtn}>
+                          <Text style={{fontSize: 20}}>Upload Image</Text>
 
-                        <AntDesign name="user" size={30} />
-                      </TouchableOpacity>
-                    </View>
+                          <AntDesign name="user" size={30} />
+                        </TouchableOpacity>
+                      </View>
+                      {formData.profile && (
+                        <View style={screenStyles.signview}>
+                          <Image
+                            source={{uri: `file://${formData.profile}`}}
+                            width={100}
+                            height={100}
+                          />
+                          <FontAwesome5
+                            name="trash"
+                            color={colors.text}
+                            size={20}
+                            onPress={() =>
+                              setFormData({...formData, profile: null})
+                            }
+                          />
+                        </View>
+                      )}
+                    </>
                   ) : name === 'sign' ? (
                     <View style={screenStyles.inputContainer}>
                       <AddSign setFormData={setFormData} formData={formData} />
@@ -376,33 +442,51 @@ const Forms: React.FC = () => {
                       ]}
                       label={'Select language'}
                       icon="codesquareo"
+                      formData={formData}
+                      setFormData={setFormData}
                     />
                   ) : null}
                 </>
               );
             }}
           />
-          {formData.profile && (
-            <View style={screenStyles.signview}>
-              <Image
-                source={{uri: `file://${formData.profile}`}}
-                width={100}
-                height={100}
-              />
-              <FontAwesome5
-                name="trash"
-                color={colors.text}
-                size={20}
-                onPress={() => setFormData({...formData, profile: null})}
-              />
-            </View>
+          {formData.signature && (
+            <>
+              <View style={screenStyles.signview}>
+                <Image
+                  source={{uri: `file://${formData.signature}`}}
+                  width={100}
+                  height={100}
+                />
+                <FontAwesome5
+                  name="trash"
+                  color={colors.text}
+                  size={20}
+                  onPress={() => onToggleSnackBar(formData?.signature)}
+                />
+              </View>
+            </>
           )}
         </View>
-        <TouchableHighlight  style={screenStyles.formSubmitBtn}>
+
+        <TouchableHighlight
+          style={screenStyles.formSubmitBtn}
+          onPress={handleFormSubmit}>
           <Text style={screenStyles.labelText}>Save</Text>
         </TouchableHighlight>
-
       </KeyboardAvoidingView>
+      <Snackbar
+        style={{}}
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'Undo',
+          onPress: () => {
+            setFormData({...formData, signature: tempSign});
+          },
+        }}>
+        Deleted
+      </Snackbar>
     </ScrollView>
   );
 };
