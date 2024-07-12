@@ -4,17 +4,13 @@ import {
   Animated,
   Dimensions,
   Image,
-  FlatList,
-  Text,
   View,
-  StyleSheet,
   StatusBar,
 } from 'react-native';
 import styles from './style';
 import axios from 'axios';
-import { ActivityIndicator } from 'react-native-paper';
-import { faker } from '@faker-js/faker';
-import Orientation, { OrientationLocker, PORTRAIT, LANDSCAPE, useOrientationChange } from "react-native-orientation-locker";
+// import { ActivityIndicator } from 'react-native-paper';
+// import Orientation, { OrientationLocker, PORTRAIT, LANDSCAPE, useOrientationChange } from "react-native-orientation-locker";
 
 export default function App() {
 

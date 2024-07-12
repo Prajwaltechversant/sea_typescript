@@ -38,10 +38,7 @@ const Home= ({navigation}:NavigaionProps) => {
       requestPermission()
     }
   }, [hasPermission])
-  // checkPermission()
 
-
-  // console.log(openScanner)
 
   const theme = useColorScheme()
   const {colors} = useTheme()

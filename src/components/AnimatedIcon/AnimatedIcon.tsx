@@ -3,7 +3,7 @@ import React, { useEffect } from "react"
 import { View, Dimensions, TextInput, StyleSheet } from "react-native"
 import { Circle, G, Svg, Text as SvgText } from "react-native-svg"
 import Animated, { useAnimatedProps, withSpring } from "react-native-reanimated"
-import Success from './success.svg'
+// import Success from './success.svg'
 
 const { height, width } = Dimensions.get('screen')
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
@@ -21,10 +21,6 @@ const AnimatedIcon: React.FC<Props> = () => {
     const strokeWidth = 20;
     const half_Circle = R + strokeWidth;
     const diameter = half_Circle * 2
-
-  
-
-
     return (
         <View >
             <Svg

@@ -12,11 +12,7 @@ interface Props {
     duration?: number;
 }
 export default function SliderComponent({ blurValue, setBlurValue, hideModal, progress, duration }: Props) {
-    // console.log(progress)
 
-
-    const durationMinutes = duration / 60
-    // console.log(duration?.toFixed(2))
 
     return (
 

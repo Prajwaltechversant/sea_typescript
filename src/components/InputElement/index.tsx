@@ -78,11 +78,11 @@ const InputBox: React.FC<Props> = ({
     ) : type === 'dropdown' ? (
       <TextInput.Icon icon={'eye'} />
     ) : type === 'doc' ? (
-      <TextInput.Icon icon={'file'} onPress={() => handleFilePicker('file')} />
+      <TextInput.Icon icon={'file'} onPress={() =>handleFilePicker && handleFilePicker('file')} />
     ) : type === 'img' ? (
       <TextInput.Icon
         icon={'image'}
-        onPress={() => handleFilePicker('image')}
+        onPress={() =>handleFilePicker && handleFilePicker('image')}
       />
     ) : null;
 
@@ -175,9 +175,9 @@ const InputBox: React.FC<Props> = ({
           setOpen(false);
           setDate(date);
           if (name === 'date') {
-            setNewDate(date);
+           setNewDate&& setNewDate(date);
           } else {
-            setYear(date.getFullYear().toString());
+          setYear &&  setYear(date.getFullYear().toString());
           }
         }}
         onCancel={() => {

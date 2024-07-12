@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useTransition } from 'react';
+import React, { useState, useCallback} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Menu, Divider, Provider as PaperProvider } from 'react-native-paper';
 import colorPalette from '../../assets/colorPalette/colorPalette';
@@ -6,8 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native';
 
 const DropdownLn: React.FC = () => {
-
-
   const [menuVisible, setMenuVisible] = useState(false);
   const { i18n } = useTranslation()
   const { colors } = useTheme()
@@ -18,8 +16,6 @@ const DropdownLn: React.FC = () => {
   const closeMenu = useCallback(() => {
     setMenuVisible(false);
   }, []);
-
-
 
   const handleItemPress = useCallback((ln: string) => {
     i18n.changeLanguage(ln)

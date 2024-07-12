@@ -96,7 +96,7 @@ const Scanner = ({ checkPermission, setOpenScanner, navigation }:Props) => {
     const handleImageSelection = async () => {
 
         try {
-            const res = await ImagePicker.openPicker({
+            const res:any = await ImagePicker.openPicker({
                 width: 300,
                 height: 400,
                 cropping: true

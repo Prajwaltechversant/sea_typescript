@@ -12,9 +12,6 @@ export default function ChangeTheme({ props }) {
     const { theme, setTheme } = useContext(ColorThemeContextAPI)
     const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
-    // Appearance.setColorScheme('')
-
-    // const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
     const { colors } = useTheme()
 
 

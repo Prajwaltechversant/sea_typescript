@@ -10,6 +10,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTim
 
 
 const { height, width } = Dimensions.get('screen')
+
 const Downloads: React.FC = () => {
 
     const { colors } = useTheme()

@@ -1,8 +1,13 @@
 import { View, Text, Dimensions } from 'react-native'
 import React from 'react'
 import styles from './style'
-import { BarChart, LineChart, PieChart, PopulationPyramid } from "react-native-gifted-charts";
-import { LinearGradient, Stop } from 'react-native-svg';
+import {
+    //  BarChart,
+     LineChart,
+      PieChart, 
+    //  PopulationPyramid
+     } from "react-native-gifted-charts";
+// import { LinearGradient, Stop } from 'react-native-svg';
 import { ScrollView } from 'react-native';
 // import preconnect from 'react-dom'
 
@@ -19,7 +24,6 @@ export default function SampleChart() {
     ];
     const lineData = [{ value: 0 }, { value: 10 }, { value: 8 }, { value: 58 }, { value: 56 }, { value: 78 }, { value: 74 }, { value: 98 }];
     const lineData2 = [{ value: 0 }, { value: 50 }, { value: 18 }, { value: 40 }, { value: 6 }, { value: 60 }, { value: 54 }, { value: 85 }];
-
     const style = styles(width, height)
 
     return (

@@ -2,7 +2,7 @@ import 'react-native-gesture-handler'
 import React, {useContext, useEffect} from 'react'
 import {NavigationContainer,useTheme} from '@react-navigation/native';
 import MainStack from './src/stack/MainStack';
-import notifee, {EventDetail, EventType} from '@notifee/react-native';
+import notifee, {EventType} from '@notifee/react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import colorPalette from './src/assets/colorPalette/colorPalette';
 import ColorThemeContext, {
@@ -19,14 +19,8 @@ import RecaptchaTest from './src/screens/modules/recaptch';
 import WebViews from './src/screens/webView/sample';
 
 
-// type NotificationParameters = {
-//   type:EventType;
-//   details:EventDetail
-// }
 
 const App: React.FC = () => {
-  // Orientation.lockToPortrait()
-  // Orientation.unlockAllOrientations()
   useEffect(() => {
     return notifee.onForegroundEvent(({type, detail}) => {
       switch (type) {

@@ -54,7 +54,6 @@ const DropdownComponent = ({
       data={data}
       search
       mode="modal"
-      // maxHeight={300}
       labelField="label"
       valueField="value"
       placeholder={label}

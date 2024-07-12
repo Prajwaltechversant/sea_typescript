@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import {  useTheme } from '@react-navigation/native'
 import TabStack from '../Tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ResultView from '../../screens/webView'
-import { ColorThemeContextAPI } from '../../context/ColorThemeContext'
 import Login from '../../screens/Login'
 
 const Stack = createNativeStackNavigator()
@@ -24,11 +23,6 @@ export type RootStackParams = {
 
 
 export default function MainStack() {
-
-    type a = {
-        a: string
-    }
-    const { theme, setTheme } = useContext(ColorThemeContextAPI)
     const { colors } = useTheme()
 
     return (
