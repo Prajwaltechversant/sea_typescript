@@ -1,5 +1,5 @@
 
-import { addData, updateData } from '../actions/formdata/actionType'
+import { addData, updateData } from '../actions/actionType'
 
 
 const initialState = {}

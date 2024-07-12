@@ -1,35 +1,28 @@
-import { View, Text, ImageBackground, Button, Appearance } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { View } from 'react-native';
+import React from 'react';
 import styles from './style';
-import { BlurView } from "@react-native-community/blur";
-import HomeIcon from '../../assets/images/home.svg';
-import { Circle, Svg } from "react-native-svg";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import Logo from '../../assets/images/logo.svg';
-import DatePicker from 'react-native-date-picker'
-import colorPalette from '../../assets/colorPalette/colorPalette';
-import ColorThemeContext, { ColorThemeContextAPI } from '../../context/ColorThemeContext';
-import { useTheme } from '@react-navigation/native';
-import AnimatedIcon from '../../components/AnimatedIcon/AnimatedIcon';
-// import Icon from '../../assets/svg/icon.svg'
+import Animated, { Keyframe, Easing } from 'react-native-reanimated';
+
 export default function UiSamples() {
-    const skew = useSharedValue(0);
+    const keyframe = new Keyframe({
+        0: {
+            transform: [{ rotate: '0deg' }],
+        },
+        45: {
+            transform: [{ rotate: '100deg' }],
+            easing: Easing.exp,
+        },
+        100: {
+            transform: [{ rotate: '45deg' }],
+        },
+    });
 
-
-
-
-    const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
-    const { theme, setTheme } = useContext(ColorThemeContextAPI)
-    const { colors } = useTheme()
     return (
         <View style={styles.container}>
-            {/* <Svg>
-                <polygon />
-            </Svg> */}
-            <AnimatedIcon />
-
-
+            <Animated.View
+                entering={keyframe.duration(3000).delay(200)}
+                style={{ width: 150, height: 150, backgroundColor: 'green' }}
+            />
         </View>
     );
 }

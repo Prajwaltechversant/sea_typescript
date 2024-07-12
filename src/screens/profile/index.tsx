@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, StatusBar} from 'react-native';
+import {Text, View, Image, StatusBar} from 'react-native';
 import React from 'react';
 import styles from './style';
 import {TouchableOpacity} from 'react-native';
@@ -7,8 +7,9 @@ import {useScreenContext} from '../../context/ScreenContextProvider';
 import {useTheme} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import PdfViewer from '../../components/pdfViewer';
+import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 
-export default function Profile({navigation}) {
+export default function Profile({navigation}: any) {
   const {colors} = useTheme();
   const screenContext = useScreenContext();
   const isPortrait = screenContext.windowWidth < screenContext.windowHeight;
@@ -22,8 +23,7 @@ export default function Profile({navigation}) {
     ],
     colors,
   );
-  const data = useSelector(state => state.data);
-
+  const data = useAppSelector(state => state.data);
 
 
 
@@ -33,14 +33,12 @@ export default function Profile({navigation}) {
       <View style={screenStyles.profileContainer}>
         <Image
           source={{
-            uri: data.profile ? data.profiile : 'https://th.bing.com/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain',
+            uri: data.profile,
           }}
           alt="Profile Picture"
           style={screenStyles.profileImage}
         />
-        <Text style={screenStyles.text}>
-          {data.name ? data.name : 'name'}
-        </Text>
+        <Text style={screenStyles.text}>{data.name ? data.name : 'name'}</Text>
       </View>
 
       <View style={screenStyles.contentContainer}>
@@ -84,10 +82,10 @@ export default function Profile({navigation}) {
         </View>
 
         <View>
-        <PdfViewer url={data.cv}  />
+          <PdfViewer url={data.cv} />
         </View>
         <View>
-        <PdfViewer profile={data.profile}  />
+          <PdfViewer signature={data.signature} />
         </View>
         <TouchableOpacity
           style={screenStyles.btn}

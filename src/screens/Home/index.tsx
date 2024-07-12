@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useTheme } from '@react-navigation/native'
 import Animated from 'react-native-reanimated';
 
-type NavigaionProps = NativeStackScreenProps<RootStackParams,'TabStack' >
+type NavigaionProps = NativeStackScreenProps<RootStackParams['TabStack'],'Home' >
 
 const Home= ({navigation}:NavigaionProps) => {
 

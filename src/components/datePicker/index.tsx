@@ -1,4 +1,4 @@
-import {View, Text, Button, Pressable} from 'react-native';
+import {View, Text, Button, Pressable, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import {TextInput} from 'react-native-gesture-handler';
@@ -19,19 +19,22 @@ export default function DatePickerComponent({
   const [open, setOpen] = useState(false);
 
   return (
-    <View>
+    <View >
       <Pressable
         style={{
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'baseline',
           flexDirection: 'row',
           paddingHorizontal: 2,
         }}
         onPress={() => setOpen(true)}>
-        <Fontisto name="date" size={30} />
         <Text>{date.toDateString()}</Text>
+        <TouchableOpacity style={{justifyContent:'center'}}>
+        <Fontisto name="date"  />
+        </TouchableOpacity>
+
       </Pressable>
-      <DatePicker
+      {/* <DatePicker
         modal
         open={open}
         mode="date"
@@ -46,7 +49,7 @@ export default function DatePickerComponent({
         onCancel={() => {
           setOpen(false);
         }}
-      />
+      /> */}
     </View>
   );
 }

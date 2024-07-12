@@ -3,12 +3,14 @@ import { StyleSheet } from "react-native";
 
 
 const styles =(screenContext:any, width:number, height:number, colors:any)=> StyleSheet.create({
+
     container:{
-        justifyContent:'center',alignItems:'center'
+        justifyContent:'center',alignItems:'center',
     }, 
     openBtn:{
         justifyContent:'space-between',
-        flexDirection:'row',alignItems:'center'
+        flexDirection:'row',alignItems:'center',      marginHorizontal: screenContext.windowisPortrait ? height * 0.05 : height * 0.01,
+        marginVertical: screenContext.windowisPortrait ? height * 0.02 : height * 0.01,
     },
     signContainer:{
 

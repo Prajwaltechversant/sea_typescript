@@ -19,7 +19,7 @@ export default function DataArray({
   const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
 
-  const [year, setYear] = useState();
+  const [year, setYear] = useState<Date | string | null>();
 
   const [count, setCount] = useState(0);
 
@@ -99,16 +99,16 @@ export default function DataArray({
     setPage(0);
   }, [itemsPerPage]);
   const updateAndUpload = () => {
-     setCount(count + 1);
-     addAnother(tempData);
-     setTempData({
+    setCount(count + 1);
+    addAnother(tempData);
+    setTempData({
       school: '',
       degree: '',
       field: '',
       startDate: null,
       endDate: null,
       id: count,
-    })
+    });
   };
 
   const {colors} = useTheme();
@@ -120,85 +120,96 @@ export default function DataArray({
     screenContext[isPortrait ? 'windowHeight' : 'windowWidth'],
     colors,
   );
+
+  // console.log('====================================');
+  // console.log(education);
+  // console.log('====================================');
+
   return (
     <>
-      <View style={{marginVertical:20}}>
+      <View style={{marginVertical: 20}}>
         <Text>Education</Text>
         <InputBox
           label="school"
           onChangeText={value => setTempData({...tempData, school: value})}
           value={tempData.school}
+          type="text"
+
         />
         <InputBox
           label="degree"
           onChangeText={value => setTempData({...tempData, degree: value})}
           value={tempData.degree}
+          type="text"
         />
         <InputBox
           label="field"
           onChangeText={value => setTempData({...tempData, field: value})}
           value={tempData.field}
+          type="text"
         />
         <Text>Start Date</Text>
+        <InputBox
+          setYear={value => setTempData({...tempData, startDate: value})}
+          name="edu"
+          type="date"
+        />
 
-        <View style={screenStyles.inputContainer}>
-          <DatePickerComponent
-            setYear={value => setTempData({...tempData, startDate: value})}
-            name="edu"
-          />
-        </View>
         <Text>End Date</Text>
-        <View style={screenStyles.inputContainer}>
-          <DatePickerComponent
-            setYear={value => setTempData({...tempData, endDate: value})}
-            name="edu"
-          />
-        </View>
+        <InputBox
+          setYear={value => setTempData({...tempData, endDate: value})}
+          name="edu"
+          type="date"
+        />
         <TouchableOpacity
           onPress={updateAndUpload}
           style={{
-            backgroundColor: colors.grayBtn,
+            backgroundColor: education.length > 0 ? 'blue' : 'green',
             height: 40,
             width: 130,
             borderRadius: 5,
-            alignSelf: 'flex-start',
+            alignSelf: 'flex-end',
             justifyContent: 'space-evenly',
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <Text style={{textAlign: 'center'}}>Add Another</Text>
+          <Text style={{textAlign: 'center'}}>
+            {education.length > 0 ? 'Add Another' : 'Add Details'}
+          </Text>
           <AntDesign name="pluscircleo" size={30} />
         </TouchableOpacity>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>College</DataTable.Title>
-            <DataTable.Title numeric>Degree</DataTable.Title>
-            <DataTable.Title numeric>Start date</DataTable.Title>
-            <DataTable.Title numeric>End date</DataTable.Title>
-            <DataTable.Title numeric>End date</DataTable.Title>
-          </DataTable.Header>
-          {education?.map((item: any) => (
-            <DataTable.Row key={item.key}>
-              <DataTable.Cell>{item.school}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.degree}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.startDate}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.endDate}</DataTable.Cell>
-              <DataTable.Cell numeric>
-                <TouchableOpacity onPress={() => removeEducation(item.id)}>
-                  <FontAwesome name="remove" size={20} />
-                </TouchableOpacity>
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
+        {education?.length > 0 && (
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>College</DataTable.Title>
+              <DataTable.Title numeric>Degree</DataTable.Title>
+              <DataTable.Title numeric>Start date</DataTable.Title>
+              <DataTable.Title numeric>End date</DataTable.Title>
+              <DataTable.Title numeric>End date</DataTable.Title>
+            </DataTable.Header>
+            {education?.map((item: any) => (
+              <DataTable.Row key={item.key}>
+                <DataTable.Cell>{item.school}</DataTable.Cell>
+                <DataTable.Cell numeric>{item.degree}</DataTable.Cell>
+                <DataTable.Cell numeric>{item.startDate}</DataTable.Cell>
+                <DataTable.Cell numeric>{item.endDate}</DataTable.Cell>
+                <DataTable.Cell numeric>
+                  <TouchableOpacity onPress={() => removeEducation(item.id)}>
+                    <FontAwesome name="remove" size={20} />
+                  </TouchableOpacity>
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
 
-          {/* <DataTable.Pagination
+            {/* <DataTable.Pagination
             page={page}
             numberOfPages={Math.ceil(items.length / itemsPerPage)}
             onPageChange={page => setPage(page)}
             label={`${from + 1}-${to} of ${items.length}`}
             showFastPaginationControls
           /> */}
-        </DataTable>
+          </DataTable>
+        )}
       </View>
     </>
   );

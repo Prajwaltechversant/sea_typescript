@@ -36,17 +36,18 @@ const styles = (screenContext, width, height, colors) =>
                 alignItems: 'center',
                 padding: 2
             }, signview: {
-                flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 10,  width: width * 0.3
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 10, width: width * 0.3
             },
             formSubmitBtn: {
                 width: width * 0.44,
                 height: width * 0.05,
                 backgroundColor: colors.btnGray,
                 fontSize: 20,
-                borderRadius:width*0.08,
-                justifyContent:'center',alignItems:'center'
-            },labelText:{
-                fontSize:screenContext.windowFontScale*25
+                borderRadius: width * 0.08,
+                justifyContent: 'center', alignItems: 'center',
+                marginTop: 20
+            }, labelText: {
+                fontSize: screenContext.windowFontScale * 25
             }
         }
     )

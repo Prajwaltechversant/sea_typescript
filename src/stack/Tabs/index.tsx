@@ -5,8 +5,8 @@ import Home from '../../screens/Home';
 import DrawerStack from '../Drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootStackParams} from '../MainStack';
-import Homelogo from '../../assets/images/home.svg';
-import Codelogo from '../../assets/images/code.svg';
+// import Homelogo from '../../assets/images/home.svg';
+// import Codelogo from '../../assets/images/code.svg';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from '@react-navigation/native';
 import Screen2 from '../../screens/screen2';
@@ -82,11 +82,15 @@ const ProfileStack = () => {
   );
 };
 
-const Tab = createBottomTabNavigator<RootStackParams>();
-export default function TabStack({navigation}: any) {
+
+// type NavigationProps = NativeStackScreenProps<RootStackParams, 'TabStack'>;
+
+const Tab = createBottomTabNavigator<RootStackParams['TabStack']>();
+const  TabStack:React.FC=() =>{
   const deviceTheme = Appearance.getColorScheme();
   const {t} = useTranslation();
   const {colors} = useTheme();
+  
   return (
     <Tab.Navigator
       // tabBar={props => <CustomTabBar {...props} />}
@@ -103,7 +107,11 @@ export default function TabStack({navigation}: any) {
         tabBarHideOnKeyboard: true,
         tabBarBadgeStyle: {backgroundColor: 'red'},
       }}>
-      <Tab.Screen name={t('home')} component={Home}
+      <Tab.Screen 
+      // name={t('home')} 
+      name={"Home"} 
+
+      component={Home}
       
       options={{
         tabBarIcon:({color,focused,size})=>{
@@ -115,7 +123,11 @@ export default function TabStack({navigation}: any) {
       }}
 
       />
-      <Tab.Screen name={t('tasks')} component={HomeStack}
+      <Tab.Screen
+      //  name={t('tasks')} 
+      name={"Tasks"} 
+
+       component={HomeStack}
       
       options={{
         tabBarIcon:({color,focused,size})=>{
@@ -126,7 +138,11 @@ export default function TabStack({navigation}: any) {
         }
       }}
       />
-      <Tab.Screen name="Track Player" component={Screen2}
+      <Tab.Screen
+       name="TrackPlayer"
+      //  name="Track Player"
+
+        component={Screen2}
       
       options={{
         tabBarIcon:({color,focused,size})=>{
@@ -151,3 +167,5 @@ export default function TabStack({navigation}: any) {
     </Tab.Navigator>
   );
 }
+
+export default TabStack

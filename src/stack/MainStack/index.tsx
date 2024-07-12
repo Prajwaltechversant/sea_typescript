@@ -9,11 +9,19 @@ import Login from '../../screens/Login'
 const Stack = createNativeStackNavigator()
 
 export type RootStackParams = {
-    TabStack: undefined,
+    TabStack: {
+        Login:undefined;
+        Home: undefined;
+        Tasks: undefined;
+        TrackPlayer: undefined;
+        Profile: undefined;
+        
+    };
     ResultView: {
-        url: string
-    }
-}
+        url: string;
+    };
+};
+
 
 export default function MainStack() {
 

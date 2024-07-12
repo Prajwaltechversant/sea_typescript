@@ -3,13 +3,10 @@ import {
   Image,
   KeyboardAvoidingView,
   LayoutAnimation,
-  PermissionsAndroid,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableHighlight,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useMemo, useState, useEffect} from 'react';
@@ -18,7 +15,7 @@ import {useScreenContext} from '../../context/ScreenContextProvider';
 import styles from './style';
 import InputBox from '../../components/InputElement';
 import DatePickerComponent from '../../components/datePicker';
-import {Button, Checkbox, Snackbar} from 'react-native-paper';
+import {Snackbar} from 'react-native-paper';
 import {useOrientationChange} from 'react-native-orientation-locker';
 import {FlatList} from 'react-native-gesture-handler';
 import DataArray from './DataArray';
@@ -30,15 +27,13 @@ import validator from 'validator';
 import AddSign from '../../components/sign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SearchbleDropdown from '../../components/searchableDropdown';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import {useDispatch, useSelector} from 'react-redux';
-import {addData} from '../../redux/actions/formdata/actionType';
+import {showMessage} from 'react-native-flash-message';
 import {addFormData} from '../../redux/actions/formdata/action';
-import {load} from 'react-native-track-player/lib/src/trackPlayer';
+import {useAppDispatch} from '../../hooks/hooks';
 
 export type Form = {
   name: string;
-  dob: Date | undefined | string;
+  dob:any;
   age: number | null;
   email: string | null;
   temporaryAddress: string;
@@ -52,7 +47,7 @@ export type Form = {
   // permanentCountry: string;
   // permanentPincode: number;
   mobile: number | null;
-  cv: any;
+  cv: string | null;
   profile: string | null;
   signature: string | null;
   skills: string | null;
@@ -72,8 +67,10 @@ export type FormType = Form & {education: Education};
 const Forms: React.FC = () => {
   const {colors} = useTheme();
   const screenContext = useScreenContext();
-  const navigation = useNavigation()
+  const navigation:any = useNavigation();
+  const dispatch = useAppDispatch();
   const isPortrait = screenContext.windowWidth > screenContext.windowHeight;
+
   const screenStyles = styles(
     screenContext,
     screenContext[isPortrait ? 'windowWidth' : 'windowHeight'],
@@ -84,8 +81,6 @@ const Forms: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [visible, setVisible] = React.useState(false);
   const [tempSign, setTempSign] = useState('');
-
-  const dispatch = useDispatch();
 
   const onToggleSnackBar = (value: any) => {
     setTempSign(value);
@@ -126,7 +121,7 @@ const Forms: React.FC = () => {
   const allInputs = [
     {key: 'name', label: 'Name', name: 'textInput', type: 'text'},
     {key: 'mobile', label: 'Mobile', name: 'textInput', type: 'tel'},
-    {key: 'dob', name: 'date', label: 'Date of Birth'},
+    {key: 'dob', name: 'date', label: 'Date of Birth', type: 'date'},
     {key: 'email', label: 'Email', name: 'textInput', type: 'email'},
 
     {
@@ -157,18 +152,18 @@ const Forms: React.FC = () => {
       key: 'temporaryPincode',
       label: ' Pincode',
       name: 'textInput',
-      type: 'tel',
+      type: 'numeric',
     },
-    {key: 'skills', label: 'Skills', name: 'dropdown'},
+    {key: 'skills', label: 'Skills', name: 'dropdown', type: 'dropdown'},
     {
       key: 'education',
       label: 'Education',
       name: 'educationArray',
       type: 'array',
     },
-    {key: 'cv', label: 'cv', name: 'filepicker', type: 'tel'},
-    {key: 'profile', label: 'Profile', name: 'profilePicker'},
-    {key: 'sign', label: 'Signature', name: 'sign'},
+    {key: 'cv', label: 'cv', name: 'filepicker', type: 'doc'},
+    {key: 'profile', label: 'Profile', name: 'filepicker', type: 'img'},
+    {key: 'sign', label: 'Signature', name: 'sign', type: 'sign'},
   ];
 
   const handleInputChange = useCallback((field: keyof Form, value: any) => {
@@ -231,9 +226,10 @@ const Forms: React.FC = () => {
     [education],
   );
 
-  type Picker = 'image' | 'file';
 
-  const handleFilePicker = async (type: Picker) => {
+
+
+  const handleFilePicker = useCallback(async (type: string) => {
     if (type === 'file') {
       try {
         const res: DocumentPickerResponse[] = await pick({
@@ -249,7 +245,7 @@ const Forms: React.FC = () => {
           try {
             const fileCopyUri = res[0]?.fileCopyUri as string;
             const uri = decodeURIComponent(fileCopyUri);
-            setFormData({...formData, cv: uri});
+            setFormData(prevFormData => ({...prevFormData, cv: uri}));
           } catch (error) {
             console.log(error);
           }
@@ -269,14 +265,13 @@ const Forms: React.FC = () => {
 
         if (size > 10000000 || size < 2000000) {
           Alert.alert(
-            'Max File size is 10Mb , Please Image between 2Mb and 10Mb ',
+            'Max File size is 10Mb , Please Image between 2Mb and 10Mb',
           );
         } else {
           try {
             const fileCopyUri = res[0]?.fileCopyUri as string;
-
             const uri = decodeURIComponent(fileCopyUri);
-            setFormData({...formData, profile: uri});
+            setFormData(prevFormData => ({...prevFormData, profile: uri}));
           } catch (error) {
             console.log(error);
           }
@@ -285,7 +280,7 @@ const Forms: React.FC = () => {
         console.log(error);
       }
     }
-  };
+  }, []);
 
   const validateInputs = () => {
     const {age, cv, dob, email, mobile} = formData;
@@ -306,32 +301,9 @@ const Forms: React.FC = () => {
 
   const handleFormSubmit = () => {
     let data = {...formData, education};
-
+    dispatch(addFormData(data));
+    navigation.navigate('profilepage');
     let isData = false;
-
-    function Alert() {
-      showMessage({
-        message: 'Please fill all details before submitting',
-        type: 'info',
-        duration: 1000,
-        position: 'top',
-      });
-    }
-
-    for (let item in formData) {
-      if (!formData[item]) {
-        Alert();
-        return;
-      } else {
-        isData = true;
-      }
-    }
-
-    if (isData) {
-      dispatch(addFormData(data));
-      navigation.navigate('profilepage')
-  
-    }
   };
 
   return (
@@ -346,34 +318,32 @@ const Forms: React.FC = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               const {key, name, type, label} = item;
+
               return (
                 <>
-                  {name === 'textInput' ? (
-                    <InputBox
-                      label={label}
-                      onChangeText={value =>
-                        handleInputChange(key as keyof Form, value)
-                      }
-                      placeholder={`Enter your ${label}`}
-                      value={formData[key as keyof Form] || ''}
-                      type={type}
-                      error={error.emailError}
-                    />
-                  ) : name === 'date' ? (
+                  {name === 'textInput' ||
+                  name === 'date' ||
+                  name === 'dropdown' ||
+                  name === 'filepicker' ||
+                  name === 'sign' ? (
                     <>
-                      <Text>{key}</Text>
-                      <View style={screenStyles.inputContainer}>
-                        <DatePickerComponent
-                          setNewDate={value => handleInputChange('dob', value)}
-                          name="dob"
-                        />
-                      </View>
-                      {formData.age && (
-                        <Text
-                          style={{alignItems: 'center', textAlign: 'center'}}>
-                          Age : {formData.age}
-                        </Text>
-                      )}
+                      <InputBox
+                        label={label}
+                        onChangeText={value =>
+                          handleInputChange(key as keyof Form, value)
+                        }
+                        placeholder={`Enter your ${label}`}
+                        value={formData[key as keyof Form] || ''}
+                        type={type}
+                        error={error.emailError}
+                        name={name}
+                        setNewDate={value => handleInputChange('dob', value)}
+                        formData={formData}
+                        setFormData={setFormData}
+                        handleFilePicker={value => handleFilePicker(value)}
+                        onToggleSnackBar={value => onToggleSnackBar(value)}
+                        key={key}
+                      />
                     </>
                   ) : name === 'educationArray' ? (
                     <DataArray
@@ -382,93 +352,56 @@ const Forms: React.FC = () => {
                       addAnother={addAnother}
                       removeEducation={removeEducation}
                     />
-                  ) : name === 'filepicker' ? (
-                    <>
-                      <View style={screenStyles.inputContainer}>
-                        <TouchableOpacity
-                          onPress={() => handleFilePicker('file')}
-                          style={screenStyles.pdfBtn}>
-                          <Text style={{fontSize: 20}}>Upload Cv</Text>
-
-                          <AntDesign name="pdffile1" size={30} />
-                        </TouchableOpacity>
-                      </View>
-                      {formData.cv && <PdfViewer url={formData?.cv} />}
-                    </>
-                  ) : name === 'profilePicker' ? (
-                    <>
-                      <View style={screenStyles.inputContainer}>
-                        <TouchableOpacity
-                          onPress={() => handleFilePicker('image')}
-                          style={screenStyles.pdfBtn}>
-                          <Text style={{fontSize: 20}}>Upload Image</Text>
-
-                          <AntDesign name="user" size={30} />
-                        </TouchableOpacity>
-                      </View>
-                      {formData.profile && (
-                        <View style={screenStyles.signview}>
-                          <Image
-                            source={{uri: `file://${formData.profile}`}}
-                            width={100}
-                            height={100}
-                          />
-                          <FontAwesome5
-                            name="trash"
-                            color={colors.text}
-                            size={20}
-                            onPress={() =>
-                              setFormData({...formData, profile: null})
-                            }
-                          />
-                        </View>
-                      )}
-                    </>
                   ) : name === 'sign' ? (
                     <View style={screenStyles.inputContainer}>
                       <AddSign setFormData={setFormData} formData={formData} />
                     </View>
-                  ) : name === 'dropdown' ? (
-                    <SearchbleDropdown
-                      data={[
-                        {label: 'HTML', value: '1'},
-                        {label: 'CSS', value: '2'},
-                        {label: 'Javascript', value: '3'},
-                        {label: 'python', value: '4'},
-                        {label: 'java', value: '5'},
-                        {label: 'c/c++', value: '6'},
-                        {label: '.net', value: '7'},
-                        {label: 'React', value: '8'},
-                      ]}
-                      label={'Select language'}
-                      icon="codesquareo"
-                      formData={formData}
-                      setFormData={setFormData}
-                    />
                   ) : null}
                 </>
               );
             }}
           />
-          {formData.signature && (
-            <>
-              <View style={screenStyles.signview}>
-                <Image
-                  source={{uri: `file://${formData.signature}`}}
-                  width={100}
-                  height={100}
-                />
-                <FontAwesome5
-                  name="trash"
-                  color={colors.text}
-                  size={20}
-                  onPress={() => onToggleSnackBar(formData?.signature)}
-                />
-              </View>
-            </>
-          )}
-        </View>
+          {formData.cv && <PdfViewer url={formData?.cv} />}
 
+          <View style={{paddingHorizontal:10}}>
+            <View style={{flexDirection: 'row'}}>
+              {formData?.profile && (
+                <View style={screenStyles.signview}>
+                  <Image
+                    source={{uri: `file://${formData.profile}`}}
+                    width={150}
+                    height={100}
+                  />
+                  <FontAwesome5
+                    name="trash"
+                    color={colors.text}
+                    size={20}
+                    style={{padding:10, backgroundColor:'red', borderRadius:50}}
+                    onPress={() => setFormData({...formData, profile: null})}
+                  />
+                </View>
+              )}
+              {formData.signature && (
+                <>
+                  <View style={screenStyles.signview}>
+                    <Image
+                      source={{uri: `file://${formData.signature}`}}
+                      width={100}
+                      height={100}
+                    />
+                    <FontAwesome5
+                      name="trash"
+                      color={colors.text}
+                      style={{padding:10, backgroundColor:'red', borderRadius:50}}
+                      size={20}
+                      onPress={() => onToggleSnackBar(formData?.signature)}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
+        </View>
         <TouchableHighlight
           style={screenStyles.formSubmitBtn}
           onPress={handleFormSubmit}>

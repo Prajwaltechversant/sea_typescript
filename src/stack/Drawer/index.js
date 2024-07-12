@@ -21,7 +21,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Layout2 from '../../screens/layoutSample'
 import ButtonAnim from '../../screens/Login'
 import Login from '../../screens/Login'
-
+import Users from '../../screens/redux'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Echart from '../../screens/echarts'
+  
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
 
@@ -90,6 +93,20 @@ export default function DrawerStack() {
                     <AntDesign name='layout' color={colors.text} />
                 ),
                 title: "Layouts 2",
+
+            }} />
+            <Drawer.Screen name='Users' component={Users} options={{
+                drawerIcon: () => (
+                    <FontAwesome name='group' color={colors.text} />
+                ),
+                title: "redux thunk",
+
+            }} />
+             <Drawer.Screen name='Echart' component={Echart} options={{
+                drawerIcon: () => (
+                    <FontAwesome name='line-chart' color={colors.text} />
+                ),
+                title: "E chart",
 
             }} />
 
