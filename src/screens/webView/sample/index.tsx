@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useRef, useState ,useTransition} from 'react'
 import {WebView,} from 'react-native-webview'
-
+// import {InferProps} from 'prop-types'
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,10 +96,8 @@ const WebViews:React.FC=()=> {
       setClickedItem(e.nativeEvent.data)
      }}
 pagingEnabled
-
 />
      <Text style={{color:'red',textAlign:'center', fontSize:20}}>{clickedItem}</Text>
-
      <TouchableOpacity>
      <Text style={{color:'red',textAlign:'center', fontSize:20}} onPress={()=>webViewRef.current?.goBack()}>Go back</Text>
      </TouchableOpacity>

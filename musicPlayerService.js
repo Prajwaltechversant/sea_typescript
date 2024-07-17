@@ -9,9 +9,9 @@ export async function setupPlayer() {
     try {
         await TrackPlayer.getActiveTrackIndex()
         isSetup = true;
-        
-        
-    
+
+
+
     } catch (error) {
         await TrackPlayer.setupPlayer()
         // await TrackPlayer.updateOptions({
@@ -34,7 +34,7 @@ export async function setupPlayer() {
         //     progressUpdateEventInterval: 2,
         //   });
         isSetup = true;
-     
+
     }
     finally {
         return isSetup;

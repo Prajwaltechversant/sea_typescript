@@ -142,7 +142,6 @@ const BackgroundTask = () => {
 
     if (downloadRef.current) {
       downloadRef.current()
- 
     }
   };
 
@@ -160,7 +159,7 @@ const BackgroundTask = () => {
         <Text>Cancel Fetch Blob Download</Text>
       </TouchableOpacity>
 
-      <ProgressLoader progress={progress} />
+      {/* <ProgressLoader progress={progress} /> */}
       <Text>Status: {status}</Text>
     </View>
   );

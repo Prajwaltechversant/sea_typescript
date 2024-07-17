@@ -17,6 +17,9 @@ import Echart from './src/screens/echarts';
 import BackgroundTask from './src/screens/modules/backgroundActions';
 import RecaptchaTest from './src/screens/modules/recaptch';
 import WebViews from './src/screens/webView/sample';
+import RenderhtmlPkg from './src/screens/webView/renderHtml';
+import MomentumT from './src/screens/modules/momentum';
+import GradientClock from './src/screens/GradientClock';
 
 
 
@@ -58,6 +61,9 @@ function ThemeProviderWrapper() {
             {/* <BackgroundTask /> */}
             {/* <RecaptchaTest /> */}
             {/* <WebViews  /> */}
+            {/* <RenderhtmlPkg  /> */}
+            {/* <MomentumT  /> */}
+            {/* <GradientClock  /> */}
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>
