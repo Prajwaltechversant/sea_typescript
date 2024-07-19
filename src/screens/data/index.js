@@ -90,6 +90,8 @@ export default function Data() {
         onClose={() => setIsTooltipVisible(false)}
       >
         <TouchableHighlight
+
+        style={{position:'static'}}
           onPress={() => setIsTooltipVisible(true)}
         >
           <Text >Press me</Text>

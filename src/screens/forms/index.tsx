@@ -363,7 +363,7 @@ const Forms: React.FC = () => {
           />
           {formData.cv && <PdfViewer url={formData?.cv} />}
 
-          <View style={{paddingHorizontal:10}}>
+          <View style={{paddingHorizontal:10}} renderToHardwareTextureAndroid>
             <View style={{flexDirection: 'row'}}>
               {formData?.profile && (
                 <View style={screenStyles.signview}>

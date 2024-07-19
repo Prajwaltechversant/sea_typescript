@@ -24,7 +24,10 @@ import Login from '../../screens/Login'
 import Users from '../../screens/redux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Echart from '../../screens/echarts'
-  
+import RecaptchaTest from '../../screens/modules/recaptch'
+import BackgroundTask from '../../screens/modules/backgroundActions'
+import WebViews from '../../screens/webView/sample'
+
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
 
@@ -34,7 +37,7 @@ export default function DrawerStack() {
 
     return (
         <Drawer.Navigator
-        initialRouteName='ParallaxScroll'
+            initialRouteName='ParallaxScroll'
             screenOptions={({ navigation }) => ({
                 headerLeft: () => (
                     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
@@ -102,14 +105,28 @@ export default function DrawerStack() {
                 title: "redux thunk",
 
             }} />
-             <Drawer.Screen name='Echart' component={Echart} options={{
+            <Drawer.Screen name='Echart' component={Echart} options={{
                 drawerIcon: () => (
                     <FontAwesome name='line-chart' color={colors.text} />
                 ),
                 title: "E chart",
 
             }} />
+            <Drawer.Screen name='recaptch' component={RecaptchaTest} options={{
 
+                title: "re captch",
+
+            }} />
+            <Drawer.Screen name='bgTask' component={BackgroundTask} options={{
+
+                title: "Background Actions",
+
+            }} />
+            <Drawer.Screen name='webViews' component={WebViews} options={{
+
+                title: "web ",
+
+            }} />
         </Drawer.Navigator>
     )
 }

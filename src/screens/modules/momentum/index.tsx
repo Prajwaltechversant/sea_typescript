@@ -1,11 +1,9 @@
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './style';
 import moment from 'moment-timezone/moment-timezone.js';
-import {DataTable} from 'react-native-paper';
 import {useTheme} from '@react-navigation/native';
 import {useScreenContext} from '../../../context/ScreenContextProvider';
-import DeviceInfo from 'react-native-device-info';
 import * as RNLocalize from 'react-native-localize';
 import 'moment-timezone/data/packed/latest.json';
 
@@ -23,37 +21,33 @@ const MomentumT: React.FC = () => {
     colors,
   );
 
-  const [date, setDate] = useState(moment().format('DD - MM - YYYY'));
-  // const [time, setTime] = useState(moment())
-  // let t = moment().format('LT')
-  // let t =moment().calendar(null, {
-  //     sameDay: '[Today]',
-  //     nextDay: '[Tomorrow]',
-  //     nextWeek: 'dddd',
-  //     lastDay: '[Yesterday]',
-  //     lastWeek: '[Last] dddd',
-  //     sameElse: 'DD/MM/YYYY'
-  // });
-
-  // let t = moment.isDate()
-
-  const [time, setTime] = useState(moment().format('HH : MM : SS A'));
-
-//   let t = moment().format('HH : MM : SS A');
-
+  const [date, setDate] = useState(moment().format('LLLL'));
+  const [locale, setLocale] = useState('en');
+  const [time, setTime] = useState(moment().format('HH : mm : ss A'));
 
   const deviceTimeZone = RNLocalize.getTimeZone();
+  // moment.tz.add('America/Los_Angeles|PST PDT|80 70|0101|1Lzm0 1zb0 Op0');
 
   useEffect(() => {
-    const interval = setTimeout(() => {
-      setTime(moment().tz(deviceTimeZone).format('LT'));
+    moment.locale(locale);
+    const interval = setInterval(() => {
+      // setTime(moment().tz(deviceTimeZone).format('HH : mm : ss A'));
+      setTime(moment().format('HH : mm : ss A'));
+      // console.log(
+      //   moment.tz.zone('Asia/kolkata'),
+      // );
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [locale, deviceTimeZone]);
 
-
-
+  useEffect(() => {
+    setDate(moment().format('DD - MM - YYYY'));
+  }, [locale]);
+  //   var june = moment("2014-06-01T12:00:00Z");
+  // console.log('====================================');
+  // console.log(june.tz('America/New_York').format('ha z'));
+  // console.log('====================================');
   return (
     <View style={screenStyles.container}>
       <Text>TimeZone -- Momentum</Text>
@@ -61,6 +55,25 @@ const MomentumT: React.FC = () => {
         <Text>{date}</Text>
         <View style={screenStyles.timeView}>
           <Text style={{fontSize: 30}}>{time}</Text>
+        </View>
+        <View>
+          <Button title="France" color="blue" onPress={() => setLocale('fr')} />
+        </View>
+
+        <View>
+          <Button
+            title="Spanish"
+            color="blue"
+            onPress={() => setLocale('es')}
+          />
+        </View>
+
+        <View>
+          <Button
+            title="English"
+            color="blue"
+            onPress={() => setLocale('en')}
+          />
         </View>
       </View>
     </View>

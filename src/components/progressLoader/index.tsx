@@ -74,7 +74,7 @@ const ProgressLoader: React.FC<Props> = ({ progress }) => {
                         :
                         <Success x={half_Circle * 2} y={half_Circle * 2} />
                 }
-                {/* <SvgText
+                <SvgText
                     x={half_Circle}
                     y={half_Circle}
                     textAnchor="middle"
@@ -83,7 +83,7 @@ const ProgressLoader: React.FC<Props> = ({ progress }) => {
                     fontSize={20}
                 >
                     {progress * 100}%
-                </SvgText> */}
+                </SvgText>
             </Svg>
         </View>
     )

@@ -1,6 +1,6 @@
-import 'react-native-gesture-handler'
-import React, {useContext, useEffect} from 'react'
-import {NavigationContainer,useTheme} from '@react-navigation/native';
+import 'react-native-gesture-handler';
+import React, {useContext, useEffect} from 'react';
+import {NavigationContainer, useTheme} from '@react-navigation/native';
 import MainStack from './src/stack/MainStack';
 import notifee, {EventType} from '@notifee/react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -20,9 +20,10 @@ import WebViews from './src/screens/webView/sample';
 import RenderhtmlPkg from './src/screens/webView/renderHtml';
 import MomentumT from './src/screens/modules/momentum';
 import GradientClock from './src/screens/GradientClock';
-
-
-
+import Login from './src/screens/Login';
+import ActionTimer from './src/screens/Testing/jest/Timer';
+import ReduxTest from './src/screens/Testing/redux';
+// import store from './__tests__/redux-test/store'
 const App: React.FC = () => {
   useEffect(() => {
     return notifee.onForegroundEvent(({type, detail}) => {
@@ -56,6 +57,7 @@ function ThemeProviderWrapper() {
       <ScreenContextProvider>
         <NavigationContainer theme={activeColor}>
           <PaperProvider>
+            {/* <Login  /> */}
             <MainStack />
             {/* <Echart  /> */}
             {/* <BackgroundTask /> */}
@@ -64,6 +66,15 @@ function ThemeProviderWrapper() {
             {/* <RenderhtmlPkg  /> */}
             {/* <MomentumT  /> */}
             {/* <GradientClock  /> */}
+            {/* <ActionTimer /> */}
+            {/* <Snapshot  /> */}
+
+            {/* <ReduxTest  /> */}
+
+            
+
+            
+            
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>

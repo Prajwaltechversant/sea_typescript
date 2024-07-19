@@ -32,7 +32,7 @@ export default function MainStack() {
       }}>
       {/* <Stack.Screen name="GradientAnimation" component={GradientClock} /> */}
 
-      <Stack.Screen name="Login" component={Login} />
+      {/* <Stack.Screen name="Login" component={Login} /> */}
       <Stack.Screen
         name="TabStack"
         component={TabStack}

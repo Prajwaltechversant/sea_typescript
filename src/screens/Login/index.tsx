@@ -19,6 +19,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useOrientationChange} from 'react-native-orientation-locker';
 import GradientClock from '../GradientClock';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -36,20 +39,27 @@ export default function Login({navigation}: any) {
     colors,
   );
   const [loading, setLoading] = useState(false);
+  const [copiedText, setCopiedText] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
 
-  console.log(loading);
   useEffect(() => {
     const interval = setTimeout(() => {
       setLoading(true);
-      console.log('====================================');
-      console.log(loading);
-      console.log('====================================');
     }, 4000);
-    return ()=> clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
-  
   const zoomValue = useRef(new Animated.Value(1)).current;
+
+  type Input = {
+    uname:string | null;
+    pwd : string | null
+  }
+
+  const [loginData, setLoginData] = useState<Input>({
+    uname: '',
+    pwd: null,
+  });
 
   const zoomAnimation = () => {
     Animated.sequence([
@@ -72,12 +82,25 @@ export default function Login({navigation}: any) {
     // zoomAnimation()
   });
 
-  console.log(
-    screenContext.windowWidth < screenContext.windowHeight ? true : false,
-  );
-  if (!loading) {
-    return <GradientClock />;
+  // console.log(
+  //   screenContext.windowWidth < screenContext.windowHeight ? true : false,
+  // );
+  // if (!loading) {
+  //   return <GradientClock />;
+  // }
+
+  const copyToClipboard = () => {
+    const {uname} = loginData;
+
+    if (uname) {
+      Clipboard.setString(uname);
+    }
+  };
+
+  const showPasswordToggle = ()=>{
+    setShowPassword(!showPassword)
   }
+
   return (
     <KeyboardAvoidingView
       style={screenStyles.wrapper}
@@ -87,7 +110,7 @@ export default function Login({navigation}: any) {
         contentContainerStyle={{flexGrow: 1}}
         viewIsInsideTabBar
         showsVerticalScrollIndicator={false}>
-        <View style={[screenStyles.container]} >
+        <View style={[screenStyles.container]}>
           <View style={screenStyles.languageSections}>
             <Text style={{textAlign: 'center'}}>Language</Text>
           </View>
@@ -102,10 +125,19 @@ export default function Login({navigation}: any) {
             <TextInput
               mode="outlined"
               placeholder="username, email or mobile number"
+              onChangeText={e => setLoginData({...loginData, uname: e})}
+              // right={
+              //   <TextInput.Icon icon={'clipboard'} onPress={copyToClipboard} />
+              // }
             />
             <TextInput
               mode="outlined"
-              placeholder="username, email or mobile number"
+              placeholder="Password"
+              secureTextEntry={showPassword}
+              onChangeText={e => setLoginData({...loginData, pwd: e})}
+              // right={
+              //   <TextInput.Icon icon={'eye'} onPress={showPasswordToggle} />
+              // }
             />
             <TouchableOpacity
               style={screenStyles.btn}

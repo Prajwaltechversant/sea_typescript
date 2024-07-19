@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, Vibration } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@react-navigation/native';
 import { useScreenContext } from '../../../context/ScreenContextProvider';
 import styles from './style';
@@ -7,8 +7,20 @@ import BackgroundService from 'react-native-background-actions';
 import ProgressLoader from '../../../components/progressLoader';
 import RNFS from 'react-native-fs';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
+const ONE_SECOND_IN_MS = 1000;
+const PATTERN = [
+  1 * ONE_SECOND_IN_MS,
+  2 * ONE_SECOND_IN_MS,
+  3 * ONE_SECOND_IN_MS,
+];
+const PATTERN_DESC =
+  Platform.OS === 'android'
+    ? 'wait 1s, vibrate 2s, wait 3s'
+    : 'wait 1s, vibrate, wait 2s, vibrate, wait 3s';
 
 const downloadFile = async (taskDataArguments) => {
   const { url } = taskDataArguments;
@@ -35,6 +47,7 @@ const downloadFile = async (taskDataArguments) => {
     .then(res => {
       console.log('File downloaded successfully:', res);
       BackgroundService.stop();
+      Vibration.vibrate(PATTERN)
     })
     .catch(err => {
       console.error('File download error:', err);
@@ -47,6 +60,14 @@ const downloadFile = async (taskDataArguments) => {
 };
 
 const BackgroundTask = () => {
+
+
+
+  useEffect(() => {
+    AsyncStorage.getItem('progress').then(i => console.log(i))
+  },[])
+
+
   const { colors } = useTheme();
   const screenContext = useScreenContext();
   const isPortrait = screenContext.windowWidth > screenContext.windowHeight;
@@ -68,18 +89,18 @@ const BackgroundTask = () => {
     const fileName = `${date.getTime()}_sample.pdf`;
     const filePath = `${dirs.DocumentDir}/${fileName}`;
 
-    console.log('Download has begun');
     setStatus('Download has begun');
 
     const task = ReactNativeBlobUtil
       .config({
         path: filePath,
         addAndroidDownloads: {
-          useDownloadManager: true, 
+          useDownloadManager: true,
           notification: true,
-          description: 'File downloaded by download manager.',
-          
-      }
+          description: `Downloading :${progress}`,
+
+
+        }
       })
       .fetch('GET', url);
 
@@ -87,9 +108,10 @@ const BackgroundTask = () => {
       let progress = (received / total) * 100;
       setProgress(progress.toFixed(2));
       console.log(`Progress: ${progress.toFixed(2)}%`);
+
       taskDataArguments.onProgress((progress / 100).toFixed(2));
     });
-
+    console.log(task)
     downloadRef.current = task.cancel
 
     try {
@@ -136,6 +158,7 @@ const BackgroundTask = () => {
 
   const fetchBlobMethod = async () => {
     await BackgroundService.start(fetchBlob, options);
+
   };
 
   const cancelDownload = async () => {
@@ -155,11 +178,11 @@ const BackgroundTask = () => {
         <Text>Download using Fetch Blob</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={screenStyles.downloadBtn} onPress={()=>cancelDownload()}>
+      <TouchableOpacity style={screenStyles.downloadBtn} onPress={() => cancelDownload()}>
         <Text>Cancel Fetch Blob Download</Text>
       </TouchableOpacity>
 
-      {/* <ProgressLoader progress={progress} /> */}
+      <ProgressLoader progress={progress} />
       <Text>Status: {status}</Text>
     </View>
   );

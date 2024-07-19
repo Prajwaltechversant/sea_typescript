@@ -13,7 +13,7 @@ const styles =(screenContext,width, height, colors)=> StyleSheet.create({
         width:width*0.5,
         height:height*0.2,
         alignItems:'center',
-        justifyContent:'center'
+        // justifyContent:'center'
     },
     timeView:{
         borderColor:colors.text,

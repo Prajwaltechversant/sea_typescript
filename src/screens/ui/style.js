@@ -3,9 +3,10 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:'white'
+        // justifyContent:'center',
+        // alignItems:'center',
+        backgroundColor:'white',
+        borderWidth:1
 
     },
     cardContainer:{
@@ -13,6 +14,7 @@ const styles = StyleSheet.create({
         height:150,
         borderRadius:20,
         borderWidth:1,
+        position:'absolute'
     }
 })
 

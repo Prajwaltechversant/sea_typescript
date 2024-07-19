@@ -21,7 +21,11 @@ export default function UiSamples() {
         <View style={styles.container}>
             <Animated.View
                 entering={keyframe.duration(3000).delay(200)}
-                style={{ width: 150, height: 150, backgroundColor: 'green' }}
+                style={{ width: 150, height: 150, backgroundColor: 'green', position:'static' }}
+            />
+            <Animated.View
+                entering={keyframe.duration(3000).delay(200)}
+                style={{ width: 150, height: 150, backgroundColor: 'green',position:'static' }}
             />
         </View>
     );

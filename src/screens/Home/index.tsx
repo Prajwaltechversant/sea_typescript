@@ -45,7 +45,9 @@ const Home= ({navigation}:NavigaionProps) => {
 
   return (
     <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}
+      renderToHardwareTextureAndroid
+      >
         {
           !openScanner &&
           <>
