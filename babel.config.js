@@ -1,12 +1,10 @@
 module.exports = {
- presets: [
+  presets: [
     'module:@react-native/babel-preset',
-    '@babel/preset-env',
-    '@babel/preset-react',
-    '@babel/preset-typescript',
   ],
-
   plugins: [
+    'react-native-reanimated/plugin',
+    'react-native-paper/babel',
     ['@babel/plugin-transform-class-properties', { loose: true }],
     ['@babel/plugin-transform-private-methods', { loose: true }],
     ['@babel/plugin-transform-private-property-in-object', { loose: true }],

@@ -70,10 +70,6 @@ function ThemeProviderWrapper() {
             {/* <Snapshot  /> */}
 
             {/* <ReduxTest  /> */}
-
-            
-
-            
             
             <FlashMessage position="top" />
           </PaperProvider>
