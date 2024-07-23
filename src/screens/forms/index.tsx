@@ -318,7 +318,6 @@ const Forms: React.FC = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               const {key, name, type, label} = item;
-
               return (
                 <>
                   {name === 'textInput' ||

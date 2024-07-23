@@ -103,6 +103,7 @@ const  TabStack:React.FC=() =>{
         headerShadowVisible: false,
         tabBarHideOnKeyboard: true,
         tabBarBadgeStyle: {backgroundColor: 'red'},
+        
       }}>
       <Tab.Screen 
       // name={t('home')} 

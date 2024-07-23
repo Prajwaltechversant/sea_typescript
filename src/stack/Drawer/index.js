@@ -27,7 +27,7 @@ import Echart from '../../screens/echarts'
 import RecaptchaTest from '../../screens/modules/recaptch'
 import BackgroundTask from '../../screens/modules/backgroundActions'
 import WebViews from '../../screens/webView/sample'
-
+import VideoStream from '../../screens/video/index'
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
 
@@ -125,6 +125,17 @@ export default function DrawerStack() {
             <Drawer.Screen name='webViews' component={WebViews} options={{
 
                 title: "web ",
+
+            }} />
+            <Drawer.Screen name='Video' component={VideoStream} options={{
+                drawerIcon: () => (
+                    <AntDesign name='play' color={colors.text} />
+                ),
+                title: "Video ",
+
+                headerShown:false
+
+                
 
             }} />
         </Drawer.Navigator>
