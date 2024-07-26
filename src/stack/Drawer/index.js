@@ -28,6 +28,9 @@ import RecaptchaTest from '../../screens/modules/recaptch'
 import BackgroundTask from '../../screens/modules/backgroundActions'
 import WebViews from '../../screens/webView/sample'
 import VideoStream from '../../screens/video/index'
+import Timer from '../../screens/Timer/index'
+
+
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
 
@@ -44,7 +47,6 @@ export default function DrawerStack() {
                         <Entypo name="menu" size={25} color={colors.text} style={{ marginLeft: 15 }} />
                     </TouchableOpacity>
                 ),
-
                 headerRight: () => (
                     <Text>{date.toDateString}</Text>
                 ),
@@ -133,11 +135,19 @@ export default function DrawerStack() {
                 ),
                 title: "Video ",
 
-                headerShown:false
+                headerShown:false   
 
-                
+            }} />
+                <Drawer.Screen name='Timer' component={Timer} options={{
+                drawerIcon: () => (
+                    <AntDesign name='clockcircle' color={colors.text} />
+                ),
+                title: "Timer",
+                headerShown:false   
 
             }} />
         </Drawer.Navigator>
     )
 }
+
+

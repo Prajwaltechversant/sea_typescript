@@ -1,12 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["node"]  ,
-    "jsx": "react-native", 
-  }
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "include": [
+    "declarations.d.ts"
+  ]
 }

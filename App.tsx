@@ -23,6 +23,7 @@ import GradientClock from './src/screens/GradientClock';
 import Login from './src/screens/Login';
 import ActionTimer from './src/screens/Testing/jest/Timer';
 import ReduxTest from './src/screens/Testing/redux';
+import Timer from './src/screens/Timer';
 // import store from './__tests__/redux-test/store'
 const App: React.FC = () => {
   useEffect(() => {
@@ -58,7 +59,7 @@ function ThemeProviderWrapper() {
         <NavigationContainer theme={activeColor}>
           <PaperProvider>
             {/* <Login  /> */}
-            <MainStack />
+            {/* <MainStack /> */}
             {/* <Echart  /> */}
             {/* <BackgroundTask /> */}
             {/* <RecaptchaTest /> */}
@@ -68,9 +69,11 @@ function ThemeProviderWrapper() {
             {/* <GradientClock  /> */}
             {/* <ActionTimer /> */}
             {/* <Snapshot  /> */}
-
             {/* <ReduxTest  /> */}
+
             
+            <Timer />
+
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>
