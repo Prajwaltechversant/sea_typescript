@@ -122,11 +122,8 @@ const  TabStack:React.FC=() =>{
 
       />
       <Tab.Screen
-      //  name={t('tasks')} 
-      name={"Tasks"} 
-
+      name="Tasks"
        component={HomeStack}
-      
       options={{
         tabBarIcon:({color,focused,size})=>{
           return(
@@ -138,10 +135,7 @@ const  TabStack:React.FC=() =>{
       />
       <Tab.Screen
        name="TrackPlayer"
-      //  name="Track Player"
-
-        component={Screen2}
-      
+        component={Screen2}  
       options={{
         tabBarIcon:({color,focused,size})=>{
           return(

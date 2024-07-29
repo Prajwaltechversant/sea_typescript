@@ -24,6 +24,7 @@ import Login from './src/screens/Login';
 import ActionTimer from './src/screens/Testing/jest/Timer';
 import ReduxTest from './src/screens/Testing/redux';
 import Timer from './src/screens/Timer';
+import path from 'path';
 // import store from './__tests__/redux-test/store'
 const App: React.FC = () => {
   useEffect(() => {
@@ -53,24 +54,34 @@ function ThemeProviderWrapper() {
   });
   const {colors} = useTheme();
 
+  const linking = {
+    prefixes: ['sea://'],
+    config: {
+      screens: {
+        TabStack: {
+          screens:{
+            Tasks:{
+              screens:{
+                drawer:{
+                  screens:{
+                    Timer:'timer'
+                  }
+                }
+              }
+            }
+          }
+        },
+        ResultView: {},
+      },
+    },
+  };
+
   return (
     <Provider store={store}>
       <ScreenContextProvider>
-        <NavigationContainer theme={activeColor}>
+        <NavigationContainer theme={activeColor} linking={linking}>
           <PaperProvider>
-            {/* <Login  /> */}
             <MainStack />
-            {/* <Echart  /> */}
-            {/* <BackgroundTask /> */}
-            {/* <RecaptchaTest /> */}
-            {/* <WebViews  /> */}
-            {/* <RenderhtmlPkg  /> */}
-            {/* <MomentumT  /> */}
-            {/* <GradientClock  /> */}
-            {/* <ActionTimer /> */}
-            {/* <Snapshot  /> */}
-            {/* <ReduxTest  /> */}       
-            {/* <Timer /> */}
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>

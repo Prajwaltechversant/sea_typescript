@@ -14,7 +14,7 @@ import notifee, {
   AndroidVisibility,
 } from '@notifee/react-native';
 import ProgressLoader from '../../components/progressLoader';
-import {Button, IconButton} from 'react-native-paper';
+import {IconButton} from 'react-native-paper';
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -26,7 +26,6 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
-import CircleProgressBar from '../../components/progressloaderPkg';
 
 const sleep = time =>
   new Promise<void>(resolve => setTimeout(() => resolve(), time));
@@ -130,6 +129,7 @@ const Timer = () => {
   const [resume, setIsResume] = useState(false);
   const [resumeToggle, setResumeToggle] = useState(false);
   const translateX = useSharedValue(0);
+  const stopWatchTimerRef = useRef(stopWatchTimer);
 
   const pan = Gesture.Pan()
     .minDistance(1)
@@ -158,47 +158,52 @@ const Timer = () => {
     transform: [{translateX: withSpring(translateX.value)}],
   }));
 
-  const startTimer = useCallback(async (value?: any, pausedTime?: string) => {
-    let timeIns;
-    if (pausedTime) {
-      timeIns = Number(pausedTime);
-    } else {
-      setTimer(value);
-      const {h, m, s} = value;
-      timeIns = Number(h) * 3600 + Number(m) * 60 + Number(s);
-    }
+  const startTimer = useCallback(
+    async (value?: any, pausedTime?: string) => {
+      let timeIns;
+      if (pausedTime) {
+        timeIns = Number(pausedTime);
+      } else {
+        setTimer(value);
+        const {h, m, s} = value;
+        timeIns = Number(h) * 3600 + Number(m) * 60 + Number(s);
+      }
 
-    await AsyncStorage.setItem('timertime', timeIns.toString());
-    setStopWatchTimer(timeIns);
-    setTotaltime(timeIns);
-    if (timerRef.current) {
-      timerRef.current.stop();
-    }
+      await AsyncStorage.setItem('timertime', timeIns.toString());
+      setStopWatchTimer(timeIns);
+      setTotaltime(timeIns);
 
-    if (timeIns > 0 && !resume) {
-      const duration: any = moment.duration(1, 'second');
-      timerRef.current = duration.timer({loop: true}, () => {
-        setStopWatchTimer(prev => {
-          const newTime = prev - 1;
-          setIsRunning(true);
-          if (newTime <= 0) {
+      if (timerRef.current) {
+        timerRef.current.stop();
+        console.log(timerRef.current);
+      }
+
+      if (timeIns > 0 && !resume) {
+        const duration: any = moment.duration(1, 'second');
+        setIsRunning(true);
+
+        timerRef.current = duration.timer({loop: true}, () => {
+          setStopWatchTimer(prev => prev - 1);
+          if (stopWatchTimerRef.current <= 0) {
             timerRef.current.stop();
             BackgroundService.stop();
-            AsyncStorage.removeItem('timerStatus').then(i => console.log(i));
+            AsyncStorage.removeItem('timerStatus');
             setIsRunning(false);
             return 0;
           }
-          return newTime;
+          return stopWatchTimer;
         });
-      });
-      await AsyncStorage.setItem('currTime', new Date().toISOString());
-      await AsyncStorage.setItem('totalTime', timeIns.toString());
-      await BackgroundService.start(veryIntensiveTask, {
-        ...options,
-        parameters: {delay: 1000, timeIns},
-      });
-    }
-  }, []);
+
+        await AsyncStorage.setItem('currTime', new Date().toISOString());
+        await AsyncStorage.setItem('totalTime', timeIns.toString());
+        await BackgroundService.start(veryIntensiveTask, {
+          ...options,
+          parameters: {delay: 1000, timeIns},
+        });
+      }
+    },
+    [resume],
+  );
 
   useEffect(() => {
     async function isPaused() {
@@ -230,22 +235,21 @@ const Timer = () => {
         setProgress(newProgress);
 
         const duration: any = moment.duration(1, 'second');
+        setIsRunning(true);
+
         timerRef.current = duration.timer({loop: true}, () => {
-          setStopWatchTimer(prev => {
-            const newTime = prev - 1;
-            setIsRunning(true);
-            if (newTime <= 0) {
-              timerRef.current.stop();
-              BackgroundService.stop();
-              AsyncStorage.removeItem('currTime');
-              setIsRunning(false);
-              return 0;
-            }
-            let newProgress = 1 - newTime / Number(timertime);
-            newProgress = Math.max(0, Math.min(newProgress, 1));
-            setProgress(newProgress);
-            return newTime;
-          });
+          setStopWatchTimer(prev => prev - 1);
+          if (stopWatchTimerRef.current <= 0) {
+            timerRef.current.stop();
+            BackgroundService.stop();
+            AsyncStorage.removeItem('currTime');
+            setIsRunning(false);
+            return 0;
+          }
+          let newProgress = 1 - stopWatchTimer / Number(timertime);
+          newProgress = Math.max(0, Math.min(newProgress, 1));
+          setProgress(newProgress);
+          return stopWatchTimer;
         });
       }
     }
@@ -256,6 +260,9 @@ const Timer = () => {
       isPaused();
     }
   }, []);
+  useEffect(() => {
+    stopWatchTimerRef.current = stopWatchTimer;
+  }, [stopWatchTimer]);
 
   const formatTime = useCallback((seconds: number) => {
     const duration = moment.duration(seconds, 'seconds');
@@ -274,7 +281,7 @@ const Timer = () => {
       type: 'mipmap',
     },
     color: '#ff00ff',
-    linkingURI: 'yourSchemeHere://chat/jane',
+    linkingURI: 'sea://timer',
   };
 
   const stopTimer = async () => {
@@ -303,14 +310,21 @@ const Timer = () => {
   }
 
   async function resetTimer() {
-    await BackgroundService.stop();
     setIsRunning(false);
     setResumeToggle(false);
+    setStopWatchTimer(0);
+    stopWatchTimerRef.current = 0;
+    setProgress(0);
+    setIsResume(false);
+    await BackgroundService.stop();
     await AsyncStorage.removeItem('timerStatus');
     await AsyncStorage.removeItem('pausedTime');
     await AsyncStorage.removeItem('timertime');
     await AsyncStorage.removeItem('currTime');
-    setProgress(0);
+    if (timerRef.current) {
+      timerRef.current.stop();
+      timerRef.current = null;
+    }
   }
 
   useEffect(() => {
@@ -346,7 +360,7 @@ const Timer = () => {
         <View style={screenStyles.timerInputBox}>
           <View style={screenStyles.loaderBox}>
             <ProgressLoader
-            time={formatTime(stopWatchTimer)}
+              time={formatTime(stopWatchTimer)}
               progress={progress}
             />
             {/* <CircleProgressBar /> */}

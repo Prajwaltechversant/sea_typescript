@@ -26,9 +26,7 @@ const ProgressLoader: React.FC<Props> = ({progress,time}) => {
   const strokeWidth = 15;
   const half_Circle = R + strokeWidth;
   const diameter = half_Circle * 2;
-
   const progressValue = useSharedValue(progress);
-
   const endPosition = useDerivedValue(() => {
     const angle = Math.PI * progressValue.value - Math.PI ;
     return {
@@ -41,7 +39,6 @@ const ProgressLoader: React.FC<Props> = ({progress,time}) => {
     return {
       // strokeDashoffset: withSpring(circumference * (1 - progress)),
       strokeDashoffset:circumference * (1 - progress)
-
     };
   }, [progress]);
 
@@ -58,7 +55,7 @@ const ProgressLoader: React.FC<Props> = ({progress,time}) => {
             animatedProps={animatedProps}
             r={R}
             strokeWidth={strokeWidth}
-            fill={progress !== 1 ? 'transparent' : colors.text}
+            fill={'transparent'}
             cx={'50%'}
             cy={'50%'}
             stroke={progress >= 0.75 ? 'green' : colors.text}
@@ -79,12 +76,7 @@ const ProgressLoader: React.FC<Props> = ({progress,time}) => {
             strokeOpacity={0.1}
           />
 
-          {/* <Circle
-            cx={endPosition.value.x}
-            cy={endPosition.value.y}
-            r={strokeWidth / 2}
-            fill={'red'}
-          /> */}
+
         </G>
       </Svg>
     </View>
