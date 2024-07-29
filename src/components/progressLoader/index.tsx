@@ -23,7 +23,7 @@ const ProgressLoader: React.FC<Props> = ({progress,time}) => {
   const style = styles(colors, height);
   const circumference = 900;
   const R = circumference / (2 * Math.PI);
-  const strokeWidth = 9;
+  const strokeWidth = 15;
   const half_Circle = R + strokeWidth;
   const diameter = half_Circle * 2;
 

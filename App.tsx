@@ -59,7 +59,7 @@ function ThemeProviderWrapper() {
         <NavigationContainer theme={activeColor}>
           <PaperProvider>
             {/* <Login  /> */}
-            {/* <MainStack /> */}
+            <MainStack />
             {/* <Echart  /> */}
             {/* <BackgroundTask /> */}
             {/* <RecaptchaTest /> */}
@@ -69,11 +69,8 @@ function ThemeProviderWrapper() {
             {/* <GradientClock  /> */}
             {/* <ActionTimer /> */}
             {/* <Snapshot  /> */}
-            {/* <ReduxTest  /> */}
-
-            
-            <Timer />
-
+            {/* <ReduxTest  /> */}       
+            {/* <Timer /> */}
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>

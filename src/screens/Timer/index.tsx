@@ -26,43 +26,10 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
+import CircleProgressBar from '../../components/progressloaderPkg';
 
 const sleep = time =>
   new Promise<void>(resolve => setTimeout(() => resolve(), time));
-
-// const veryIntensiveTask = async taskDataArguments => {
-//   const {delay, timeIns} = taskDataArguments;
-
-//   const format = seconds => {
-//     const duration = moment.duration(seconds, 'seconds');
-//     const hours = duration.hours().toString().padStart(2, '0');
-//     const minutes = duration.minutes().toString().padStart(2, '0');
-//     const secs = duration.seconds().toString().padStart(2, '0');
-//     return `${hours} h: ${minutes} m: ${secs} s`;
-//   };
-
-//   let newT = timeIns;
-
-//   await new Promise<void>(async resolve => {
-//     for (let i = timeIns; i >= 0; i--) {
-//       newT - 1;
-//       await sleep(delay);
-//       await BackgroundService.updateNotification({
-//         taskDesc: `timer left:${format(newT)} `,
-//         progressBar: {value: 10, max: 0, indeterminate: false},
-//       });
-//     }
-//     resolve();
-//   });
-
-//   if (newT === 0) {
-//     BackgroundService.stop();
-
-//     Vibration.vibrate();
-//     AsyncStorage.removeItem('currTime');
-//     AsyncStorage.removeItem('timertime');
-//   }
-// };
 
 const veryIntensiveTask = async taskDataArguments => {
   const {delay, timeIns} = taskDataArguments;
@@ -137,11 +104,11 @@ const veryIntensiveTask = async taskDataArguments => {
     resolve();
   });
 };
+
 const Timer = () => {
   const {colors} = useTheme();
   const screenContext = useScreenContext();
   const isPortrait = screenContext.windowWidth < screenContext.windowHeight;
-
   const screenStyles = styles(
     screenContext,
     screenContext[
@@ -157,12 +124,11 @@ const Timer = () => {
   const [stopWatchTimer, setStopWatchTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef<any>(null);
-
   const [totalTime, setTotaltime] = useState<number>(0);
   const [isStopped, setIlsStopped] = useState(false);
   const [progress, setProgress] = useState(0);
   const [resume, setIsResume] = useState(false);
-  const [resumeToggle, setResumeToggle] = useState(false)
+  const [resumeToggle, setResumeToggle] = useState(false);
   const translateX = useSharedValue(0);
 
   const pan = Gesture.Pan()
@@ -182,7 +148,6 @@ const Timer = () => {
         translateX.value = 291;
         stopTimer();
         setIsResume(true);
-        // setResumeToggle(true)
       } else {
         translateX.value = 0;
       }
@@ -193,7 +158,7 @@ const Timer = () => {
     transform: [{translateX: withSpring(translateX.value)}],
   }));
 
-  const startTimer = useCallback(async (value?: Time, pausedTime?: string) => {
+  const startTimer = useCallback(async (value?: any, pausedTime?: string) => {
     let timeIns;
     if (pausedTime) {
       timeIns = Number(pausedTime);
@@ -234,59 +199,6 @@ const Timer = () => {
       });
     }
   }, []);
-
-  // useEffect(() => {
-  //   async function isPaused() {
-  //     if ((await AsyncStorage.getItem('timerStatus')) === 'paused') {
-  //       let pausedTime = Number(await AsyncStorage.getItem('pausedTime'));
-  //       let total = Number(await AsyncStorage.getItem('timertime'));
-  //       let newProgress = 1 - pausedTime / total;
-  //       console.log('====================================');
-  //       console.log(total, pausedTime, 'qwwdq',newProgress);
-  //       console.log('====================================');
-  //       newProgress = Math.max(0, Math.min(progress, 1));
-  //       setProgress(progress)
-  //       setIsRunning(true);
-  //       setStopWatchTimer(Number(pausedTime));
-  //     }
-  //   }
-
-  //   async function checkTimer() {
-  //     const storedTime = await AsyncStorage.getItem('currTime');
-  //     if (storedTime) {
-  //       const storedTimestamp = new Date(storedTime).getTime();
-  //       const currentTimestamp = Date.now();
-  //       const elapsedTime = Math.floor(
-  //         (currentTimestamp - storedTimestamp) / 1000,
-  //       );
-  //       const timertime = await AsyncStorage.getItem('timertime');
-  //       setTotaltime(Number(timertime));
-  //       setStopWatchTimer(Number(timertime) - elapsedTime);
-
-  //       const duration: any = moment.duration(1, 'second');
-  //       timerRef.current = duration.timer({loop: true}, () => {
-  //         setStopWatchTimer(prev => {
-  //           const newTime = prev - 1;
-  //           setIsRunning(true);
-  //           if (newTime <= 0) {
-  //             timerRef.current.stop();
-  //             BackgroundService.stop();
-  //             AsyncStorage.removeItem('currTime');
-  //             setIsRunning(false);
-  //             return 0;
-  //           }
-  //           return newTime;
-  //         });
-  //       });
-  //     }
-  //   }
-
-  //   if (BackgroundService.isRunning()) {
-  //     checkTimer();
-  //   } else {
-  //     isPaused();
-  //   }
-  // }, []);
 
   useEffect(() => {
     async function isPaused() {
@@ -372,7 +284,7 @@ const Timer = () => {
     await AsyncStorage.setItem('timerStatus', 'paused');
     BackgroundService.stop();
     setIsResume(true);
-    setResumeToggle(true)
+    setResumeToggle(true);
     translateX.value = 0;
     if (timerRef.current) {
       timerRef.current.stop();
@@ -384,25 +296,21 @@ const Timer = () => {
       (await AsyncStorage.getItem('timerStatus')) === 'paused' ? true : false;
     let pausedTime = await AsyncStorage.getItem('pausedTime');
     setIsResume(false);
-    setResumeToggle(false)
+    setResumeToggle(false);
     if (status && pausedTime !== null) {
       startTimer(undefined, pausedTime);
     }
   }
 
-
   async function resetTimer() {
-
-    await BackgroundService.stop()
-    setIsRunning(false)
-    setResumeToggle(false)
+    await BackgroundService.stop();
+    setIsRunning(false);
+    setResumeToggle(false);
     await AsyncStorage.removeItem('timerStatus');
     await AsyncStorage.removeItem('pausedTime');
     await AsyncStorage.removeItem('timertime');
     await AsyncStorage.removeItem('currTime');
-
-    setProgress(0)
-    
+    setProgress(0);
   }
 
   useEffect(() => {
@@ -415,9 +323,8 @@ const Timer = () => {
           progress = Math.max(0, Math.min(progress, 1));
           setProgress(progress);
         } else if (Number(stopWatchTimer) >= 0 || isPaused) {
-          // setIsResume(true);
           let totalTimePaused = await AsyncStorage.getItem('timertime');
-          setResumeToggle(true)
+          setResumeToggle(true);
           let progress = 1 - stopWatchTimer / Number(totalTimePaused);
           progress = Math.max(0, Math.min(progress, 1));
           setProgress(progress);
@@ -437,16 +344,12 @@ const Timer = () => {
       </View>
       {isRunning && (
         <View style={screenStyles.timerInputBox}>
-          {/* <Text style={{textAlign: 'center'}}>
-            {formatTime(stopWatchTimer)}
-          </Text> */}
           <View style={screenStyles.loaderBox}>
             <ProgressLoader
             time={formatTime(stopWatchTimer)}
-              // progress={0.6}
               progress={progress}
             />
-
+            {/* <CircleProgressBar /> */}
             <View
               style={{
                 flexDirection: 'row',
@@ -454,16 +357,12 @@ const Timer = () => {
                 justifyContent: 'center',
               }}>
               {resumeToggle && (
-                // <Button icon={'play'} onPress={pauseTimer}>
-
-                // pause</Button>
                 <>
                   <IconButton
                     icon="play"
                     mode="contained"
                     size={30}
                     onPress={pauseTimer}
-
                   />
                   <IconButton
                     icon="delete"
@@ -479,14 +378,7 @@ const Timer = () => {
               <GestureHandlerRootView>
                 <View style={screenStyles.swipeBtn}>
                   <GestureDetector gesture={pan}>
-                    <View
-                      style={
-                        {
-                          // justifyContent: 'center',
-                          // alignItems: 'center',
-                          // flexDirection: 'row',
-                        }
-                      }>
+                    <View>
                       <Animated.View
                         style={[
                           screenStyles.circle,
