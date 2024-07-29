@@ -1,6 +1,6 @@
 import {useTheme} from '@react-navigation/native';
 import React from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions,Text} from 'react-native';
 import styles from './style';
 import {Circle, G, Svg} from 'react-native-svg';
 import Animated, {
@@ -15,9 +15,10 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface Props {
   progress: number;
+  time?:any
 }
 
-const ProgressLoader: React.FC<Props> = ({progress}) => {
+const ProgressLoader: React.FC<Props> = ({progress,time}) => {
   const {colors} = useTheme();
   const style = styles(colors, height);
   const circumference = 900;
@@ -46,6 +47,7 @@ const ProgressLoader: React.FC<Props> = ({progress}) => {
 
   return (
     <View style={style.container}>
+      <View style={{position:'absolute',}}><Text style={{fontSize:25}}>{time}</Text></View>
       <Svg
         rotation={360}
         width={R * 2}
@@ -77,12 +79,12 @@ const ProgressLoader: React.FC<Props> = ({progress}) => {
             strokeOpacity={0.1}
           />
 
-          <Circle
+          {/* <Circle
             cx={endPosition.value.x}
             cy={endPosition.value.y}
             r={strokeWidth / 2}
             fill={'red'}
-          />
+          /> */}
         </G>
       </Svg>
     </View>

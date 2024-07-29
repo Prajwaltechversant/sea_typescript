@@ -8,14 +8,13 @@ import moment from 'moment';
 import 'moment-timer';
 import BackgroundService from 'react-native-background-actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {log} from 'console';
 import notifee, {
   AndroidColor,
   AndroidImportance,
   AndroidVisibility,
 } from '@notifee/react-native';
 import ProgressLoader from '../../components/progressLoader';
-import {Button} from 'react-native-paper';
+import {Button, IconButton} from 'react-native-paper';
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -163,8 +162,7 @@ const Timer = () => {
   const [isStopped, setIlsStopped] = useState(false);
   const [progress, setProgress] = useState(0);
   const [resume, setIsResume] = useState(false);
-
-
+  const [resumeToggle, setResumeToggle] = useState(false)
   const translateX = useSharedValue(0);
 
   const pan = Gesture.Pan()
@@ -184,6 +182,7 @@ const Timer = () => {
         translateX.value = 291;
         stopTimer();
         setIsResume(true);
+        // setResumeToggle(true)
       } else {
         translateX.value = 0;
       }
@@ -194,10 +193,7 @@ const Timer = () => {
     transform: [{translateX: withSpring(translateX.value)}],
   }));
 
-
   const startTimer = useCallback(async (value?: Time, pausedTime?: string) => {
-
-
     let timeIns;
     if (pausedTime) {
       timeIns = Number(pausedTime);
@@ -293,7 +289,6 @@ const Timer = () => {
   // }, []);
 
   useEffect(() => {
-
     async function isPaused() {
       if ((await AsyncStorage.getItem('timerStatus')) === 'paused') {
         const pausedTime = Number(await AsyncStorage.getItem('pausedTime'));
@@ -303,15 +298,12 @@ const Timer = () => {
         setProgress(newProgress);
         setIsRunning(true);
         setStopWatchTimer(pausedTime);
-
       }
     }
 
     async function checkTimer() {
-
       const storedTime = await AsyncStorage.getItem('currTime');
       if (storedTime) {
-
         const storedTimestamp = new Date(storedTime).getTime();
         const currentTimestamp = Date.now();
         const elapsedTime = Math.floor(
@@ -380,37 +372,52 @@ const Timer = () => {
     await AsyncStorage.setItem('timerStatus', 'paused');
     BackgroundService.stop();
     setIsResume(true);
-    translateX.value=0
+    setResumeToggle(true)
+    translateX.value = 0;
     if (timerRef.current) {
       timerRef.current.stop();
     }
-  }; 
+  };
 
   async function pauseTimer() {
     let status =
       (await AsyncStorage.getItem('timerStatus')) === 'paused' ? true : false;
     let pausedTime = await AsyncStorage.getItem('pausedTime');
     setIsResume(false);
-
+    setResumeToggle(false)
     if (status && pausedTime !== null) {
       startTimer(undefined, pausedTime);
     }
   }
+
+
+  async function resetTimer() {
+
+    await BackgroundService.stop()
+    setIsRunning(false)
+    setResumeToggle(false)
+    await AsyncStorage.removeItem('timerStatus');
+    await AsyncStorage.removeItem('pausedTime');
+    await AsyncStorage.removeItem('timertime');
+    await AsyncStorage.removeItem('currTime');
+
+    setProgress(0)
+    
+  }
+
   useEffect(() => {
     async function changeProgress() {
       let isPaused =
         (await AsyncStorage.getItem('timerStatus')) === 'paused' ? true : false;
-      if (isRunning && !resume ) {
-        if (Number(stopWatchTimer) >= 0 &&!isPaused) {
+      if (isRunning && !resume) {
+        if (Number(stopWatchTimer) >= 0 && !isPaused) {
           let progress = 1 - stopWatchTimer / totalTime;
           progress = Math.max(0, Math.min(progress, 1));
           setProgress(progress);
-
-        }
-        else if(Number(stopWatchTimer) >= 0 ||isPaused){
-
-         let  totalTimePaused = await AsyncStorage.getItem('timertime')
-            
+        } else if (Number(stopWatchTimer) >= 0 || isPaused) {
+          // setIsResume(true);
+          let totalTimePaused = await AsyncStorage.getItem('timertime');
+          setResumeToggle(true)
           let progress = 1 - stopWatchTimer / Number(totalTimePaused);
           progress = Math.max(0, Math.min(progress, 1));
           setProgress(progress);
@@ -419,25 +426,54 @@ const Timer = () => {
     }
     changeProgress();
   }, [Number(stopWatchTimer), totalTime]);
-  
 
   return (
-    <View style={screenStyles.container}>   
+    <View style={screenStyles.container}>
       <View style={screenStyles.headerContainer}>
         <Text style={screenStyles.headerText}>Timer</Text>
         <View>
           <TimePicker startTimer={startTimer} isRunning={isRunning} />
         </View>
-        <Button onPress={pauseTimer}>pause</Button>
       </View>
       {isRunning && (
         <View style={screenStyles.timerInputBox}>
-          <Text style={{textAlign: 'center'}}>{formatTime(stopWatchTimer)}</Text>
+          {/* <Text style={{textAlign: 'center'}}>
+            {formatTime(stopWatchTimer)}
+          </Text> */}
           <View style={screenStyles.loaderBox}>
             <ProgressLoader
+            time={formatTime(stopWatchTimer)}
               // progress={0.6}
               progress={progress}
             />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {resumeToggle && (
+                // <Button icon={'play'} onPress={pauseTimer}>
+
+                // pause</Button>
+                <>
+                  <IconButton
+                    icon="play"
+                    mode="contained"
+                    size={30}
+                    onPress={pauseTimer}
+
+                  />
+                  <IconButton
+                    icon="delete"
+                    mode="contained"
+                    size={30}
+                    onPress={resetTimer}
+                  />
+                </>
+              )}
+            </View>
 
             <View style={screenStyles.swipeBtnContainer}>
               <GestureHandlerRootView>
