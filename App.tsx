@@ -1,6 +1,11 @@
 import 'react-native-gesture-handler';
 import React, {useContext, useEffect} from 'react';
-import {NavigationContainer, useTheme} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useTheme,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import MainStack from './src/stack/MainStack';
 import notifee, {EventType} from '@notifee/react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -25,6 +30,8 @@ import ActionTimer from './src/screens/Testing/jest/Timer';
 import ReduxTest from './src/screens/Testing/redux';
 import Timer from './src/screens/Timer';
 import path from 'path';
+import HooksSamples from './src/hooks/react-hooks';
+import CustomModal from './src/components/customModal';
 // import store from './__tests__/redux-test/store'
 const App: React.FC = () => {
   useEffect(() => {
@@ -59,17 +66,17 @@ function ThemeProviderWrapper() {
     config: {
       screens: {
         TabStack: {
-          screens:{
-            Tasks:{
-              screens:{
-                drawer:{
-                  screens:{
-                    Timer:'timer'
-                  }
-                }
-              }
-            }
-          }
+          screens: {
+            Tasks: {
+              screens: {
+                drawer: {
+                  screens: {
+                    Timer: 'timer',
+                  },
+                },
+              },
+            },
+          },
         },
         ResultView: {},
       },
@@ -82,6 +89,8 @@ function ThemeProviderWrapper() {
         <NavigationContainer theme={activeColor} linking={linking}>
           <PaperProvider>
             <MainStack />
+            {/* <CustomModal /> */}
+            {/* <HooksSamples  /> */}
             <FlashMessage position="top" />
           </PaperProvider>
         </NavigationContainer>

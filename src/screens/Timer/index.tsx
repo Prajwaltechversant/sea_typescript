@@ -400,7 +400,7 @@ const Timer = () => {
                         ]}></Animated.View>
                     </View>
                   </GestureDetector>
-                  <Text style={screenStyles.swipeBtnText}>Stop Timer</Text>
+                  <Text style={screenStyles.swipeBtnText}>{'Stop Timer'}</Text>
                 </View>
               </GestureHandlerRootView>
             </View>

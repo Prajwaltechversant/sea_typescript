@@ -18,7 +18,8 @@ const styles = (screenContext, width, height, colors) => StyleSheet.create({
         width: screenContext.windowisPortrait ? width * 0.2 : width * 0.1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:5
+        borderRadius:5,
+        color:colors.text
     }
 })
 

@@ -29,6 +29,7 @@ import BackgroundTask from '../../screens/modules/backgroundActions'
 import WebViews from '../../screens/webView/sample'
 import VideoStream from '../../screens/video/index'
 import Timer from '../../screens/Timer/index'
+import OnBoardUser from '../../screens/onBoard'
 
 const Drawer = createDrawerNavigator()
 export default function DrawerStack() {
@@ -36,14 +37,13 @@ export default function DrawerStack() {
     const { t } = useTranslation()
     let date = new Date()
     const { colors } = useTheme()
-
     return (
         <Drawer.Navigator
             initialRouteName='ParallaxScroll'
             screenOptions={({ navigation }) => ({
                 headerLeft: () => (
                     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-                        <Entypo name="menu" size={25} color={colors.text} style={{ marginLeft: 15 }} />
+                        <Entypo name='menu' size={25} color={colors.text} style={{ marginLeft: 15 }} />
                     </TouchableOpacity>
                 ),
                 headerRight: () => (
@@ -65,14 +65,14 @@ export default function DrawerStack() {
                         color: colors.text
                     },
                     drawerIcon: () => (
-                        <Entypo name='home' color={colors.text} />
+                        <Entypo name='home' color={colors.text} size={25} />
                     ),
                 }}
             />
             <Drawer.Screen name={t('geolocation')} component={GeoLoaction}
                 options={{
-                    drawerIcon: () => (
-                        <Entypo name='map' color={colors.text} />
+                    drawerIcon: ({size}) => (
+                        <Entypo name='map' color={colors.text} size={25} />
                     ),
 
                 }}
@@ -80,7 +80,7 @@ export default function DrawerStack() {
             />
             <Drawer.Screen name={t('editor')} component={Editor} options={{
                 headerShown: false, drawerIcon: () => (
-                    <AntDesign name='edit' color={colors.text} />
+                    <AntDesign name='edit' color={colors.text} size={25} />
                 ),
             }}
 
@@ -90,7 +90,7 @@ export default function DrawerStack() {
 
                 options={{
                     drawerIcon: () => (
-                        <AntDesign name='areachart' color={colors.text} />
+                        <AntDesign name='areachart' color={colors.text} size={25} />
                     ),
 
                 }}
@@ -99,7 +99,7 @@ export default function DrawerStack() {
             <Drawer.Screen name={t('uiSample')} component={UiSamples}
                 options={{
                     drawerIcon: () => (
-                        <Entypo name='dot-single' color={colors.text} />
+                        <Entypo name='dot-single' color={colors.text} size={25} />
                     ),
 
                 }}
@@ -113,14 +113,14 @@ export default function DrawerStack() {
                         </View>
                     ),
                     drawerIcon: () => (
-                        <Entypo name='language' color={colors.text} />
+                        <Entypo name='language' color={colors.text} size={25} />
                     ),
                 }}
             />
             <Drawer.Screen name={t('ThreeDSample')} component={ThreeDSample}
                 options={{
                     drawerIcon: () => (
-                        <AntDesign name='antdesign' color={colors.text} />
+                        <AntDesign name='antdesign' color={colors.text} size={25} />
                     ),
 
                 }}
@@ -129,7 +129,7 @@ export default function DrawerStack() {
             <Drawer.Screen name='ParallaxScroll' component={ParallaxScroll}
                 options={{
                     drawerIcon: () => (
-                        <AntDesign name='antdesign' color={colors.text} />
+                        <AntDesign name='antdesign' color={colors.text} size={25} />
                     ),
 
                 }}
@@ -139,35 +139,35 @@ export default function DrawerStack() {
 
                 options={{
                     drawerIcon: () => (
-                        <Entypo name='download' color={colors.text} />
+                        <Entypo name='download' color={colors.text} size={25} />
                     ),
 
                 }}
             />
             <Drawer.Screen name='layoutAnimations' component={LayoutAnimations} options={{
                 drawerIcon: () => (
-                    <AntDesign name='layout' color={colors.text} />
+                    <AntDesign name='layout' color={colors.text} size={25} />
                 ),
                 title: "Layouts",
 
             }} />
             <Drawer.Screen name='layoutSample' component={Layout2} options={{
                 drawerIcon: () => (
-                    <AntDesign name='layout' color={colors.text} />
+                    <AntDesign name='layout' color={colors.text} size={25} />
                 ),
                 title: "Layouts 2",
 
             }} />
             <Drawer.Screen name='Users' component={Users} options={{
                 drawerIcon: () => (
-                    <FontAwesome name='group' color={colors.text} />
+                    <FontAwesome name='group' color={colors.text} size={25} />
                 ),
                 title: "redux thunk",
 
             }} />
             <Drawer.Screen name='Echart' component={Echart} options={{
                 drawerIcon: () => (
-                    <FontAwesome name='line-chart' color={colors.text} />
+                    <FontAwesome name='line-chart' color={colors.text} size={25} />
                 ),
                 title: "E chart",
 
@@ -176,7 +176,7 @@ export default function DrawerStack() {
 
                 title: "re captch",
                 drawerIcon: () => (
-                    <AntDesign name='layout' color={colors.text} />
+                    <AntDesign name='layout' color={colors.text} size={25} />
                 ),
 
             }} />
@@ -184,22 +184,30 @@ export default function DrawerStack() {
 
                 title: "Background Actions",
                 drawerIcon: () => (
-                    <AntDesign name='doubleright' color={colors.text} />
+                    <AntDesign name='doubleright' color={colors.text} size={25} />
                 ),
+
+            }} />
+            <Drawer.Screen name='OnBaord' component={OnBoardUser} options={{
+                drawerIcon: () => (
+                    <AntDesign name='layout' color={colors.text} size={25} />
+                ),
+                title: "onboard animation",
+                headerShown: false
 
             }} />
             <Drawer.Screen name='webViews' component={WebViews} options={{
 
                 title: "web ",
                 drawerIcon: () => (
-                    <AntDesign name='codepen' color={colors.text} />
+                    <AntDesign name='codepen' color={colors.text} size={25} />
 
                 ),
 
             }} />
             <Drawer.Screen name='Video' component={VideoStream} options={{
                 drawerIcon: () => (
-                    <AntDesign name='play' color={colors.text} />
+                    <AntDesign name='play' color={colors.text} size={25} />
                 ),
                 title: "Video Streaming",
 
@@ -208,7 +216,7 @@ export default function DrawerStack() {
             }} />
             <Drawer.Screen name='Timer' component={Timer} options={{
                 drawerIcon: () => (
-                    <AntDesign name='clockcircle' color={colors.text} />
+                    <AntDesign name='clockcircle' color={colors.text} size={25} />
                 ),
                 title: "Timer",
                 headerShown: false

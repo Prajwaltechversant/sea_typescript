@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701626214167",
+    "project_id": "seaapp-febed",
+    "storage_bucket": "seaapp-febed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701626214167:android:98db27c8936613500c3952",
+        "android_client_info": {
+          "package_name": "com.sea"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB69MEKznA1VcK2k7qRPV8gDNKycYRQDrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

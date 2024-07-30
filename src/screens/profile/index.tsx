@@ -8,6 +8,8 @@ import {useTheme} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import PdfViewer from '../../components/pdfViewer';
 import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
+import { Button } from 'react-native-paper';
+import auth from '@react-native-firebase/auth';
 
 export default function Profile({navigation}: any) {
   const {colors} = useTheme();
@@ -25,12 +27,16 @@ export default function Profile({navigation}: any) {
   );
   const data = useAppSelector(state => state.data);
 
-
+const logout = async()=>{
+  await auth().signOut()
+}
 
   return (
     <View style={screenStyles.container}>
-      <StatusBar backgroundColor={colors.primary} />
+      {/* <StatusBar backgroundColor={colors.primary} /> */}
+      
       <View style={screenStyles.profileContainer}>
+      <Button buttonColor='black' onPress={logout}>Logout</Button>
         <Image
           source={{
             uri: data.profile,

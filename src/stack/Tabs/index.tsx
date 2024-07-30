@@ -151,7 +151,6 @@ const  TabStack:React.FC=() =>{
         tabBarIcon:({color,focused,size})=>{
           return(
             <Icon name={'user'} size={20} color={colors.text} />
-
           )
         }
       }}
